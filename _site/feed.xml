@@ -5,9 +5,98 @@
     <description>欢迎来到我的个人站~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 06 Mar 2021 12:37:14 +0800</pubDate>
-    <lastBuildDate>Sat, 06 Mar 2021 12:37:14 +0800</lastBuildDate>
+    <pubDate>Sat, 06 Mar 2021 12:54:53 +0800</pubDate>
+    <lastBuildDate>Sat, 06 Mar 2021 12:54:53 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>2021年03月06日 《深入浅出 Java 多线程》第一篇 ThreadLocal类(附加)</title>
+        <description>&lt;h4 id=&quot;threadlocal类附加&quot;&gt;ThreadLocal类(附加)&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ThreadLocal是一个本地线程副本变量工具类。内部是一个弱引用的Map来维护。这里不详细介绍它的原理，而是只是介绍它的使用，以后有独立章节来介绍ThreadLocal类的原理。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;有些朋友称ThreadLocal为线程本地变量或线程本地存储。严格来说，ThreadLocal类并不属于多线程间的通信，而是让每个线程有自己”独立“的变量，线程之间互不影响。它为每个线程都创建一个副本，每个线程可以访问自己内部的副本变量。&lt;/p&gt;
+
+&lt;p&gt;ThreadLocal类最常用的就是set方法和get方法。示例代码：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public class ThreadLocalDemo {
+    static class ThreadA implements Runnable {
+        private ThreadLocal&amp;lt;String&amp;gt; threadLocal;
+
+        public ThreadA(ThreadLocal&amp;lt;String&amp;gt; threadLocal) {
+            this.threadLocal = threadLocal;
+        }
+
+        @Override
+        public void run() {
+            threadLocal.set(&quot;A&quot;);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println(&quot;ThreadA输出：&quot; + threadLocal.get());
+        }
+
+        static class ThreadB implements Runnable {
+            private ThreadLocal&amp;lt;String&amp;gt; threadLocal;
+
+            public ThreadB(ThreadLocal&amp;lt;String&amp;gt; threadLocal) {
+                this.threadLocal = threadLocal;
+            }
+
+            @Override
+            public void run() {
+                threadLocal.set(&quot;B&quot;);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(&quot;ThreadB输出：&quot; + threadLocal.get());
+            }
+        }
+
+        public static void main(String[] args) {
+            ThreadLocal&amp;lt;String&amp;gt; threadLocal = new ThreadLocal&amp;lt;&amp;gt;();
+            new Thread(new ThreadA(threadLocal)).start();
+            new Thread(new ThreadB(threadLocal)).start();
+        }
+    }
+}
+
+// 输出：
+ThreadA输出：A
+ThreadB输出：B
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;可以看到，虽然两个线程使用的同一个ThreadLocal实例（通过构造方法传入），但是它们各自可以存取自己当前线程的一个值。&lt;/p&gt;
+
+&lt;p&gt;那ThreadLocal有什么作用呢？如果只是单纯的想要线程隔离，在每个线程中声明一个私有变量就好了呀，为什么要使用ThreadLocal？&lt;/p&gt;
+
+&lt;p&gt;如果开发者希望将类的某个静态变量（user ID或者transaction ID）与线程状态关联，则可以考虑使用ThreadLocal。&lt;/p&gt;
+
+&lt;p&gt;最常见的ThreadLocal使用场景为用来解决数据库连接、Session管理等。数据库连接和Session管理涉及多个复杂对象的初始化和关闭。如果在每个线程中声明一些私有变量来进行操作，那这个线程就变得不那么“轻量”了，需要频繁的创建和关闭连接。&lt;/p&gt;
+
+&lt;p&gt;InheritableThreadLocal&lt;/p&gt;
+
+&lt;p&gt;==InheritableThreadLocal类与ThreadLocal类稍有不同==，Inheritable是继承的意思。它==不仅仅是当前线程可以存取副本值，而且它的子线程也可以存取这个副本值。==&lt;/p&gt;
+</description>
+        <pubDate>Sat, 06 Mar 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/03/java_thread_002/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/03/java_thread_002/</guid>
+        
+        <category>java</category>
+        
+        <category>多线程</category>
+        
+        <category>《深入浅出Java多线程》</category>
+        
+        <category>ThreadLocal类</category>
+        
+        
+      </item>
     
       <item>
         <title>2021年03月06日 《深入浅出 Java 多线程》第一篇 基础篇</title>
