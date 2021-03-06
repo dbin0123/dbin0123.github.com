@@ -1,5 +1,5 @@
 # Basic
-title: 爱我，爱自己
+title: 爱我，爱你，爱自己
 subtitle: 个人站
 description: 欢迎来到我的个人站~
 # 头像里面的标题
@@ -12,20 +12,20 @@ url: "https://blog.aiwiown.com/"
 enableToc: true
 
 # Comment
-comment:
+# comment:
     # livere: MTAyMC81MDk5NC8yNzQ3Ng  # https://www.livere.com
-    disqus: leopard
+    # disqus: leopard
     # uyan: 2143225  # 有言id,登录有言官网申请
 
 # Social
 social:
-    weibo: 5366874726 
-    github: leopardpan
+    # weibo: 5366874726 
+    github: dbin0123
     # zhihu: panpanleopard
     # juejin: xxx
-    jianshu: 2ada30d8d0f7
+    ! jianshu: 2ada30d8d0f7
     # twitter: 
-    mail: leopardpan@icloud.com
+    mail: dbin0123@hotmail.com
 
 
 # 百度统计 
@@ -61,7 +61,7 @@ cover_color: clear
 
 # The blog button should not be removed.
 blog_button:
-    title: 博客主页
+    title: 爱我，爱你，爱自己
 
 # Navigation buttons in the front page.s
 nav:
