@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>HEXO进阶</title>
-  <meta name="description" content="HEXO接近是最近有一些朋友提出的问题，然后我做了总结，如果你也在使用HEXO，不妨看看，应该会有些帮助。">
+  <title>2021年03月06日 java-打开文件数（Too many open files)</title>
+  <meta name="description" content="转:https://blog.csdn.net/c814276009/article/details/84891109">
   <meta name="author" content="leopardpan">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="HEXO进阶">
-  <meta name="twitter:description" content="HEXO接近是最近有一些朋友提出的问题，然后我做了总结，如果你也在使用HEXO，不妨看看，应该会有些帮助。">
+  <meta name="twitter:title" content="2021年03月06日 java-打开文件数（Too many open files)">
+  <meta name="twitter:description" content="转:https://blog.csdn.net/c814276009/article/details/84891109">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="HEXO进阶">
-  <meta property="og:description" content="HEXO接近是最近有一些朋友提出的问题，然后我做了总结，如果你也在使用HEXO，不妨看看，应该会有些帮助。">
+  <meta property="og:title" content="2021年03月06日 java-打开文件数（Too many open files)">
+  <meta property="og:description" content="转:https://blog.csdn.net/c814276009/article/details/84891109">
   
   <link rel="icon" type="image/png" href="/images/favicon.png" />
   <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="http://localhost:4000/2016/06/HEXO_Advanced/">
+  <link rel="canonical" href="http://localhost:4000/2021/03/%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6%E6%95%B0-Too-many-open-files)/">
   <link rel="alternate" type="application/rss+xml" title="爱我，爱你，爱自己" href="http://localhost:4000/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -179,10 +179,10 @@
 
 <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
-    <h1 class="post-title">HEXO进阶</h1>
+    <h1 class="post-title">2021年03月06日 java-打开文件数（Too many open files)</h1>
     <div class="post-meta">
       <img src="/images/calendar.png" width="20px"/> 
-      <time datetime="2016-06-12 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2016-06-12</time>  
+      <time datetime="2021-03-06 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-03-06</time>  
 
       <span id="busuanzi_container_page_pv"> | 阅读：<span id="busuanzi_value_page_pv"></span>次</span>
     </p>
@@ -192,101 +192,79 @@
   
     <h2 class="post-title">目录</h2>
     <ul>
-  <li><a href="#使用jekyll解决前三个问题">使用Jekyll解决前三个问题。</a></li>
-  <li><a href="#使用hexo解决上面前三个问题">使用Hexo解决上面前三个问题</a></li>
-  <li><a href="#具体实现">具体实现:</a></li>
-  <li><a href="#为什么要使用百度搜索">为什么要使用百度搜索？</a></li>
-  <li><a href="#为什么使用百度搜索不到-github-page-上的博客">为什么使用百度搜索不到 Github Page 上的博客？</a></li>
-  <li><a href="#如何让百度能搜索你的博客">如何让百度能搜索你的博客?</a>
-    <ul>
-      <li><a href="#在coding上部署你的博客">在Coding上部署你的博客。</a></li>
-    </ul>
-  </li>
+  <li><a href="#详解">详解：</a></li>
+  <li><a href="#系统级">系统级：</a></li>
+  <li><a href="#用户级">用户级：</a></li>
+  <li><a href="#原因分析以及排查">原因分析以及排查：</a></li>
+  <li><a href="#检查程序问题">检查程序问题：</a></li>
 </ul>
 
   
 
   <section class="post">
-    <p>HEXO接近是最近有一些朋友提出的问题，然后我做了总结，如果你也在使用HEXO，不妨看看，应该会有些帮助。</p>
+    <p>转:https://blog.csdn.net/c814276009/article/details/84891109</p>
 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Linux系统下Java程序抛Too many open files异常，常见于高并发访问文件系统、多线程网络连接等场景。
+</code></pre></div></div>
+
+<p>程序打开的文件数过多，这里的file包括经常访问的文件、网络通信连接（socket）等等，有时也叫句柄。这个错误也可以叫做句柄数超过系统限制数。</p>
+<h3 id="详解">详解：</h3>
 <ul>
-  <li>1、博客部署样式出问题了怎么办？</li>
-  <li>2、电脑重装或者误删了本地博客怎么办？</li>
-  <li>3、想使用两台电脑写博客怎么办？</li>
-  <li>4、为何使用百度搜不到我的博客？</li>
+  <li>file entry	
+  linux系统需要记录当前访问file的name、location、access、authority等信息。</li>
+  <li>open files table：
+以数组的形式存储file entry</li>
+  <li>file descriptor table（文件描述符）：
+作为进程到open files table的指针，也就是open files table的下标索引。将每个进程与它访问的文件关联起来。
+每个进程中都有一个file descriptor table管理当前进程所访问（open或create）的所有文件。
+    <blockquote>
+      <p>file descriptor table（文件描述符）关联着open files table中文件的file entry。</p>
+    </blockquote>
+  </li>
 </ul>
 
-<h3 id="使用jekyll解决前三个问题">使用Jekyll解决前三个问题。</h3>
-<p>不得不说 <code class="highlighter-rouge">Jekyll</code> 确实可以解决我上面三个问题, 因为 <code class="highlighter-rouge">Jekyll</code> 是直接把Markdown格式的文章直接放在github仓库里的, 相当于直接用git来管理博客了, <code class="highlighter-rouge">Github</code> 官方也很推荐 <code class="highlighter-rouge">Jekyll</code> 。 你可以先看下 <code class="highlighter-rouge">Jekyll</code> 搭建博客的<a href="voyagelab.github.io">voyagelab</a>, <a href="https://github.com/voyagelab/voyagelab.github.io">github地址</a>, 当然了这只是很普通的, Jekyll 也有很多主题可以选择的, 更详细的请看<a href="http://jekyll.bootcss.com/">Jekyll中文文档</a>、<a href="https://jekyllrb.com/">Jekyll英文文档</a>、<a href="http://jekyllthemes.org/">Jekyll主题列表</a>。
-在 <code class="highlighter-rouge">Jekyll</code> 上逛了一个星期的我又回到了 <code class="highlighter-rouge">Hexo</code> , 发现 目前 <code class="highlighter-rouge">Jekyll</code> 对主题和一些插件的支持相对 <code class="highlighter-rouge">Hexo</code> 来说, 没那么友好, 可能有一些其它的方法只是我没找到而已,关于 <code class="highlighter-rouge">Jekyll</code> 搭建博客就介绍到这, 如果有问题的话可以评论, 或者联系我。</p>
-
-<h3 id="使用hexo解决上面前三个问题">使用Hexo解决上面前三个问题</h3>
-<p>是的, 我大<code class="highlighter-rouge">Hexo</code>同样可以解决上面三个问题, 那就是使用git。关于如何使用 <code class="highlighter-rouge">Hexo</code> 搭建博客请看我另一篇文章<a href="http://www.leopardpan.cn/2015/08/25/HEXO%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/">HEXO搭建个人博客</a>, 如果搭建的过程中出现了问题, 我们可以交流交流。现在我假设你已经能基本使用 <code class="highlighter-rouge">Hexo</code> 了, 接下来就看看如何来管理博客。</p>
-
-<h2 id="使用git管理博客">使用git管理博客</h2>
-<p><a href="https://github.com/leopardpan/Blog-Growing">Blog-Growing</a>是我管理博客的仓库地址。结构大致是:</p>
-
-<blockquote>
-  <p>– Blog-Growing   <br />
-　　|– .git   <br />
-　　|– .gitignore  <br />
-　　|– Hexo   <br />
-　　　　|   ..  <br />
-　　　　|   ..  <br />
-　　　　|   整个博客的配置信息</p>
-</blockquote>
-
-<p>你可以把我的的<a href="https://github.com/leopardpan/Blog-Growing">Blog-Growing</a> clone下来, 看看一些基本配置是怎么配置的。需要提醒的是, <code class="highlighter-rouge">要把主题下的.git给删除掉</code> , 当然了你也可以使用 <code class="highlighter-rouge">git submodule</code> 来管理, 具体的管理方法我这里就不做多的介绍了, 想了解的话可以私信我。
-上面的过程基本做完后, 怎么来解决我开篇提的前三个问题了。</p>
-
-<h3 id="具体实现">具体实现:</h3>
-<p><strong>一：家里电脑使用博客</strong>      <br />
-　　建立git远端仓库管理博客,并使用家里的电脑把本地博客的配置推送到远端仓库。 <br />
-<strong>二：公司电脑使用博客</strong>       <br />
-　　到了公司只需要执行<code class="highlighter-rouge">sudo npm install -g hexo</code>,然后cd到你的博客目录下,如我cd 到Hexo目录下, 然后执行 <code class="highlighter-rouge">hexo server</code> 就可以在本地预览博客了。  <br />
-<strong>三：使用Git保存</strong>        <br />
-　　修改好博客后记得先使用git来提交下, 即使下次把博客的样式修改坏了, 也可以使用 <code class="highlighter-rouge">git reset --hard</code> 来回退。如: 我cd 到 <code class="highlighter-rouge">Blog-Growing</code> 目录下使用git提交。 <br />
-<strong>四：博客提交</strong>         <br />
-　　1、修改好的博客使用 <code class="highlighter-rouge">hexo d</code> 展示到博客页上。 <br />
-　　2、git push 整个本地博客。</p>
-
-<p><strong>提示:</strong> 在这里 <code class="highlighter-rouge">git</code> 仅仅只是用户做博客的版本管理的, 博客的样式修改、基本部署还是使用 <code class="highlighter-rouge">hexo</code> 来操作的。</p>
-
-<h2 id="让百度能搜索到你的博客">让百度能搜索到你的博客</h2>
-
-<h3 id="为什么要使用百度搜索">为什么要使用百度搜索？</h3>
-
-<p>　　有人可能会说作为一个开发人员, 你不会用 <code class="highlighter-rouge">Google</code> 啊。 是的, Google是能搜到我们搭建在 <code class="highlighter-rouge">Github Page</code> 的博客, 会用<code class="highlighter-rouge">Google</code> 也是一个开发人员必备技能之一。但是, 我们生活在天朝, 所以百度还是总有会用到的时候, 或者是你想让更多的天朝人能搜到你。</p>
-
-<h3 id="为什么使用百度搜索不到-github-page-上的博客">为什么使用百度搜索不到 Github Page 上的博客？</h3>
-
-<p>有人联系过 Github Support 部门 , 给出大致的意思就是: 百度爬虫爬得太猛烈，已经对很多 Github 用户造成了问题。所以 Github 将禁止百度爬虫的爬取。</p>
-
-<h3 id="如何让百度能搜索你的博客">如何让百度能搜索你的博客?</h3>
-
-<p>　　根据上面说的, 目前发现只是Github Page禁止了百度搜索, 所以让百度能搜索到你的博客还是有一些方法的。例如:</p>
+<p>Linux系统配置open files table的文件限制，如果超过配置值，就会拒绝其他文件操作请求。并抛出Too many open files异常。限制分为系统和用户之分。</p>
+<h3 id="系统级">系统级：</h3>
+<p>系统级设置对所有用户有效。查看分为两种方式：</p>
 <ul>
-  <li>自己搞个VPS,博客部署在VPS上。</li>
-  <li>博客部署 <code class="highlighter-rouge">Coding.net</code> 上, <code class="highlighter-rouge">GitCafe</code>已经合并到 <code class="highlighter-rouge">Coding</code> 。
-我使用的是第二种方法, 博客部署在 <code class="highlighter-rouge">Coding.net</code> 上也相对简单些。</li>
+  <li>1:cat /proc/sys/fs/file-max  </li>
+  <li>2:sysctl -a 查看结果中fs.file-max这项的配置数量</li>
+  <li>3:增加配置数量:vim /etc/sysctl.conf文件，配置fs.file-max属性，如果属性不存在就添加。 </li>
+  <li>立即生效： sysctl -p</li>
 </ul>
 
-<h4 id="在coding上部署你的博客">在Coding上部署你的博客。</h4>
+<h3 id="用户级">用户级：</h3>
+<p>Linux限制每个登录用户的可连接文件数。</p>
+<ul>
+  <li>查询限制数
+    <blockquote>
+      <p>ulimit -n</p>
+    </blockquote>
+  </li>
+  <li>设置限制数：
+    <blockquote>
+      <p>ulimit -n &lt;setting number&gt;</p>
+    </blockquote>
+  </li>
+</ul>
 
-<p>　　Coding同样支持Hexo、Jekyll等博客的部署, Coding 跟Github还是挺像的,而且是中文。 同样的在Coding里面建一个项目,项目名字跟你的用户名一样,这里我就不啰嗦了, 说几个需要注意的地方:   <br />
-<strong>注意一:</strong>     <br />
-　　在<code class="highlighter-rouge">Coding Page</code> 上部署博客,需要把博客推送到<code class="highlighter-rouge">coding-pages </code> 分支上, 分支名字是固定的。  <br />
-<strong>注意二:</strong>   <br />
-　　<code class="highlighter-rouge">Coding Page</code> 不支持自定义CNAME, 你需要点击到Page模块,然后添加一个域名来绑定。</p>
+<p>对于文件描述符增加的比例，资料推荐是以2的幂次为参考。如当前文件描述符数量是1024，可增加到2048，如果不够，可设置到4096，依此类推。 </p>
 
-<p>更详细的请看<a href="https://coding.net/help/doc/pages/index.html">Coding Pages 官网介绍</a>.</p>
+<h3 id="原因分析以及排查">原因分析以及排查：</h3>
+<p>在出现Too many open files问题后，最大的可能是打开的文件或是socket没有正常关闭。为了定位问题是否由Java进程引起，通过Java进程号查看当前进程占用文件描述符情况： </p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsof -p $java_pid 每个文件描述符的具体属性  (获取PID:ps -ef|grep xxxx)
+lsof -p $java_pid | wc -l 当前Java进程file descriptor table中FD的总量
+</code></pre></div></div>
 
-<p>参考文章:
-<a href="http://jerryzou.com/posts/feasibility-of-allowing-baiduSpider-for-Github-Pages/">解决 Github Pages 禁止百度爬虫的方法与可行性分析</a></p>
+<h3 id="检查程序问题">检查程序问题：</h3>
+<p>如果你对你的程序有一定的解的话，应该对程序打开文件数(链接数)上限有一定的估算，如果感觉数字异常，请使用第一步的lsof -p 进程id &gt; openfiles.log命令，获得当前占用句柄的全部详情进行分析，</p>
+<ol>
+  <li>打开的这些文件是不是都是必要的？</li>
+  <li>定位到打开这些文件的代码</li>
+  <li>是否程序操作了文件写入，但是没有进行正常关闭</li>
+  <li>是否程序进行了通讯，但是没有正常关闭(也就是没有超时结束的机制) </li>
+</ol>
 
-<p><br /></p>
-
-<p>转载请注明：<a href="https://leopardpan.cn">潘柏信的博客</a> » <a href="http://leopardpan.cn/2016/06/HEXO_Advanced/">点击阅读原文</a></p>
 
   </section>
 
@@ -356,15 +334,10 @@
        <ul class="pager">
         
         <li class="previous">
-            <a href="/2015/08/HEXO%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" data-toggle="tooltip" data-placement="top" title="HEXO搭建个人博客">上一篇：  <span>HEXO搭建个人博客</span>
+            <a href="/2020/07/blog_info/" data-toggle="tooltip" data-placement="top" title="博客模板功能介绍">上一篇：  <span>博客模板功能介绍</span>
             </a>
         </li>
         
-        
-        <li class="next">
-            <a href="/2016/10/jekyll_tutorials1/" data-toggle="tooltip" data-placement="top" title="Jekyll搭建个人博客">下一篇：  <span>Jekyll搭建个人博客</span>
-            </a>
-        </li>
         
     </ul>
 </section>

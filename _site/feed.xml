@@ -1,13 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>潘柏信</title>
+    <title>爱我，爱你，爱自己</title>
     <description>欢迎来到我的个人站~</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 06 Mar 2021 08:18:56 +0800</pubDate>
-    <lastBuildDate>Sat, 06 Mar 2021 08:18:56 +0800</lastBuildDate>
+    <pubDate>Sat, 06 Mar 2021 19:57:01 +0800</pubDate>
+    <lastBuildDate>Sat, 06 Mar 2021 19:57:01 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>2021年03月06日 java-打开文件数（Too many open files)</title>
+        <description>&lt;p&gt;转:https://blog.csdn.net/c814276009/article/details/84891109&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Linux系统下Java程序抛Too many open files异常，常见于高并发访问文件系统、多线程网络连接等场景。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;程序打开的文件数过多，这里的file包括经常访问的文件、网络通信连接（socket）等等，有时也叫句柄。这个错误也可以叫做句柄数超过系统限制数。&lt;/p&gt;
+&lt;h3 id=&quot;详解&quot;&gt;详解：&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;file entry	
+  linux系统需要记录当前访问file的name、location、access、authority等信息。&lt;/li&gt;
+  &lt;li&gt;open files table：
+以数组的形式存储file entry&lt;/li&gt;
+  &lt;li&gt;file descriptor table（文件描述符）：
+作为进程到open files table的指针，也就是open files table的下标索引。将每个进程与它访问的文件关联起来。
+每个进程中都有一个file descriptor table管理当前进程所访问（open或create）的所有文件。
+    &lt;blockquote&gt;
+      &lt;p&gt;file descriptor table（文件描述符）关联着open files table中文件的file entry。&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Linux系统配置open files table的文件限制，如果超过配置值，就会拒绝其他文件操作请求。并抛出Too many open files异常。限制分为系统和用户之分。&lt;/p&gt;
+&lt;h3 id=&quot;系统级&quot;&gt;系统级：&lt;/h3&gt;
+&lt;p&gt;系统级设置对所有用户有效。查看分为两种方式：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;1:cat /proc/sys/fs/file-max  &lt;/li&gt;
+  &lt;li&gt;2:sysctl -a 查看结果中fs.file-max这项的配置数量&lt;/li&gt;
+  &lt;li&gt;3:增加配置数量:vim /etc/sysctl.conf文件，配置fs.file-max属性，如果属性不存在就添加。 &lt;/li&gt;
+  &lt;li&gt;立即生效： sysctl -p&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;用户级&quot;&gt;用户级：&lt;/h3&gt;
+&lt;p&gt;Linux限制每个登录用户的可连接文件数。&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;查询限制数
+    &lt;blockquote&gt;
+      &lt;p&gt;ulimit -n&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/li&gt;
+  &lt;li&gt;设置限制数：
+    &lt;blockquote&gt;
+      &lt;p&gt;ulimit -n &amp;lt;setting number&amp;gt;&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;对于文件描述符增加的比例，资料推荐是以2的幂次为参考。如当前文件描述符数量是1024，可增加到2048，如果不够，可设置到4096，依此类推。 &lt;/p&gt;
+
+&lt;h3 id=&quot;原因分析以及排查&quot;&gt;原因分析以及排查：&lt;/h3&gt;
+&lt;p&gt;在出现Too many open files问题后，最大的可能是打开的文件或是socket没有正常关闭。为了定位问题是否由Java进程引起，通过Java进程号查看当前进程占用文件描述符情况： &lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lsof -p $java_pid 每个文件描述符的具体属性  (获取PID:ps -ef|grep xxxx)
+lsof -p $java_pid | wc -l 当前Java进程file descriptor table中FD的总量
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;检查程序问题&quot;&gt;检查程序问题：&lt;/h3&gt;
+&lt;p&gt;如果你对你的程序有一定的解的话，应该对程序打开文件数(链接数)上限有一定的估算，如果感觉数字异常，请使用第一步的lsof -p 进程id &amp;gt; openfiles.log命令，获得当前占用句柄的全部详情进行分析，&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;打开的这些文件是不是都是必要的？&lt;/li&gt;
+  &lt;li&gt;定位到打开这些文件的代码&lt;/li&gt;
+  &lt;li&gt;是否程序操作了文件写入，但是没有进行正常关闭&lt;/li&gt;
+  &lt;li&gt;是否程序进行了通讯，但是没有正常关闭(也就是没有超时结束的机制) &lt;/li&gt;
+&lt;/ol&gt;
+
+</description>
+        <pubDate>Sat, 06 Mar 2021 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2021/03/%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6%E6%95%B0-Too-many-open-files)/</link>
+        <guid isPermaLink="true">http://localhost:4000/2021/03/%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6%E6%95%B0-Too-many-open-files)/</guid>
+        
+        <category>java,linux</category>
+        
+        
+      </item>
     
       <item>
         <title>博客模板功能介绍</title>
