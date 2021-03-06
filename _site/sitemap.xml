@@ -1,31 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>http://localhost:4000/2015/08/HEXO%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</loc>
-<lastmod>2015-08-25T00:00:00+08:00</lastmod>
+<loc>http://localhost:4000/2021/03/too_many_open_files/</loc>
+<lastmod>2021-03-05T00:00:00+08:00</lastmod>
 </url>
 <url>
-<loc>http://localhost:4000/2016/06/HEXO_Advanced/</loc>
-<lastmod>2016-06-12T00:00:00+08:00</lastmod>
-</url>
-<url>
-<loc>http://localhost:4000/2016/10/jekyll_tutorials1/</loc>
-<lastmod>2016-10-14T00:00:00+08:00</lastmod>
-</url>
-<url>
-<loc>http://localhost:4000/2016/11/markdownTool/</loc>
-<lastmod>2016-11-20T00:00:00+08:00</lastmod>
-</url>
-<url>
-<loc>http://localhost:4000/2020/07/ReleaseNode/</loc>
-<lastmod>2020-07-10T00:00:00+08:00</lastmod>
-</url>
-<url>
-<loc>http://localhost:4000/2020/07/blog_info/</loc>
-<lastmod>2020-07-11T00:00:00+08:00</lastmod>
-</url>
-<url>
-<loc>http://localhost:4000/2021/03/%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6%E6%95%B0-Too-many-open-files)/</loc>
+<loc>http://localhost:4000/2021/03/java_thread_001/</loc>
 <lastmod>2021-03-06T00:00:00+08:00</lastmod>
 </url>
 <url>

@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "2021年03月06日 java-打开文件数（Too many open files)"
-date: 2021-03-06 
+title: 2021年03月05日 打开文件数（Too many open files)
+date: 2021-03-05 
 description: "linux 打开文件数（Too many open files)"
-tag: java,linux
+tags: java linux
 ---   
 
 转:https://blog.csdn.net/c814276009/article/details/84891109
