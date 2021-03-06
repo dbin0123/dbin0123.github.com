@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "2021年1月23日java-打开文件数（Too many open files)"
-date: 2015-08-25 
+title: "2021年03月06日 java-打开文件数（Too many open files)"
+date: 2021-03-06 
 description: "linux 打开文件数（Too many open files)"
 tag: java,linux
 ---   
