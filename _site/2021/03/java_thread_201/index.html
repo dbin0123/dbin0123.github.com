@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>2021年03月06日 《深入浅出 Java 多线程》第一篇 ThreadLocal类(附加)</title>
-  <meta name="description" content="ThreadLocal类(附加)">
+  <title>2021年03月06日 《深入浅出 Java 多线程》第二篇 原理片-Java内存模型基础知识</title>
+  <meta name="description" content="Java内存模型基础知识">
   <meta name="author" content="aiwiown">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="2021年03月06日 《深入浅出 Java 多线程》第一篇 ThreadLocal类(附加)">
-  <meta name="twitter:description" content="ThreadLocal类(附加)">
+  <meta name="twitter:title" content="2021年03月06日 《深入浅出 Java 多线程》第二篇 原理片-Java内存模型基础知识">
+  <meta name="twitter:description" content="Java内存模型基础知识">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="2021年03月06日 《深入浅出 Java 多线程》第一篇 ThreadLocal类(附加)">
-  <meta property="og:description" content="ThreadLocal类(附加)">
+  <meta property="og:title" content="2021年03月06日 《深入浅出 Java 多线程》第二篇 原理片-Java内存模型基础知识">
+  <meta property="og:description" content="Java内存模型基础知识">
   
   <link rel="icon" type="image/png" href="/images/favicon.png" />
   <link href="/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,14 +24,14 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="http://localhost:4000/2021/03/java_thread_002/">
+  <link rel="canonical" href="http://localhost:4000/2021/03/java_thread_201/">
   <link rel="alternate" type="application/rss+xml" title="爱我，爱你，爱自己" href="http://localhost:4000/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
 
 <!-- 站点统计 -->
   <script 
-  async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+  async src="/js/busuanzi.pure.mini.js">
   </script>  
 
 <!-- 百度统计 -->
@@ -159,6 +159,25 @@
     <div class="panel-cover--overlay cover-clear"></div>
     
   </div>
+    <script>
+        window.onload=function(){
+            //定义一个存放照片位置的数组，可以放任意个，在这里放3个
+            //（设定想要显示的图片）
+            var imgs =[
+                "/images/background-cover.jpg",
+                "/images/background-cover1.jpg",
+                "/images/backgrouds/background-cover_01.JPG",
+                "/images/backgrouds/background-cover_02.JPG",
+                "/images/backgrouds/background-cover_03.JPG",
+                "/images/backgrouds/background-cover_04.JPG"
+            ];
+            var index = Math.floor(Math.random() * imgs.length);
+            var panelCover = document.getElementsByClassName("panel-cover")[0];
+            //显示对应的图片
+            panelCover.style.backgroundImage= "URL("+imgs[index]+")";
+        }
+    </script>
+    </script>
 </header>
 
 
@@ -170,7 +189,7 @@
 
 <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
-    <h1 class="post-title">2021年03月06日 《深入浅出 Java 多线程》第一篇 ThreadLocal类(附加)</h1>
+    <h1 class="post-title">2021年03月06日 《深入浅出 Java 多线程》第二篇 原理片-Java内存模型基础知识</h1>
     <div class="post-meta">
       <img src="/images/calendar.png" width="20px"/> 
       <time datetime="2021-03-06 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2021-03-06</time>  
@@ -183,83 +202,107 @@
   
     <h2 class="post-title">目录</h2>
     <ul>
-  <li><a href="#threadlocal类附加">ThreadLocal类(附加)</a></li>
+  <li><a href="#java内存模型基础知识">Java内存模型基础知识</a>
+    <ul>
+      <li><a href="#并发编程模型的两个关键问题">并发编程模型的两个关键问题</a></li>
+      <li><a href="#java内存模型的抽象结构">Java内存模型的抽象结构</a>
+        <ul>
+          <li><a href="#运行时内存的划分">运行时内存的划分</a></li>
+          <li><a href="#既然堆是共享的为什么在堆中会有内存不可见问题">既然堆是共享的，为什么在堆中会有内存不可见问题？</a></li>
+          <li><a href="#jmm与java内存区域划分的区别与联系">JMM与Java内存区域划分的区别与联系</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ul>
 
   
 
   <section class="post">
-    <h4 id="threadlocal类附加">ThreadLocal类(附加)</h4>
+    <h4 id="java内存模型基础知识">Java内存模型基础知识</h4>
+
+<h5 id="并发编程模型的两个关键问题">并发编程模型的两个关键问题</h5>
 
 <ul>
-  <li>ThreadLocal是一个本地线程副本变量工具类。内部是一个弱引用的Map来维护。这里不详细介绍它的原理，而是只是介绍它的使用，以后有独立章节来介绍ThreadLocal类的原理。</li>
+  <li>线程间如何通信？即：线程之间以何种机制来交换信息</li>
+  <li>线程间如何同步？即：线程以何种机制来控制不同线程间操作发生的相对顺序</li>
 </ul>
 
-<p>有些朋友称ThreadLocal为线程本地变量或线程本地存储。严格来说，ThreadLocal类并不属于多线程间的通信，而是让每个线程有自己”独立“的变量，线程之间互不影响。它为每个线程都创建一个副本，每个线程可以访问自己内部的副本变量。</p>
+<p>有两种并发模型可以解决这两个问题：</p>
 
-<p>ThreadLocal类最常用的就是set方法和get方法。示例代码：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public class ThreadLocalDemo {
-    static class ThreadA implements Runnable {
-        private ThreadLocal&lt;String&gt; threadLocal;
+<ul>
+  <li>消息传递并发模型</li>
+  <li>共享内存并发模型</li>
+</ul>
 
-        public ThreadA(ThreadLocal&lt;String&gt; threadLocal) {
-            this.threadLocal = threadLocal;
-        }
+<p>这两种模型之间的区别如下表所示：</p>
 
-        @Override
-        public void run() {
-            threadLocal.set("A");
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("ThreadA输出：" + threadLocal.get());
-        }
+<p><img src="http://dbin0123.github.io/images/posts/thread/201/两种并发模型的比较.png" alt="image" /></p>
 
-        static class ThreadB implements Runnable {
-            private ThreadLocal&lt;String&gt; threadLocal;
+<p>两种并发模型的比较 <strong>Java中，使用的是<code class="highlighter-rouge">共享内存并发模型</code></strong>。</p>
 
-            public ThreadB(ThreadLocal&lt;String&gt; threadLocal) {
-                this.threadLocal = threadLocal;
-            }
+<h5 id="java内存模型的抽象结构">Java内存模型的抽象结构</h5>
 
-            @Override
-            public void run() {
-                threadLocal.set("B");
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("ThreadB输出：" + threadLocal.get());
-            }
-        }
+<h6 id="运行时内存的划分">运行时内存的划分</h6>
+<p>对于每一个线程来说，栈都是私有的，而堆是共有的</p>
 
-        public static void main(String[] args) {
-            ThreadLocal&lt;String&gt; threadLocal = new ThreadLocal&lt;&gt;();
-            new Thread(new ThreadA(threadLocal)).start();
-            new Thread(new ThreadB(threadLocal)).start();
-        }
-    }
-}
+<p>也就是说在栈中的变量（局部变量、方法定义参数、异常处理器参数）不会在线程之间共享，也就不会有内存可见性（下文会说到）的问题，也不受内存模型的影响。而在堆中的变量是共享的，本文称为共享变量。</p>
 
-// 输出：
-ThreadA输出：A
-ThreadB输出：B
-</code></pre></div></div>
+<p>所以，内存可见性是针对的共享变量。
+<img src="http://dbin0123.github.io/images/posts/thread/201/Java运行时数据区.png" alt="image" /></p>
 
-<p>可以看到，虽然两个线程使用的同一个ThreadLocal实例（通过构造方法传入），但是它们各自可以存取自己当前线程的一个值。</p>
+<h6 id="既然堆是共享的为什么在堆中会有内存不可见问题">既然堆是共享的，为什么在堆中会有内存不可见问题？</h6>
+<p>这是因为现代计算机为了高效，往往会在高速缓存区中缓存共享变量，因为cpu访问缓存区比访问内存要快得多。</p>
+<blockquote>
+  <p>线程之间的共享变量存在主内存中，每个线程都有一个私有的本地内存，存储了该线程以读、写共享变量的副本。本地内存是Java内存模型的一个抽象概念，并不真实存在。它涵盖了缓存、写缓冲区、寄存器等。</p>
+</blockquote>
 
-<p>那ThreadLocal有什么作用呢？如果只是单纯的想要线程隔离，在每个线程中声明一个私有变量就好了呀，为什么要使用ThreadLocal？</p>
+<p>Java线程之间的通信由<strong>Java内存模型</strong>（简称JMM）控制，从抽象的角度来说，JMM定义了线程和主内存之间的抽象关系。JMM的抽象示意图如图所示：
+<img src="http://dbin0123.github.io/images/posts/thread/201/JMM抽象示意图.jpg" alt="image" />
+从图中可以看出：</p>
 
-<p>如果开发者希望将类的某个静态变量（user ID或者transaction ID）与线程状态关联，则可以考虑使用ThreadLocal。</p>
+<ul>
+  <li>所有的共享变量都存在主内存中。</li>
+  <li>每个线程都保存了一份该线程使用到的共享变量的副本。</li>
+  <li>如果线程A与线程B之间要通信的话，必须经历下面2个步骤：
+    <ul>
+      <li>线程A将本地内存A中更新过的共享变量刷新到主内存中去。</li>
+      <li>线程B到主内存中去读取线程A之前已经更新过的共享变量。
+<strong>所以，线程A无法直接访问线程B的工作内存，线程间通信必须经过主内存。</strong></li>
+    </ul>
+  </li>
+</ul>
 
-<p>最常见的ThreadLocal使用场景为用来解决数据库连接、Session管理等。数据库连接和Session管理涉及多个复杂对象的初始化和关闭。如果在每个线程中声明一些私有变量来进行操作，那这个线程就变得不那么“轻量”了，需要频繁的创建和关闭连接。</p>
+<p>注意，根据JMM的规定，<strong>线程对共享变量的所有操作都必须在自己的本地内存中进行，不能直接从主内存中读取。</strong></p>
 
-<p>InheritableThreadLocal</p>
+<p>所以线程B并不是直接去主内存中读取共享变量的值，而是先在本地内存B中找到这个共享变量，发现这个共享变量已经被更新了，然后本地内存B去主内存中读取这个共享变量的新值，并拷贝到本地内存B中，最后线程B再读取本地内存B中的新值。</p>
 
-<p>==InheritableThreadLocal类与ThreadLocal类稍有不同==，Inheritable是继承的意思。它==不仅仅是当前线程可以存取副本值，而且它的子线程也可以存取这个副本值。==</p>
+<p>那么怎么知道这个共享变量的被其他线程更新了呢？这就是JMM的功劳了，也是JMM存在的必要性之一。<strong>JMM通过控制主内存与每个线程的本地内存之间的交互，来提供内存可见性保证。</strong></p>
+
+<blockquote>
+  <p>Java中的volatile关键字可以保证多线程操作共享变量的可见性以及禁止指令重排序，synchronized关键字不仅保证可见性，同时也保证了原子性（互斥性）。在更底层，JMM通过内存屏障来实现内存的可见性以及禁止重排序。为了程序员的方便理解，提出了happens-before，它更加的简单易懂，从而避免了程序员为了理解内存可见性而去学习复杂的重排序规则以及这些规则的具体实现方法。这里涉及到的所有内容后面都会有专门的章节介绍。</p>
+</blockquote>
+
+<blockquote>
+  <p>happens-before的意思是前一个操作的结果可以被后续操作获取;</p>
+</blockquote>
+
+<h6 id="jmm与java内存区域划分的区别与联系">JMM与Java内存区域划分的区别与联系</h6>
+<ul>
+  <li>区别</li>
+</ul>
+
+<blockquote>
+  <p>两者是不同的概念层次。JMM是抽象的，他是用来描述一组规则，通过这个规则来控制各个变量的访问方式，围绕原子性、有序性、可见性等展开的。而Java运行时内存的划分是具体的，是JVM运行Java程序时，必要的内存划分。</p>
+</blockquote>
+
+<ul>
+  <li>联系</li>
+</ul>
+
+<blockquote>
+  <p>都存在私有数据区域和共享数据区域。一般来说，<strong>JMM中的主内存属于共享数据区域</strong>，<strong>他是包含了堆和方法区</strong>；同样，<strong>JMM中的本地内存属于私有数据区域，包含了程序计数器、本地方法栈、虚拟机栈</strong>。</p>
+</blockquote>
 
   </section>
 
@@ -307,7 +350,7 @@ ThreadB输出：B
             <style type="text/css">
               .content-play{width:80%;margin-top: 20px;margin-bottom: 10px;height:40px;}
               .hide_box-play{z-index:999;filter:alpha(opacity=50);background:#666;opacity: 0.5;-moz-opacity: 0.5;left:0;top:0;height:99%;width:100%;position:fixed;display:none;}
-              .shang_box-play{width:540px;height:540px;padding:10px;background-color:#fff;border-radius:10px;position:fixed;z-index:1000;left:50%;top:50%;margin-left:-280px;margin-top:-280px;border:1px dotted #dedede;display:none;}
+              .shang_box-play{width:540px;padding:10px;background-color:#fff;border-radius:10px;position:fixed;z-index:1000;left:50%;top:50%;margin-left:-280px;margin-top:-280px;border:1px dotted #dedede;display:none;}
               .shang_box-play img{border:none;border-width:0;}
               .dashang{display:block;width:100px;margin:5px auto;height:25px;line-height:25px;padding:10px;background-color:#E74851;color:#fff;text-align:center;text-decoration:none;border-radius:10px;font-weight:bold;font-size:16px;transition: all 0.3s;}
               .dashang:hover{opacity:0.8;padding:15px;font-size:18px;}
@@ -329,10 +372,15 @@ ThreadB输出：B
        <ul class="pager">
         
         <li class="previous">
-            <a href="/2021/03/java_thread_001/" data-toggle="tooltip" data-placement="top" title="2021年03月06日 《深入浅出 Java 多线程》第一篇 基础篇">上一篇：  <span>2021年03月06日 《深入浅出 Java 多线程》第一篇 基础篇</span>
+            <a href="/2021/03/java_thread_102/" data-toggle="tooltip" data-placement="top" title="2021年03月06日 《深入浅出 Java 多线程》第一篇 ThreadLocal类(附加)">上一篇：  <span>2021年03月06日 《深入浅出 Java 多线程》第一篇 ThreadLocal类(附加)</span>
             </a>
         </li>
         
+        
+        <li class="next">
+            <a href="/2021/03/java_thread_202/" data-toggle="tooltip" data-placement="top" title="2021年03月06日 《深入浅出 Java 多线程》第二篇 原理片-重排序与happens-before">下一篇：  <span>2021年03月06日 《深入浅出 Java 多线程》第二篇 原理片-重排序与happens-before</span>
+            </a>
+        </li>
         
     </ul>
 </section>
@@ -427,7 +475,7 @@ ThreadB输出：B
         </div>
     </div>
     
-    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="/js/main.js"></script>
 
 <script type="text/javascript" src="/js/highlight.pack.js"></script>

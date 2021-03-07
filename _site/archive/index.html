@@ -31,7 +31,7 @@
 
 <!-- 站点统计 -->
   <script 
-  async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+  async src="/js/busuanzi.pure.mini.js">
   </script>  
 
 <!-- 百度统计 -->
@@ -159,6 +159,25 @@
     <div class="panel-cover--overlay cover-clear"></div>
     
   </div>
+    <script>
+        window.onload=function(){
+            //定义一个存放照片位置的数组，可以放任意个，在这里放3个
+            //（设定想要显示的图片）
+            var imgs =[
+                "/images/background-cover.jpg",
+                "/images/background-cover1.jpg",
+                "/images/backgrouds/background-cover_01.JPG",
+                "/images/backgrouds/background-cover_02.JPG",
+                "/images/backgrouds/background-cover_03.JPG",
+                "/images/backgrouds/background-cover_04.JPG"
+            ];
+            var index = Math.floor(Math.random() * imgs.length);
+            var panelCover = document.getElementsByClassName("panel-cover")[0];
+            //显示对应的图片
+            panelCover.style.backgroundImage= "URL("+imgs[index]+")";
+        }
+    </script>
+    </script>
 </header>
 
 
@@ -203,7 +222,7 @@
         2021-03- 6
       </span>
        &raquo; 
-      <a href="/2021/03/java_thread_002/">2021年03月06日 《深入浅出 Java 多线程》第一篇 ThreadLocal类(附加)</a>
+      <a href="/2021/03/spring_day_01/">2021年03月06日 哈哈</a>
     </li>
  
     
@@ -223,7 +242,87 @@
         2021-03- 6
       </span>
        &raquo; 
-      <a href="/2021/03/java_thread_001/">2021年03月06日 《深入浅出 Java 多线程》第一篇 基础篇</a>
+      <a href="/2021/03/java_thread_203/">2021年03月06日 《深入浅出 Java 多线程》第二篇 原理片-volatile关键字</a>
+    </li>
+ 
+    
+          
+      
+    
+  
+    
+    
+    
+    
+  
+    
+  
+    <li>
+      <span>
+        2021-03- 6
+      </span>
+       &raquo; 
+      <a href="/2021/03/java_thread_202/">2021年03月06日 《深入浅出 Java 多线程》第二篇 原理片-重排序与happens-before</a>
+    </li>
+ 
+    
+          
+      
+    
+  
+    
+    
+    
+    
+  
+    
+  
+    <li>
+      <span>
+        2021-03- 6
+      </span>
+       &raquo; 
+      <a href="/2021/03/java_thread_201/">2021年03月06日 《深入浅出 Java 多线程》第二篇 原理片-Java内存模型基础知识</a>
+    </li>
+ 
+    
+          
+      
+    
+  
+    
+    
+    
+    
+  
+    
+  
+    <li>
+      <span>
+        2021-03- 6
+      </span>
+       &raquo; 
+      <a href="/2021/03/java_thread_102/">2021年03月06日 《深入浅出 Java 多线程》第一篇 ThreadLocal类(附加)</a>
+    </li>
+ 
+    
+          
+      
+    
+  
+    
+    
+    
+    
+  
+    
+  
+    <li>
+      <span>
+        2021-03- 6
+      </span>
+       &raquo; 
+      <a href="/2021/03/java_thread_101/">2021年03月06日 《深入浅出 Java 多线程》第一篇 基础篇</a>
     </li>
  
     
@@ -340,7 +439,7 @@
         </div>
     </div>
     
-    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="/js/main.js"></script>
 
 <script type="text/javascript" src="/js/highlight.pack.js"></script>

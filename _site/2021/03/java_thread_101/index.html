@@ -24,14 +24,14 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="http://localhost:4000/2021/03/java_thread_001/">
+  <link rel="canonical" href="http://localhost:4000/2021/03/java_thread_101/">
   <link rel="alternate" type="application/rss+xml" title="爱我，爱你，爱自己" href="http://localhost:4000/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
 
 <!-- 站点统计 -->
   <script 
-  async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+  async src="/js/busuanzi.pure.mini.js">
   </script>  
 
 <!-- 百度统计 -->
@@ -159,6 +159,25 @@
     <div class="panel-cover--overlay cover-clear"></div>
     
   </div>
+    <script>
+        window.onload=function(){
+            //定义一个存放照片位置的数组，可以放任意个，在这里放3个
+            //（设定想要显示的图片）
+            var imgs =[
+                "/images/background-cover.jpg",
+                "/images/background-cover1.jpg",
+                "/images/backgrouds/background-cover_01.JPG",
+                "/images/backgrouds/background-cover_02.JPG",
+                "/images/backgrouds/background-cover_03.JPG",
+                "/images/backgrouds/background-cover_04.JPG"
+            ];
+            var index = Math.floor(Math.random() * imgs.length);
+            var panelCover = document.getElementsByClassName("panel-cover")[0];
+            //显示对应的图片
+            panelCover.style.backgroundImage= "URL("+imgs[index]+")";
+        }
+    </script>
+    </script>
 </header>
 
 
@@ -1205,7 +1224,7 @@ public class ThreadVolatile {
             <style type="text/css">
               .content-play{width:80%;margin-top: 20px;margin-bottom: 10px;height:40px;}
               .hide_box-play{z-index:999;filter:alpha(opacity=50);background:#666;opacity: 0.5;-moz-opacity: 0.5;left:0;top:0;height:99%;width:100%;position:fixed;display:none;}
-              .shang_box-play{width:540px;height:540px;padding:10px;background-color:#fff;border-radius:10px;position:fixed;z-index:1000;left:50%;top:50%;margin-left:-280px;margin-top:-280px;border:1px dotted #dedede;display:none;}
+              .shang_box-play{width:540px;padding:10px;background-color:#fff;border-radius:10px;position:fixed;z-index:1000;left:50%;top:50%;margin-left:-280px;margin-top:-280px;border:1px dotted #dedede;display:none;}
               .shang_box-play img{border:none;border-width:0;}
               .dashang{display:block;width:100px;margin:5px auto;height:25px;line-height:25px;padding:10px;background-color:#E74851;color:#fff;text-align:center;text-decoration:none;border-radius:10px;font-weight:bold;font-size:16px;transition: all 0.3s;}
               .dashang:hover{opacity:0.8;padding:15px;font-size:18px;}
@@ -1233,7 +1252,7 @@ public class ThreadVolatile {
         
         
         <li class="next">
-            <a href="/2021/03/java_thread_002/" data-toggle="tooltip" data-placement="top" title="2021年03月06日 《深入浅出 Java 多线程》第一篇 ThreadLocal类(附加)">下一篇：  <span>2021年03月06日 《深入浅出 Java 多线程》第一篇 ThreadLocal类(附加)</span>
+            <a href="/2021/03/java_thread_102/" data-toggle="tooltip" data-placement="top" title="2021年03月06日 《深入浅出 Java 多线程》第一篇 ThreadLocal类(附加)">下一篇：  <span>2021年03月06日 《深入浅出 Java 多线程》第一篇 ThreadLocal类(附加)</span>
             </a>
         </li>
         
@@ -1330,7 +1349,7 @@ public class ThreadVolatile {
         </div>
     </div>
     
-    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="/js/main.js"></script>
 
 <script type="text/javascript" src="/js/highlight.pack.js"></script>

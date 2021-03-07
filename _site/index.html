@@ -31,7 +31,7 @@
 
 <!-- 站点统计 -->
   <script 
-  async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+  async src="/js/busuanzi.pure.mini.js">
   </script>  
 
 <!-- 百度统计 -->
@@ -159,6 +159,25 @@
     <div class="panel-cover--overlay cover-clear"></div>
     
   </div>
+    <script>
+        window.onload=function(){
+            //定义一个存放照片位置的数组，可以放任意个，在这里放3个
+            //（设定想要显示的图片）
+            var imgs =[
+                "/images/background-cover.jpg",
+                "/images/background-cover1.jpg",
+                "/images/backgrouds/background-cover_01.JPG",
+                "/images/backgrouds/background-cover_02.JPG",
+                "/images/backgrouds/background-cover_03.JPG",
+                "/images/backgrouds/background-cover_04.JPG"
+            ];
+            var index = Math.floor(Math.random() * imgs.length);
+            var panelCover = document.getElementsByClassName("panel-cover")[0];
+            //显示对应的图片
+            panelCover.style.backgroundImage= "URL("+imgs[index]+")";
+        }
+    </script>
+    </script>
 </header>
 
 
@@ -169,33 +188,82 @@
   <ol class="post-list">
     
     <li>
-      <h2 class="post-list__post-title post-title"><a href="/2021/03/java_thread_002/" title="访问 2021年03月06日 《深入浅出 Java 多线程》第一篇 ThreadLocal类(附加)">2021年03月06日 《深入浅出 Java 多线程》第一篇 ThreadLocal类(附加)</a></h2>
-      <p class="excerpt">ThreadLocal类(附加)  ThreadLocal是一个本地线程副本变量工具类。内部是一个弱引用的Map来维护。这里不详细介绍它的原理，而是只是介绍它的使用，以后有独立章节来介绍ThreadLocal类的原理。有些朋友称ThreadLocal为线程本地变量或线程本地存储。严格来说，ThreadLocal类并不属于多线程间的通信，而是让每个线程有自己”独立“的变量，线程之间互不影响。它为每个线程都创建一个副本，每个线程可以访问自己内部的副本变量。ThreadLocal类最常用的就是s...&hellip;</p>
+      <h2 class="post-list__post-title post-title"><a href="/2021/03/spring_day_01/" title="访问 2021年03月06日 哈哈">2021年03月06日 哈哈</a></h2>
+      <p class="excerpt">哈哈回顾及介绍几个基本的概念  内存可见性          在Java内存模型那一章我们介绍了JMM有一个主内存，每个线程有自己私有的工作内存，工作内存中保存了一些变量在主内存的拷贝。      内存可见性，指的是线程之间的可见性，当一个线程修改了共享变量时，另一个线程可以读取到这个修改后的值。  重排序          为优化程序性能，对原有的指令执行顺序进行优化重新排序。重排序可能发生在多个阶段，比如编译重排序、CPU重排序等。        happens-before规则   ...&hellip;</p>
       <div class="post-list__meta">        
         <time datetime="2021-03-06 00:00:00 +0800" class="post-list__meta--date date">
           <img src="/images/calendar.png" width="20px" /> 
-          2021-03-06</time> 
+          2021-03-06
+        </time>
         <div class = "tag-img-icon">
           <img src="/images/tag-icon.svg" width="20px" /> 
         </div>
         <a href="/tags">
           <div class = "post-list-icon-mate">
-            <span class="post-list__meta--tags-right">java多线程《深入浅出Java多线程》ThreadLocal类</span>
+            <span class="post-list__meta--tags-right"></span>
           </div>
           <div class = "post-list-small-mate">
-          <a class="btn-border-small" href=/2021/03/java_thread_002/>阅读全文 » </a>
+            <a class="btn-border-small" href=/2021/03/spring_day_01/>阅读全文 » </a>
           </div>
+        </a>
       </div>
       <hr class="post-list__divider" />
     </li>
     
     <li>
-      <h2 class="post-list__post-title post-title"><a href="/2021/03/java_thread_001/" title="访问 2021年03月06日 《深入浅出 Java 多线程》第一篇 基础篇">2021年03月06日 《深入浅出 Java 多线程》第一篇 基础篇</a></h2>
-      <p class="excerpt">第一章 进程与线程的基本概念1.1 进程产生的背景  进程:应用程序在内存中分配的空间，也就是正在运行的程序    进程中CPU采用时间片轮转的方式运行进程：CPU为每个进程分配一个时间段，称作它的时间片        上下文切换:进程/线程中CPU来回切换被称为上下问切换    进程让操作系统的并发性成为了可能，而线程让进程的内部并发成为了可能      多进程方式确实可以实现并发，但使用多线程，有以下几个好处：  进程间的通信比较复杂，而线程间的通信比较简单，通常情况下，我们需要使用共...&hellip;</p>
+      <h2 class="post-list__post-title post-title"><a href="/2021/03/java_thread_203/" title="访问 2021年03月06日 《深入浅出 Java 多线程》第二篇 原理片-volatile关键字">2021年03月06日 《深入浅出 Java 多线程》第二篇 原理片-volatile关键字</a></h2>
+      <p class="excerpt">volatile关键字回顾及介绍几个基本的概念  内存可见性          在Java内存模型那一章我们介绍了JMM有一个主内存，每个线程有自己私有的工作内存，工作内存中保存了一些变量在主内存的拷贝。      内存可见性，指的是线程之间的可见性，当一个线程修改了共享变量时，另一个线程可以读取到这个修改后的值。  重排序          为优化程序性能，对原有的指令执行顺序进行优化重新排序。重排序可能发生在多个阶段，比如编译重排序、CPU重排序等。        happens-be...&hellip;</p>
       <div class="post-list__meta">        
         <time datetime="2021-03-06 00:00:00 +0800" class="post-list__meta--date date">
           <img src="/images/calendar.png" width="20px" /> 
-          2021-03-06</time> 
+          2021-03-06
+        </time>
+        <div class = "tag-img-icon">
+          <img src="/images/tag-icon.svg" width="20px" /> 
+        </div>
+        <a href="/tags">
+          <div class = "post-list-icon-mate">
+            <span class="post-list__meta--tags-right">java《深入浅出Java多线程》volatile</span>
+          </div>
+          <div class = "post-list-small-mate">
+            <a class="btn-border-small" href=/2021/03/java_thread_203/>阅读全文 » </a>
+          </div>
+        </a>
+      </div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2021/03/java_thread_202/" title="访问 2021年03月06日 《深入浅出 Java 多线程》第二篇 原理片-重排序与happens-before">2021年03月06日 《深入浅出 Java 多线程》第二篇 原理片-重排序与happens-before</a></h2>
+      <p class="excerpt">重排序与happens-before什么是重排序？计算机在执行程序时，为了提高性能，编译器和处理器常常会对指令做重排。为什么指令重排序可以提高性能？简单地说，每一个指令都会包含多个步骤，每个步骤可能使用不同的硬件。因此，流水线技术产生了，它的原理是指令1还没有执行完，就可以开始执行指令2，而不用等到指令1执行结束之后再执行指令2，这样就大大提高了效率。但是，流水线技术最害怕中断，恢复中断的代价是比较大的，所以我们要想尽办法不让流水线中断。指令重排就是减少中断的一种技术。我们分析一下下面这个...&hellip;</p>
+      <div class="post-list__meta">        
+        <time datetime="2021-03-06 00:00:00 +0800" class="post-list__meta--date date">
+          <img src="/images/calendar.png" width="20px" /> 
+          2021-03-06
+        </time>
+        <div class = "tag-img-icon">
+          <img src="/images/tag-icon.svg" width="20px" /> 
+        </div>
+        <a href="/tags">
+          <div class = "post-list-icon-mate">
+            <span class="post-list__meta--tags-right">java多线程《深入浅出Java多线程》happens-before重排序</span>
+          </div>
+          <div class = "post-list-small-mate">
+            <a class="btn-border-small" href=/2021/03/java_thread_202/>阅读全文 » </a>
+          </div>
+        </a>
+      </div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2021/03/java_thread_201/" title="访问 2021年03月06日 《深入浅出 Java 多线程》第二篇 原理片-Java内存模型基础知识">2021年03月06日 《深入浅出 Java 多线程》第二篇 原理片-Java内存模型基础知识</a></h2>
+      <p class="excerpt">Java内存模型基础知识并发编程模型的两个关键问题  线程间如何通信？即：线程之间以何种机制来交换信息  线程间如何同步？即：线程以何种机制来控制不同线程间操作发生的相对顺序有两种并发模型可以解决这两个问题：  消息传递并发模型  共享内存并发模型这两种模型之间的区别如下表所示：两种并发模型的比较 Java中，使用的是共享内存并发模型。Java内存模型的抽象结构运行时内存的划分对于每一个线程来说，栈都是私有的，而堆是共有的也就是说在栈中的变量（局部变量、方法定义参数、异常处理器参数）不会在...&hellip;</p>
+      <div class="post-list__meta">        
+        <time datetime="2021-03-06 00:00:00 +0800" class="post-list__meta--date date">
+          <img src="/images/calendar.png" width="20px" /> 
+          2021-03-06
+        </time>
         <div class = "tag-img-icon">
           <img src="/images/tag-icon.svg" width="20px" /> 
         </div>
@@ -204,8 +272,55 @@
             <span class="post-list__meta--tags-right">java多线程《深入浅出Java多线程》</span>
           </div>
           <div class = "post-list-small-mate">
-          <a class="btn-border-small" href=/2021/03/java_thread_001/>阅读全文 » </a>
+            <a class="btn-border-small" href=/2021/03/java_thread_201/>阅读全文 » </a>
           </div>
+        </a>
+      </div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2021/03/java_thread_102/" title="访问 2021年03月06日 《深入浅出 Java 多线程》第一篇 ThreadLocal类(附加)">2021年03月06日 《深入浅出 Java 多线程》第一篇 ThreadLocal类(附加)</a></h2>
+      <p class="excerpt">ThreadLocal类(附加)  ThreadLocal是一个本地线程副本变量工具类。内部是一个弱引用的Map来维护。这里不详细介绍它的原理，而是只是介绍它的使用，以后有独立章节来介绍ThreadLocal类的原理。有些朋友称ThreadLocal为线程本地变量或线程本地存储。严格来说，ThreadLocal类并不属于多线程间的通信，而是让每个线程有自己”独立“的变量，线程之间互不影响。它为每个线程都创建一个副本，每个线程可以访问自己内部的副本变量。ThreadLocal类最常用的就是s...&hellip;</p>
+      <div class="post-list__meta">        
+        <time datetime="2021-03-06 00:00:00 +0800" class="post-list__meta--date date">
+          <img src="/images/calendar.png" width="20px" /> 
+          2021-03-06
+        </time>
+        <div class = "tag-img-icon">
+          <img src="/images/tag-icon.svg" width="20px" /> 
+        </div>
+        <a href="/tags">
+          <div class = "post-list-icon-mate">
+            <span class="post-list__meta--tags-right">java多线程《深入浅出Java多线程》ThreadLocal类</span>
+          </div>
+          <div class = "post-list-small-mate">
+            <a class="btn-border-small" href=/2021/03/java_thread_102/>阅读全文 » </a>
+          </div>
+        </a>
+      </div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2021/03/java_thread_101/" title="访问 2021年03月06日 《深入浅出 Java 多线程》第一篇 基础篇">2021年03月06日 《深入浅出 Java 多线程》第一篇 基础篇</a></h2>
+      <p class="excerpt">第一章 进程与线程的基本概念1.1 进程产生的背景  进程:应用程序在内存中分配的空间，也就是正在运行的程序    进程中CPU采用时间片轮转的方式运行进程：CPU为每个进程分配一个时间段，称作它的时间片        上下文切换:进程/线程中CPU来回切换被称为上下问切换    进程让操作系统的并发性成为了可能，而线程让进程的内部并发成为了可能      多进程方式确实可以实现并发，但使用多线程，有以下几个好处：  进程间的通信比较复杂，而线程间的通信比较简单，通常情况下，我们需要使用共...&hellip;</p>
+      <div class="post-list__meta">        
+        <time datetime="2021-03-06 00:00:00 +0800" class="post-list__meta--date date">
+          <img src="/images/calendar.png" width="20px" /> 
+          2021-03-06
+        </time>
+        <div class = "tag-img-icon">
+          <img src="/images/tag-icon.svg" width="20px" /> 
+        </div>
+        <a href="/tags">
+          <div class = "post-list-icon-mate">
+            <span class="post-list__meta--tags-right">java多线程《深入浅出Java多线程》</span>
+          </div>
+          <div class = "post-list-small-mate">
+            <a class="btn-border-small" href=/2021/03/java_thread_101/>阅读全文 » </a>
+          </div>
+        </a>
       </div>
       <hr class="post-list__divider" />
     </li>
@@ -216,7 +331,8 @@
       <div class="post-list__meta">        
         <time datetime="2021-03-05 00:00:00 +0800" class="post-list__meta--date date">
           <img src="/images/calendar.png" width="20px" /> 
-          2021-03-05</time> 
+          2021-03-05
+        </time>
         <div class = "tag-img-icon">
           <img src="/images/tag-icon.svg" width="20px" /> 
         </div>
@@ -225,8 +341,9 @@
             <span class="post-list__meta--tags-right">javalinux</span>
           </div>
           <div class = "post-list-small-mate">
-          <a class="btn-border-small" href=/2021/03/too_many_open_files/>阅读全文 » </a>
+            <a class="btn-border-small" href=/2021/03/too_many_open_files/>阅读全文 » </a>
           </div>
+        </a>
       </div>
       <hr class="post-list__divider" />
     </li>
@@ -332,7 +449,7 @@
         </div>
     </div>
     
-    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="/js/main.js"></script>
 
 <script type="text/javascript" src="/js/highlight.pack.js"></script>
