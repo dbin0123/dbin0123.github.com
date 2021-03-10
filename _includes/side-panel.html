@@ -1,4 +1,22 @@
 <header class="panel-cover {% if page.layout == 'post' or page.layout == 'page' %}panel-cover--collapsed{% endif %}" style="">
+    <script>
+        window.onload=function(){
+            //定义一个存放照片位置的数组，可以放任意个，在这里放3个
+            //（设定想要显示的图片）
+            var imgs =[
+                "/images/background-cover.jpg",
+                "/images/background-cover1.jpg",
+                "/images/backgrouds/background-cover_01.JPG",
+                "/images/backgrouds/background-cover_02.JPG",
+                "/images/backgrouds/background-cover_03.JPG",
+                "/images/backgrouds/background-cover_04.JPG"
+            ];
+            var index = Math.floor(Math.random() * imgs.length);
+            var panelCover = document.getElementsByClassName("panel-cover")[0];
+            //显示对应的图片
+            panelCover.style.backgroundImage= "URL("+imgs[index]+")";
+        }
+    </script>
   <div class="panel-main">
 
     <div class="panel-main__inner panel-inverted">
@@ -61,23 +79,5 @@
     <div class="panel-cover--overlay cover-disabled"></div>
     {% endif %}
   </div>
-    <script>
-        window.onload=function(){
-            //定义一个存放照片位置的数组，可以放任意个，在这里放3个
-            //（设定想要显示的图片）
-            var imgs =[
-                "/images/background-cover.jpg",
-                "/images/background-cover1.jpg",
-                "/images/backgrouds/background-cover_01.JPG",
-                "/images/backgrouds/background-cover_02.JPG",
-                "/images/backgrouds/background-cover_03.JPG",
-                "/images/backgrouds/background-cover_04.JPG"
-            ];
-            var index = Math.floor(Math.random() * imgs.length);
-            var panelCover = document.getElementsByClassName("panel-cover")[0];
-            //显示对应的图片
-            panelCover.style.backgroundImage= "URL("+imgs[index]+")";
-        }
-    </script>
-    </script>
+
 </header>
