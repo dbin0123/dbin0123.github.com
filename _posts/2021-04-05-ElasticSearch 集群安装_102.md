@@ -27,8 +27,9 @@ wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.3.2.ta
 1. es_master安装
 
 >master配置文件（elasticsearch.yml）
->
+
 ```yml
+
 # 集群名称
 cluster.name: aiwiown-master
 # 节点名称
@@ -41,6 +42,7 @@ http.port: 9200
 # head插件配置跨域
 http.cors.enabled: true
 http.cors.allow-origin: "*"
+
 ```
 
 >启动 ./bin/elasticsearch -d (-d 后台启动)
@@ -50,8 +52,9 @@ http.cors.allow-origin: "*"
 2. es_slave_01安装
 
 >slave_01配置文件（elasticsearch.yml）
->
+
 ```yml
+
 # 集群名称
 cluster.name: aiwiown-master
 # 节点名称
@@ -64,6 +67,7 @@ http.port: 9201
 discovery.zen.ping.unicast.hosts: ["127.0.0.1"]
 # 为了避免脑裂，集群节点数最少为 半数+1
 discovery.zen.minimum_master_nodes: 2
+
 ```
 
 >启动 ./bin/elasticsearch -d (-d 后台启动)
@@ -73,6 +77,7 @@ discovery.zen.minimum_master_nodes: 2
 >slave_02配置文件（elasticsearch.yml）
 
 ```yml
+
 # 集群名称
 cluster.name: aiwiown-master
 # 节点名称
