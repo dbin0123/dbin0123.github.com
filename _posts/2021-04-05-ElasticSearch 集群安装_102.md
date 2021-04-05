@@ -8,25 +8,27 @@ tags: ElasticSearch 集群 ES
 # ES 集群搭建
 #### 装备工作
 
->下载ElasticSearch安装包（6.3.2）
+- 下载ElasticSearch安装包（6.3.2）
 
 ```sh
 wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.3.2.tar.gz
 ```
-
-安装路径
+ 
+- 安装路径说明
 
 ![安装目录结构](https://gitee.com/dbin0123/picgo/raw/master/image/20210405120023.png)
 
-- es_master：主节点
-- es_slave_01: 子节点1
-- es_slave_02: 子节点2
+1. es_master：主节点
+2. es_slave_01: 子节点1
+3. es_slave_02: 子节点2
 
->解压安装文件至 （es_master,es_slave_01,es_slave_02）
+- 解压安装文件至 （es_master,es_slave_01,es_slave_02）
 
-1. es_master安装
+#### 安装工作
 
->master配置文件（elasticsearch.yml）
+- es_master安装
+
+master配置文件（elasticsearch.yml）
 
 ```yml
 
@@ -45,13 +47,13 @@ http.cors.allow-origin: "*"
 
 ```
 
->启动 ./bin/elasticsearch -d (-d 后台启动)
+启动 ./bin/elasticsearch -d (-d 后台启动)
 
 ![head插件查看](https://gitee.com/dbin0123/picgo/raw/master/image/20210405124149.png)
 
-2. es_slave_01安装
+- es_slave_01安装
 
->slave_01配置文件（elasticsearch.yml）
+slave_01配置文件（elasticsearch.yml）
 
 ```yml
 
@@ -70,11 +72,11 @@ discovery.zen.minimum_master_nodes: 2
 
 ```
 
->启动 ./bin/elasticsearch -d (-d 后台启动)
+启动 ./bin/elasticsearch -d (-d 后台启动)
 
-2. es_slave_02安装
+- es_slave_02安装
 
->slave_02配置文件（elasticsearch.yml）
+slave_02配置文件（elasticsearch.yml）
 
 ```yml
 
@@ -93,7 +95,7 @@ discovery.zen.minimum_master_nodes: 2
 
 ```
 
->启动 ./bin/elasticsearch -d (-d 后台启动)
+启动 ./bin/elasticsearch -d (-d 后台启动)
 
 ![head插件查看](https://gitee.com/dbin0123/picgo/raw/master/image/20210405125429.png)
 
