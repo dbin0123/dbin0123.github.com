@@ -7,7 +7,9 @@ tags: ElasticSearch 集群 ES
 ---   
 # ES 集群搭建
 #### 装备工作
+
 >下载ElasticSearch安装包（6.3.2）
+
 ```sh
 wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.3.2.tar.gz
 ```
@@ -25,6 +27,7 @@ wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.3.2.ta
 1. es_master安装
 
 >master配置文件（elasticsearch.yml）
+>
 ```yml
 # 集群名称
 cluster.name: aiwiown-master
@@ -39,6 +42,7 @@ http.port: 9200
 http.cors.enabled: true
 http.cors.allow-origin: "*"
 ```
+
 >启动 ./bin/elasticsearch -d (-d 后台启动)
 
 ![head插件查看](https://gitee.com/dbin0123/picgo/raw/master/image/20210405124149.png)
@@ -46,6 +50,7 @@ http.cors.allow-origin: "*"
 2. es_slave_01安装
 
 >slave_01配置文件（elasticsearch.yml）
+>
 ```yml
 # 集群名称
 cluster.name: aiwiown-master
@@ -60,11 +65,13 @@ discovery.zen.ping.unicast.hosts: ["127.0.0.1"]
 # 为了避免脑裂，集群节点数最少为 半数+1
 discovery.zen.minimum_master_nodes: 2
 ```
+
 >启动 ./bin/elasticsearch -d (-d 后台启动)
 
 2. es_slave_02安装
 
 >slave_02配置文件（elasticsearch.yml）
+
 ```yml
 # 集群名称
 cluster.name: aiwiown-master
@@ -78,12 +85,15 @@ http.port: 9202
 discovery.zen.ping.unicast.hosts: ["127.0.0.1"]
 # 为了避免脑裂，集群节点数最少为 半数+1
 discovery.zen.minimum_master_nodes: 2
+
 ```
+
 >启动 ./bin/elasticsearch -d (-d 后台启动)
 
 ![head插件查看](https://gitee.com/dbin0123/picgo/raw/master/image/20210405125429.png)
 
 ### 附录
+
 #### 配置描述（转：https://www.cnblogs.com/sunsky303/p/9438737.html）
 
 |  配置   | 描述  |

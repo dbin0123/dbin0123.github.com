@@ -9,6 +9,7 @@ tags: ElasticSearch 插件 Head ES
 ### ES head插件安装
 
 #### 下载 head插件
+
 ```sh
 # 进入安装目录
 cd /run/media/duanbin/programs/opt/elastic_head
@@ -32,12 +33,14 @@ npm run start
 #### ES配置跨域访问
 
 在elasticsearch中启用CORS
+
 ```
 http.cors.enabled: true
 http.cors.allow-origin: "*"
 ```
 
 需要身份认证链接
+
 ```
 http:/127.0.0.1:9100?auth_user=elastic&auth_password=pwd
 ```
