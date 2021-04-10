@@ -1,6 +1,6 @@
 # Basic
 title: 爱我，爱你，爱自己
-subtitle: 个人站
+subtitle:
 description: 欢迎来到我的个人站~
 # 头像里面的标题
 avatarTitle: aiwiown
@@ -76,7 +76,7 @@ nav:
 
 # Pagination 分页信息
 gems: [jekyll-paginate,jekyll-sitemap]
-paginate: 20
+paginate: 10
 paginate_path: "page/:num/"
 
 
