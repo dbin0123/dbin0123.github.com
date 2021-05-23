@@ -224,7 +224,9 @@ public class TestValidate implements DefaultGroupSequenceProvider<TestFrom> {}
     public List<Class<?>> getValidationGroups(TestFrom testFrom) {return null;}
 ```
 - 按需求新增分组校验逻辑
+
 ```java
+
     @Override
     public List<Class<?>> getValidationGroups(TestFrom testFrom) {
         List<Class<?>> listGroudSequence = new ArrayList<>();
@@ -262,13 +264,12 @@ public class TestValidate implements DefaultGroupSequenceProvider<TestFrom> {}
     public interface Group4Check {
     }
 
-
-
 ```
 
 ###### spring boot使用
 
 ```java 
+
     @RequestMapping("/test")
     public JSONResult test(@RequestBody TestFrom testFrom, BindingResult bindingResult) {
         log.info("入参:{}", testFrom);
@@ -277,6 +278,7 @@ public class TestValidate implements DefaultGroupSequenceProvider<TestFrom> {}
         //TODO ... 业务逻辑
         return JSONResult.ok();
     }
+    
 ```
 
 
