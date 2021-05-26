@@ -273,8 +273,8 @@ public class TestValidate implements DefaultGroupSequenceProvider<TestFrom> {}
     @RequestMapping("/test")
     public JSONResult test(@RequestBody TestFrom testFrom, BindingResult bindingResult) {
         log.info("入参:{}", testFrom);
-        //参数校验
-        ValidatorUtils.validateFastException(testFrom, TestValidate.Group1Check.class);
+        //参数校验 Default.class用于全局参数校验
+        ValidatorUtils.validateFastException(testFrom, {TestValidate.Group1Check.class,Default.class});
         //TODO ... 业务逻辑
         return JSONResult.ok();
     }
