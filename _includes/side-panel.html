@@ -1133,8 +1133,13 @@
             // fullw = Math.max(b.clientWidth , b.scrollWidth, d.scrollWidth, d.clientWidth);
             // fullh = Math.max(b.clientHeight , b.scrollHeight, d.scrollHeight, d.clientHeight);
             var parent = document.getElementsByClassName("panel-cover--overlay");
-            canvas.width = parent[0].clientWidth;
-            canvas.height = parent[0].clientHeight;
+            if(parent[0].clientWidth < 500){
+                canvas.width = 0;
+                canvas.height = 0;
+            }else{
+                canvas.width = parent[0].clientWidth;
+                canvas.height = parent[0].clientHeight;
+            }
         }
 
         window.addEventListener('load', function(e) {
