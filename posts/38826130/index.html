@@ -1,0 +1,718 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>2021年09月24日 JVM参数 | 被讨厌的勇气</title><meta name="author" content="dbin0123"><meta name="copyright" content="dbin0123"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="JVM参数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2021年09月24日 JVM参数">
+<meta property="og:url" content="http://blog.aiwiown.com/posts/38826130/index.html">
+<meta property="og:site_name" content="被讨厌的勇气">
+<meta property="og:description" content="JVM参数">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.aiwiown.com/img/avatar.jpg">
+<meta property="article:published_time" content="2021-09-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-30T00:45:01.462Z">
+<meta property="article:author" content="dbin0123">
+<meta property="article:tag" content="JVM虚拟机">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.aiwiown.com/img/avatar.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "2021年09月24日 JVM参数",
+  "url": "http://blog.aiwiown.com/posts/38826130/",
+  "image": "http://blog.aiwiown.com/img/avatar.jpg",
+  "datePublished": "2021-09-23T16:00:00.000Z",
+  "dateModified": "2025-11-30T00:45:01.462Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "dbin0123",
+      "url": "http://blog.aiwiown.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="http://blog.aiwiown.com/posts/38826130/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="stylesheet" href="/css/index.css?v=5.5.2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '2021年09月24日 JVM参数',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.1.1"></head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/blue/pace-theme-minimal.min.css"><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">69</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">66</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-archive"></i><span> 文档</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://s2.loli.net/2022/02/09/dytTqjBgbhkCmD6.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">被讨厌的勇气</span></a><a class="nav-page-title" href="/"><span class="site-name">2021年09月24日 JVM参数</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-archive"></i><span> 文档</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">2021年09月24日 JVM参数</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-09-23T16:00:00.000Z" title="发表于 2021-09-24 00:00:00">2021-09-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-30T00:45:01.462Z" title="更新于 2025-11-30 08:45:01">2025-11-30</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h3 id="JVM-堆参数配置"><a href="#JVM-堆参数配置" class="headerlink" title="JVM 堆参数配置"></a>JVM 堆参数配置</h3><h4 id="JVM通用参数配置"><a href="#JVM通用参数配置" class="headerlink" title="JVM通用参数配置"></a>JVM通用参数配置</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>参数描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-server</code></td>
+<td>如果不配置该参数,JVM 会根据应用服务器硬件配置自动选择不同模式,server 模式启动比较慢,但是运行期速度得到了优化,适合于服务器端运行的 JVM.</td>
+</tr>
+<tr>
+<td><code>-client</code></td>
+<td>启动比较快,但是运行期响应没有 server 模式的优化,适合于个人 PC 的服务开发和测试.</td>
+</tr>
+<tr>
+<td><code>-Xms</code></td>
+<td>设置JVM启动时堆内存的初始化大小</td>
+</tr>
+<tr>
+<td><code>-Xmx</code></td>
+<td>设置堆内存最大值</td>
+</tr>
+<tr>
+<td><code>-Xmn</code></td>
+<td>设置年轻代的空间大小，剩下的为老年代的空间大小</td>
+</tr>
+<tr>
+<td><code>-XX:MetaspaceSize</code></td>
+<td><strong>设置元空间大小(默认大小)</strong></td>
+</tr>
+<tr>
+<td><code>-XX:MaxMetaspaceSize</code></td>
+<td><strong>设置元最大空间大小</strong></td>
+</tr>
+<tr>
+<td><code>-XX:PermGen</code></td>
+<td><del>设置永久代内存的初始化大小(JDK1.8开始废弃了永久代)</del></td>
+</tr>
+<tr>
+<td><code>-XX:MaxPcrmGcn</code></td>
+<td><del>设置永久代的最大值</del></td>
+</tr>
+<tr>
+<td><code>-XX:NewRatio</code></td>
+<td>设置年老代和年轻代的比例大小, 默认值是2. 默认即堆内存分成3份 年轻代1份 老年代2份</td>
+</tr>
+<tr>
+<td><code>-XX:SurvivorRatio</code></td>
+<td>设置Eden区和Survivor区的空间比例：Eden/Survivor 0 = Eden/Survivor 1 默认为8, 年轻带分10份 Eden区默认分8分,-XX:SurvivorRatio=4 eden:sur0:sur1=4:1:1</td>
+</tr>
+<tr>
+<td><code>-XX:+/-UseAdaptiveSizePolicy</code></td>
+<td>开启/关闭Eden/Survivor区使用自适应大小策略,JDK8 默认开启,开启会导致 <code>-XX:SurvivorRatio</code> 设置的比例和实际的不一致</td>
+</tr>
+<tr>
+<td><code>-XX:+/-UseTLAB</code></td>
+<td>开启/关闭使用本地线程分配缓冲(Thread Local Allocation Buffer)分配空间 jdk默认开启</td>
+</tr>
+<tr>
+<td><code>-XX:+/-UseCompressedOops</code></td>
+<td>开启/关闭压缩指针(jdk1.6后默认开启)</td>
+</tr>
+<tr>
+<td><code>‐XX:+/‐UseCompressedClassPointers</code></td>
+<td>开启/关闭头信息的类型指针Klass Pointer</td>
+</tr>
+<tr>
+<td><code>-XX:+/-DoEscapeAnalysis</code></td>
+<td>开启/关闭逃逸分析(JDK7默认开启)</td>
+</tr>
+<tr>
+<td><code>-XX:+/-EliminateAllocations</code></td>
+<td>开启/关闭标量替换(JDK7默认开启)</td>
+</tr>
+<tr>
+<td><code>-XX:PretenureSizeThresholds</code></td>
+<td>设置JVM大对象的大小<strong>单位是字节</strong>,参数只有在Serial 和ParNew垃圾收集器下有效  -XX:+UseSerialGC, -XX:+UseParNewGC</td>
+</tr>
+<tr>
+<td><code>-XX:MaxTenuringThreshold</code></td>
+<td>设置最大对象年龄,超过这个年龄的对象直接进入老年代</td>
+</tr>
+<tr>
+<td><code>-XX:TargetSurvivorRatio</code></td>
+<td>设置对象的存活率, 即对象,(对象动态年龄判断机制一般是在minor gc之后触发的)</td>
+</tr>
+<tr>
+<td><code>-XX:+/-PrintGC</code></td>
+<td>开启/关闭GC日志</td>
+</tr>
+<tr>
+<td><code>-XX:+/-PrintGCDetails</code></td>
+<td>开启/关闭GC详情日志</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h5 id="对象动态年龄判断-XX-MaxTenuringThreshold"><a href="#对象动态年龄判断-XX-MaxTenuringThreshold" class="headerlink" title="对象动态年龄判断 -XX:MaxTenuringThreshold"></a>对象动态年龄判断 -XX:MaxTenuringThreshold</h5><blockquote>
+<p>当前放对象的Survivor区域里(其中一块区域，放对象的那块s区)，一批对象的总大小大于这块Survivor区域内存大小的50%(-XX:TargetSurvivorRatio可以指定)，那么此时大于等于这批对象年龄最大值的对象，就可以直接进入老年代了，例如Survivor区域里现在有一批对象，年龄1+年龄2+年龄n的多个年龄对象总和超过了Survivor区域的50%，此时就会把年龄n(含)以上的对象都放入老年代。这个规则其实是希望那些可能是长期存活的对象，尽早进入老年代。对象动态年龄判断机制一般是在minor gc之后触发的。</p>
+</blockquote>
+<h5 id="老年代空间分配担保机制-XX-HandlePromotionFailure"><a href="#老年代空间分配担保机制-XX-HandlePromotionFailure" class="headerlink" title="老年代空间分配担保机制 -XX:-HandlePromotionFailure"></a>老年代空间分配担保机制 -XX:-HandlePromotionFailure</h5><blockquote>
+<p><strong>年轻代每次minor gc之前JVM都会计算下老年代剩余可用空间</strong><br><strong>如果这个可用空间小于年轻代里现有的所有对象大小之和(包括垃圾对象)</strong><br>就会看一个-XX:-HandlePromotionFailure(jdk1.8默认就设置了)的参数是否设置了,如果有这个参数，就会看看老年代的可用内存大小，是否大于之前每一次minor gc后进入老年代的对象的平均大小。如果上一步结果是小于或者之前说的参数没有设置，那么就会触发一次Full gc，对老年代和年轻代一起回收一次垃圾，如果回收完还是没有足够空间存放新的对象就会发生”OOM”<br>当然，如果minor gc之后剩余存活的需要挪动到老年代的对象大小还是大于老年代可用空间，那么也会触发full gc，full gc完之后如果还是没有空间放minor gc之后的存活对象，则也会发生”OOM”</p>
+</blockquote>
+<h4 id="回收器参数"><a href="#回收器参数" class="headerlink" title="回收器参数"></a>回收器参数</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>参数描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-XX:+UseSerialGC</code></td>
+<td><strong>串行垃圾回收期</strong> 年轻代 和 老年代都使用串行, 使用复制算法回收,逻辑筒单高效,无线程切换开销</td>
+</tr>
+<tr>
+<td><code>-XX:+UseParallelGC</code></td>
+<td><strong>并行垃圾回收器</strong> 年轻代：使用Parallel scavenge回收算法, 多个线程并行回收。通过 <code>-XX:ParallelGCThreads=n</code> 参数指定有线程数,默认是CPU核数,老年代使用单线程回收</td>
+</tr>
+<tr>
+<td><code>-XX:+UseParallelOldGC</code></td>
+<td><strong>并行垃圾回收器</strong> 和<code>-XX:+UseParallelGC</code>一样, 年轻代和老年代都使用多线程</td>
+</tr>
+<tr>
+<td><code>-XX:+UseConcMarkSweepGC</code></td>
+<td><strong>并发垃圾收集器</strong> 短暂停顿的并发垃圾收集器. 年轻代:可以使用普通的或者parallel垃圾回收算法,由参数 <code>-XX+UseParNewGC</code>来控制, 老年代:只能使用并发标记扫描(Concurrent Mark Sweep)</td>
+</tr>
+<tr>
+<td><code>-XX:+UseG1GC</code></td>
+<td><strong>并行垃圾收集器</strong> 并行的,并发的和增量式压缩短暂停顿垃圾收集器, 不区分年轻代和老年代,它把堆空间划分为多个大小相等的区域. 当进行垃圾收集时它会优先收集存活对象较少的区域. 因此叫’Garbage First’</td>
+</tr>
+<tr>
+<td><code>-XX:+UseZGC</code></td>
+<td>可扩展的低延迟垃圾收集器 GC 暂停时间不会随着堆或实时集大小而增加. <a target="_blank" rel="external nofollow noopener noreferrer" href="https://archive.fosdem.org/2018/schedule/event/zgc/attachments/slides/2211/export/events/attachments/zgc/slides/2211/ZGC_FOSDEM_2018.pdf">ZGC介绍</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="项目中常用配置"><a href="#项目中常用配置" class="headerlink" title="项目中常用配置"></a>项目中常用配置</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>参数描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-Xms2048m</code></td>
+<td>初始化堆空间大小2048M</td>
+</tr>
+<tr>
+<td><code>-Xmx2048m</code></td>
+<td>最大堆空间大小2048M</td>
+</tr>
+<tr>
+<td><code>-Xnm682m</code></td>
+<td>最大堆空间大小682M</td>
+</tr>
+<tr>
+<td><code>-Xss512k</code></td>
+<td>设置线程栈空间大小</td>
+</tr>
+<tr>
+<td><code>-XX:PermSize=256m</code></td>
+<td>永久区空间大小(jdk 1.8开始废弃了永久代)</td>
+</tr>
+<tr>
+<td><code>-XX:MaxPermSize=256m</code></td>
+<td>最大永久区空间大小</td>
+</tr>
+<tr>
+<td><code>-XX:+UseStringCache</code></td>
+<td>默认开启，启用缓存常用的字符串</td>
+</tr>
+<tr>
+<td><code>-XX:+UseConcMarkSweepGC</code></td>
+<td>老年代使用CMS收集器</td>
+</tr>
+<tr>
+<td><code>-XX:+UseParNewGC</code></td>
+<td>新生代使用并行收集器</td>
+</tr>
+<tr>
+<td><code>-XX:ParallelGCThreads=4</code></td>
+<td>设置年轻代并行线程数量4</td>
+</tr>
+<tr>
+<td><code>-XX:+CMSClassUnloadingEnabled</code></td>
+<td>允许对类的元数据进行清理</td>
+</tr>
+<tr>
+<td><code>-XX:+DisableExplicitGC</code></td>
+<td>禁止代码执行GC,即System.gc()</td>
+</tr>
+<tr>
+<td><code>-XX:-UscCMSInitiatingOccupancyOnly</code></td>
+<td>表示只有达到阈值的之后才进行CMS回收</td>
+</tr>
+<tr>
+<td><code>-XX:CMSInitiatingOccupancyFraction=68</code></td>
+<td>设置CMS在老年代回收的阈值为68%</td>
+</tr>
+<tr>
+<td><code>-vcrbose:gc</code></td>
+<td>输出虚拟机GC详情</td>
+</tr>
+<tr>
+<td><code>-XX:+PrintGCDetails</code></td>
+<td>打印GC详情日志</td>
+</tr>
+<tr>
+<td><code>-XX:+PrintGCDatcStamps</code></td>
+<td>打印GC的耗时</td>
+</tr>
+<tr>
+<td><code>-XX:+PrintTenuringDistribution</code></td>
+<td>打印Tenuring年龄信息</td>
+</tr>
+<tr>
+<td><code>-XX:+HcapDumpOnOutOfMcmoryError</code></td>
+<td>当抛出OOM时进行HcapDump</td>
+</tr>
+<tr>
+<td><code>-XX:HeapDumpPath=/home/admin/logs</code></td>
+<td>指定HeapDump的文件路径或目录</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="常用垃圾处理器组合配置"><a href="#常用垃圾处理器组合配置" class="headerlink" title="常用垃圾处理器组合配置"></a>常用垃圾处理器组合配置</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>年轻代</th>
+<th>老年代</th>
+<th>JVM 配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Serial</code></td>
+<td><code>Serial</code></td>
+<td><code>-XX:+UseSerialGC</code></td>
+</tr>
+<tr>
+<td><code>Parallel scavenge</code></td>
+<td><code>Serial</code></td>
+<td><code>-XX:+UserParallelGC -XX:+UserParallelOldGC</code>((JDK8 默认垃圾回收器))</td>
+</tr>
+<tr>
+<td><code>Serial/Parallel scavenge</code></td>
+<td><code>CMS</code></td>
+<td><code>-XX:+UserParNewGC -XX:+UseConcMarkSweepGC</code></td>
+</tr>
+<tr>
+<td><code>G1</code></td>
+<td></td>
+<td><code>-XX:+UserG1GC</code>(JDK11 默认垃圾回收器)</td>
+</tr>
+<tr>
+<td><code>ZGC</code></td>
+<td></td>
+<td><code>-XX:+UnlockExperimentalVMOptions -XX:+UseZGC</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="GC-调优原则"><a href="#GC-调优原则" class="headerlink" title="GC 调优原则"></a>GC 调优原则</h3><p>在调优之前，我们需要记住下面的原则：</p>
+<blockquote>
+<p>多数的 Java 应用不需要在服务器上进行 GC 优化； 多数导致 GC 问题的 Java 应用，都不是因为我们参数设置错误，而是代码问题； 在应用上线之前，先考虑将机器的 JVM 参数设置到最优（最适合）； 减少创建对象的数量； 减少使用全局变量和大对象； GC 优化是到最后不得已才采用的手段； 在实际使用中，分析 GC 情况优化代码比优化 GC 参数要多得多。</p>
+</blockquote>
+<h3 id="GC-调优目的"><a href="#GC-调优目的" class="headerlink" title="GC 调优目的"></a>GC 调优目的</h3><p>将转移到老年代的对象数量降低到最小； 减少 GC 的执行时间。</p>
+<ol>
+<li><strong>策略 1</strong> 将新对象预留在新生代，由于 Full GC 的成本远高于 Minor GC，因此尽可能将对象分配在新生代是明智的做法，实际项目中根据 GC 日志分析新生代空间大小分配是否合理，适当通过“-Xmn”命令调节新生代大小，最大限度降低新对象直接进入老年代的情况。</li>
+<li><strong>策略 2</strong> 大对象进入老年代，虽然大部分情况下，将对象分配在新生代是合理的。但是对于大对象这种做法却值得商榷，大对象如果首次在新生代分配可能会出现空间不足导致很多年龄不够的小对象被分配的老年代，破坏新生代的对象结构，可能会出现频繁的 full gc。因此，对于大对象，可以设置直接进入老年代（当然短命的大对象对于垃圾回收老说简直就是噩梦）。-XX:PretenureSizeThreshold 可以设置直接进入老年代的对象大小。</li>
+<li><strong>策略 3</strong> 合理设置进入老年代对象的年龄，-XX:MaxTenuringThreshold 设置对象进入老年代的年龄大小，减少老年代的内存占用，降低 full gc 发生的频率。</li>
+<li><strong>策略 4</strong> 设置稳定的堆大小，堆大小设置有两个参数：-Xms 初始化堆大小，-Xmx 最大堆大小。</li>
+<li><strong>策略 5</strong> 注意： 如果满足下面的指标，则一般不需要进行 GC 优化：</li>
+</ol>
+<blockquote>
+<p>MinorGC 执行时间不到50ms； Minor GC 执行不频繁，约10秒一次; Full GC 执行时间不到1s； Full GC 执行频率不算频繁，不低于10分钟1次.</p>
+</blockquote>
+<h3 id="垃圾回收器选择"><a href="#垃圾回收器选择" class="headerlink" title="垃圾回收器选择"></a>垃圾回收器选择</h3><ol>
+<li>优先调整堆大小,让JVM自行选择;</li>
+<li>如果内存小于100M, 使用串行数据收集器;</li>
+<li>如果是单核CPU,并且没有停顿时间的要求,串行或让JVM自行选择;</li>
+<li>如果允许替代时间超过1秒,选择并行或让JVM自行选择;</li>
+<li>如果响应时间最重要,并且不能超过1秒,使用并发收集器;</li>
+<li><strong>4G以下的可以选择parallel, 4-8G可以选择 ParNew+CMS , 8G 以上可以使用G1, 几百G以上用ZGC</strong></li>
+</ol>
+<p>————————————————-我是可爱的页面分割线——————————————————-</p>
+<blockquote>
+<p>堆内存3G 老年代 2G 年轻代1G(eden:880M s0:60M s1:60M)</p>
+<ul>
+<li>jvm 参数:-Xms3G -Xmx3G -Xss1M -XX:MetaspaceSize=512M -XX:MaxMetaspaceSize=512M</li>
+</ul>
+<p>堆内存3G 老年代 1G 年轻代2G(eden:1.6G s0:200M s1:200M)</p>
+<ul>
+<li>jvm 参数:-Xms3G -Xmx3G -Xmn2G -Xss1M -XX:MetaspaceSize=512M -XX:MaxMetaspaceSize=512M</li>
+</ul>
+</blockquote>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ol>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://juejin.cn/post/6844903802378665997">JVM 配置常用参数</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.jianshu.com/p/2957b001645d">CMS,G1,ZGC介绍</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.jianshu.com/p/b31f17da63ab">ZGC介绍</a></li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://blog.aiwiown.com">dbin0123</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://blog.aiwiown.com/posts/38826130/">http://blog.aiwiown.com/posts/38826130/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="external nofollow noopener noreferrer">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://blog.aiwiown.com" target="_blank">被讨厌的勇气</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA/">JVM虚拟机</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/6ef44812/" title="2021年10月13日 垃圾收集器"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">2021年10月13日 垃圾收集器</div></div><div class="info-2"><div class="info-item-1">垃圾收集器 G1垃圾收集器参数    参数 描述     -XX:+UseG1GC 使用G1收集器   -XX:ParallelGCThreads 指定GC工作的线程数量   -XX:G1HeapRegionSize 指定分区大小（1MB〜32MB,且必须是2的N次鬲），默认将整堆划分为2048个region   -XX:MaxGCPauseMillis 目标暂停时间（默认200ms）   -XX:G1NewSizePercent 新生代内存初始空间（默认整堆5%,值配置整数，默认就是百分比）   -XX:G1MaxNewSizePercent 新生代内存最大空间   -XX:TargetSurvivorRatio Survivor区的填充容量（默认50%）, Survivor区域里的一批对象（年龄1+年龄2+年龄n的多个年 龄对象）总和超过了Survivor区域的50%,此时就会把年龄n（含）以上的对象都放入老年代   -XX:MaxTenuringThreshold 最大年龄阈值（默认 15）   -XX:InitiatingHeapOccupancyPercent 老年代占...</div></div></div></a><a class="pagination-related" href="/posts/9edbaa64/" title="2021年09月13日 JVM虚拟机介绍"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">2021年09月13日 JVM虚拟机介绍</div></div><div class="info-2"><div class="info-item-1">JVM虚拟机介绍 12345678910111213public class App &#123;	public static void main(String[] args) &#123;		App app = new App();		int c = app.add();		System.out.println(c);	&#125;	public int add() &#123;		int a = 1;		int b = 2;		int c = a + b;		return c;	&#125;&#125; javap -c App.class12345678910111213141516171819202122232425262728293031323334public class com.aiwiown.App &#123;  public com.aiwiown.App();    Code:       0: aload_0       1: invokespecial #1                  // Method java/lang/Object.&quo...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/9edbaa64/" title="2021年09月13日 JVM虚拟机介绍"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-09-13</div><div class="info-item-2">2021年09月13日 JVM虚拟机介绍</div></div><div class="info-2"><div class="info-item-1">JVM虚拟机介绍 12345678910111213public class App &#123;	public static void main(String[] args) &#123;		App app = new App();		int c = app.add();		System.out.println(c);	&#125;	public int add() &#123;		int a = 1;		int b = 2;		int c = a + b;		return c;	&#125;&#125; javap -c App.class12345678910111213141516171819202122232425262728293031323334public class com.aiwiown.App &#123;  public com.aiwiown.App();    Code:       0: aload_0       1: invokespecial #1                  // Method java/lang/Object.&quo...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="author-info-name">dbin0123</div><div class="author-info-description">人生不是别人赋予的,而是自己选择的,自由就是被别人讨厌~</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">69</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">66</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/dbin0123"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/dbin0123" target="_blank" title="Github" rel="external nofollow noopener noreferrer"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#JVM-%E5%A0%86%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">JVM 堆参数配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#JVM%E9%80%9A%E7%94%A8%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.</span> <span class="toc-text">JVM通用参数配置</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E5%8A%A8%E6%80%81%E5%B9%B4%E9%BE%84%E5%88%A4%E6%96%AD-XX-MaxTenuringThreshold"><span class="toc-number">1.1.1.</span> <span class="toc-text">对象动态年龄判断 -XX:MaxTenuringThreshold</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%80%81%E5%B9%B4%E4%BB%A3%E7%A9%BA%E9%97%B4%E5%88%86%E9%85%8D%E6%8B%85%E4%BF%9D%E6%9C%BA%E5%88%B6-XX-HandlePromotionFailure"><span class="toc-number">1.1.2.</span> <span class="toc-text">老年代空间分配担保机制 -XX:-HandlePromotionFailure</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9E%E6%94%B6%E5%99%A8%E5%8F%82%E6%95%B0"><span class="toc-number">1.2.</span> <span class="toc-text">回收器参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E4%B8%AD%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE"><span class="toc-number">1.3.</span> <span class="toc-text">项目中常用配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%9E%83%E5%9C%BE%E5%A4%84%E7%90%86%E5%99%A8%E7%BB%84%E5%90%88%E9%85%8D%E7%BD%AE"><span class="toc-number">1.4.</span> <span class="toc-text">常用垃圾处理器组合配置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GC-%E8%B0%83%E4%BC%98%E5%8E%9F%E5%88%99"><span class="toc-number">2.</span> <span class="toc-text">GC 调优原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GC-%E8%B0%83%E4%BC%98%E7%9B%AE%E7%9A%84"><span class="toc-number">3.</span> <span class="toc-text">GC 调优目的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E9%80%89%E6%8B%A9"><span class="toc-number">4.</span> <span class="toc-text">垃圾回收器选择</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">4.1.</span> <span class="toc-text">参考</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/57c67e8a/" title="2023年08月20日 包(Package)和Create和模块(Module)&quot;">2023年08月20日 包(Package)和Create和模块(Module)&quot;</a><time datetime="2023-08-19T16:00:00.000Z" title="发表于 2023-08-20 00:00:00">2023-08-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/50541e2f/" title="2023年08月20日 路径(Path)&quot;">2023年08月20日 路径(Path)&quot;</a><time datetime="2023-08-19T16:00:00.000Z" title="发表于 2023-08-20 00:00:00">2023-08-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/c467feca/" title="2023年08月19日 枚举与match表达式">2023年08月19日 枚举与match表达式</a><time datetime="2023-08-18T16:00:00.000Z" title="发表于 2023-08-19 00:00:00">2023-08-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/56134be9/" title="2023年08月19日 struct">2023年08月19日 struct</a><time datetime="2023-08-18T16:00:00.000Z" title="发表于 2023-08-19 00:00:00">2023-08-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/b82e4745/" title="2023年07月26日 Java获取系统名称">2023年07月26日 Java获取系统名称</a><time datetime="2023-07-25T16:00:00.000Z" title="发表于 2023-07-26 00:00:00">2023-07-26</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By dbin0123</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.2"></script><script src="/js/main.js?v=5.5.2"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const applyThemeDefaultsConfig = theme => {
+    if (theme === 'dark-mode') {
+      Chart.defaults.color = "rgba(255, 255, 255, 0.8)"
+      Chart.defaults.borderColor = "rgba(255, 255, 255, 0.2)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    } else {
+      Chart.defaults.color = "rgba(0, 0, 0, 0.8)"
+      Chart.defaults.borderColor = "rgba(0, 0, 0, 0.1)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    }
+  }
+
+  // Recursively traverse the config object and automatically apply theme-specific color schemes
+  const applyThemeConfig = (obj, theme) => {
+    if (typeof obj !== 'object' || obj === null) return
+
+    Object.keys(obj).forEach(key => {
+      const value = obj[key]
+      // If the property is an object and has theme-specific options, apply them
+      if (typeof value === 'object' && value !== null) {
+        if (value[theme]) {
+          obj[key] = value[theme] // Apply the value for the current theme
+        } else {
+          // Recursively process child objects
+          applyThemeConfig(value, theme)
+        }
+      }
+    })
+  }
+
+  const runChartJS = ele => {
+    window.loadChartJS = true
+
+    Array.from(ele).forEach((item, index) => {
+      const chartSrc = item.firstElementChild
+      const chartID = item.getAttribute('data-chartjs-id') || ('chartjs-' + index) // Use custom ID or default ID
+      const width = item.getAttribute('data-width')
+      const existingCanvas = document.getElementById(chartID)
+
+      // If a canvas already exists, remove it to avoid rendering duplicates
+      if (existingCanvas) {
+          existingCanvas.parentNode.remove()
+      }
+
+      const chartDefinition = chartSrc.textContent
+      const canvas = document.createElement('canvas')
+      canvas.id = chartID
+
+      const div = document.createElement('div')
+      div.className = 'chartjs-wrap'
+
+      if (width) {
+        div.style.width = width
+      }
+
+      div.appendChild(canvas)
+      chartSrc.insertAdjacentElement('afterend', div)
+
+      const ctx = document.getElementById(chartID).getContext('2d')
+
+      const config = JSON.parse(chartDefinition)
+
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark-mode' : 'light-mode'
+
+      // Set default styles (initial setup)
+      applyThemeDefaultsConfig(theme)
+
+      // Automatically traverse the config and apply dual-mode color schemes
+      applyThemeConfig(config, theme)
+
+      new Chart(ctx, config)
+    })
+  }
+
+  const loadChartJS = () => {
+    const chartJSEle = document.querySelectorAll('#article-container .chartjs-container')
+    if (chartJSEle.length === 0) return
+
+    window.loadChartJS ? runChartJS(chartJSEle) : btf.getScript('https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js').then(() => runChartJS(chartJSEle))
+  }
+
+  // Listen for theme change events
+  btf.addGlobalFn('themeChange', loadChartJS, 'chartjs')
+  btf.addGlobalFn('encrypt', loadChartJS, 'chartjs')
+
+  window.pjax ? loadChartJS() : document.addEventListener('DOMContentLoaded', loadChartJS)
+})()</script></div><div class="aplayer no-destroy" data-id="28290165" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true" data-lrctype="-1"> </div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script>(() => {
+  const destroyAplayer = () => {
+    if (window.aplayers) {
+      for (let i = 0; i < window.aplayers.length; i++) {
+        if (!window.aplayers[i].options.fixed) {
+          window.aplayers[i].destroy()
+        }
+      }
+    }
+  }
+
+  const runMetingJS = () => {
+    typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+  }
+
+  btf.addGlobalFn('pjaxSend', destroyAplayer, 'destroyAplayer')
+  btf.addGlobalFn('pjaxComplete', loadMeting, 'runMetingJS')
+})()</script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script>(() => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      const usePjax = true
+      true
+        ? (usePjax ? pjax.loadUrl('/404.html') : window.location.href = '/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})()</script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文档" type="text"></div><hr><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.2"></script></div></div></body></html>

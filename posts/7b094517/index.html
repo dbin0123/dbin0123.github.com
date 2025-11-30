@@ -1,0 +1,752 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>2022年01月22日 mongodb 聚合管道 | 被讨厌的勇气</title><meta name="author" content="dbin0123"><meta name="copyright" content="dbin0123"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="mongodb 聚合管道">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2022年01月22日 mongodb 聚合管道">
+<meta property="og:url" content="http://blog.aiwiown.com/posts/7b094517/index.html">
+<meta property="og:site_name" content="被讨厌的勇气">
+<meta property="og:description" content="mongodb 聚合管道">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.aiwiown.com/img/avatar.jpg">
+<meta property="article:published_time" content="2022-01-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-30T00:45:01.730Z">
+<meta property="article:author" content="dbin0123">
+<meta property="article:tag" content="mongodb 聚合管道">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.aiwiown.com/img/avatar.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "2022年01月22日 mongodb 聚合管道",
+  "url": "http://blog.aiwiown.com/posts/7b094517/",
+  "image": "http://blog.aiwiown.com/img/avatar.jpg",
+  "datePublished": "2022-01-21T16:00:00.000Z",
+  "dateModified": "2025-11-30T00:45:01.730Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "dbin0123",
+      "url": "http://blog.aiwiown.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="http://blog.aiwiown.com/posts/7b094517/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="stylesheet" href="/css/index.css?v=5.5.2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '2022年01月22日 mongodb 聚合管道',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.1.1"></head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/blue/pace-theme-minimal.min.css"><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">69</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">66</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-archive"></i><span> 文档</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://s2.loli.net/2022/02/09/dytTqjBgbhkCmD6.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">被讨厌的勇气</span></a><a class="nav-page-title" href="/"><span class="site-name">2022年01月22日 mongodb 聚合管道</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-archive"></i><span> 文档</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">2022年01月22日 mongodb 聚合管道</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-01-21T16:00:00.000Z" title="发表于 2022-01-22 00:00:00">2022-01-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-30T00:45:01.730Z" title="更新于 2025-11-30 08:45:01">2025-11-30</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>22分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h3 id="mongodb聚合管道"><a href="#mongodb聚合管道" class="headerlink" title="mongodb聚合管道"></a>mongodb聚合管道</h3><h4 id="阶段操作符"><a href="#阶段操作符" class="headerlink" title="阶段操作符"></a>阶段操作符</h4><p><img src="https://docs.mongodb.com/v4.0/_images/map-reduce.bakedsvg.svg" alt></p>
+<h5 id="project-修改文档的结构，可以用来重命名、增加或删除文档中的字段。"><a href="#project-修改文档的结构，可以用来重命名、增加或删除文档中的字段。" class="headerlink" title="$project 修改文档的结构，可以用来重命名、增加或删除文档中的字段。"></a>$project 修改文档的结构，可以用来重命名、增加或删除文档中的字段。</h5><blockquote>
+<p>示例1 返回书籍名称, 金额</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">aiwiown:PRIMARY&gt; db.tb_book.aggregate([&#123;$project:&#123;_id:0, name:1, price: 1&#125;&#125;])</span><br><span class="line">&#123; &quot;name&quot; : &quot;mongodb从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;179.9900000000000&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;mongodb从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;169.9900000000000&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;java从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;199.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;c++从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;299.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;C从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;399.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;python从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;499.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;php从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;599.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;c++入门图解&quot;, &quot;price&quot; : null &#125;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">java示例</span></span><br><span class="line"> public static void main(String[] args) &#123;</span><br><span class="line">     MongoDatabase database = new MongoClient(&quot;127.0.0.1&quot;).getDatabase(&quot;aiwiown&quot;);</span><br><span class="line">     MongoCollection&lt;Document&gt; bookCollections = database.getCollection(&quot;tb_book&quot;);</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">    List&lt;Document&gt; aggregateListQuery = new ArrayList&lt;&gt;();</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">    aggregateListQuery.add(new Document(<span class="string">&quot;<span class="variable">$project</span>&quot;</span>,</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">            new Document().append(<span class="string">&quot;_id&quot;</span>, 0).append(<span class="string">&quot;name&quot;</span>, 1).append(<span class="string">&quot;price&quot;</span>, 1)));</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">    AggregateIterable&lt;Document&gt; aggregate = bookCollections.aggregate(aggregateListQuery);</span></span><br><span class="line">AggregateIterable&lt;Document&gt; aggregate = bookCollections.aggregate(Arrays.asList(new Document(&quot;$project&quot;, Projections.fields(Projections.excludeId(),Projections.include(&quot;name&quot;,&quot;price&quot;)))));</span><br><span class="line">     for (Document document : aggregate) &#123;</span><br><span class="line">         System.out.println(document);</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>示例2 金额不为空+10;</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">aiwiown:PRIMARY&gt; db.tb_book.aggregate([&#123;$project:&#123;_id:0, name:1, price:&#123;$add:[&quot;$price&quot;, 10]&#125;&#125;&#125;])</span><br><span class="line">&#123; &quot;name&quot; : &quot;mongodb从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;189.9900000000000&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;mongodb从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;179.9900000000000&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;java从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;209.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;c++从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;309.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;C从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;409.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;python从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;509.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;php从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;609.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;c++入门图解&quot;, &quot;price&quot; : null &#125;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">java 示例</span></span><br><span class="line"> public static void main(String[] args) &#123;</span><br><span class="line">     MongoDatabase database = new MongoClient(&quot;127.0.0.1&quot;).getDatabase(&quot;aiwiown&quot;);</span><br><span class="line">     MongoCollection&lt;Document&gt; bookCollections = database.getCollection(&quot;tb_book&quot;);</span><br><span class="line">     List&lt;Document&gt; aggregateListQuery = new ArrayList&lt;&gt;();</span><br><span class="line">     aggregateListQuery.add(new Document(&quot;$project&quot;,</span><br><span class="line">             new Document().append(&quot;_id&quot;, 0).append(&quot;name&quot;, 1).append(&quot;price&quot;, new Document().append(&quot;$add&quot;, Arrays.asList(&quot;$price&quot;,10)))));</span><br><span class="line">     AggregateIterable&lt;Document&gt; aggregate = bookCollections.aggregate(aggregateListQuery);</span><br><span class="line">     for (Document doc : aggregate) &#123;</span><br><span class="line">         System.out.println(doc);</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>示例3 重命名price为 amount</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">aiwiown:PRIMARY&gt; db.tb_book.aggregate([&#123;$project:&#123;_id:0, name: 1, amount:&#x27;$price&#x27;&#125;&#125;]);</span><br><span class="line">&#123; &quot;name&quot; : &quot;mongodb从入门到放弃&quot;, &quot;amount&quot; : NumberDecimal(&quot;179.9900000000000&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;mongodb从入门到放弃&quot;, &quot;amount&quot; : NumberDecimal(&quot;169.9900000000000&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;java从入门到放弃&quot;, &quot;amount&quot; : NumberDecimal(&quot;199.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;c++从入门到放弃&quot;, &quot;amount&quot; : NumberDecimal(&quot;299.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;C从入门到放弃&quot;, &quot;amount&quot; : NumberDecimal(&quot;399.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;python从入门到放弃&quot;, &quot;amount&quot; : NumberDecimal(&quot;499.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;php从入门到放弃&quot;, &quot;amount&quot; : NumberDecimal(&quot;599.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;c++入门图解&quot;, &quot;amount&quot; : null &#125;</span><br><span class="line">java示例</span><br><span class="line"> public static void main(String[] args) &#123;</span><br><span class="line">     MongoDatabase database = new MongoClient(&quot;127.0.0.1&quot;).getDatabase(&quot;aiwiown&quot;);</span><br><span class="line">     MongoCollection&lt;Document&gt; bookCollections = database.getCollection(&quot;tb_book&quot;);</span><br><span class="line">     List&lt;Document&gt; aggregateListQuery = new ArrayList&lt;&gt;();</span><br><span class="line">     aggregateListQuery.add(new Document(&quot;$project&quot;,</span><br><span class="line">             new Document().append(&quot;_id&quot;, 0).append(&quot;name&quot;, 1).append(&quot;amount&quot;, &quot;$price&quot;)));</span><br><span class="line">     AggregateIterable&lt;Document&gt; aggregate = bookCollections.aggregate(aggregateListQuery);</span><br><span class="line">     for (Document doc : aggregate) &#123;</span><br><span class="line">         System.out.println(doc);</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h5 id="match-匹配-相当于find查询"><a href="#match-匹配-相当于find查询" class="headerlink" title="$match 匹配(相当于find查询)"></a>$match 匹配(相当于find查询)</h5><blockquote>
+<p>查询金额大于500的数据</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">aiwiown:PRIMARY&gt; db.tb_book.aggregate([</span><br><span class="line">    &#123;$match:&#123;price:&#123;$gt:NumberDecimal(&#x27;500&#x27;)&#125;&#125;&#125;, //查询金额大于500的数据</span><br><span class="line">    &#123;$project:&#123;_id:0, name:1, price:1&#125;&#125;         //数据数据名称, 金额</span><br><span class="line">])</span><br><span class="line">&#123; &quot;name&quot; : &quot;php从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;599.99&quot;) &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li>$match 中不能使用 $where 表达式操作符</li>
+<li>如果 $match 位于管道的第一个阶段,可以利用索引来提高查询效率</li>
+<li>$match 中使用 $text 操作符的话,只能位于管道的第一阶段</li>
+<li>$match 尽量出现在管道的最前面,过滤出需要的数据,在后续的阶段中可以提高效率</li>
+</ul>
+<h5 id="group-分组操作"><a href="#group-分组操作" class="headerlink" title="$group 分组操作"></a>$group 分组操作</h5><blockquote>
+<p>根据出版社分组,计算不同出版社的书籍数量</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">aiwiown:PRIMARY&gt; db.tb_book.aggregate([</span><br><span class="line">  &#123;$group:&#123;_id:&#x27;$cbs&#x27;, count:&#123;$sum:1&#125;&#125;&#125;,</span><br><span class="line">  &#123;$project:&#123;_id:0, &#x27;cbs&#x27;:&#x27;$_id&#x27;, count: 1&#125;&#125;</span><br><span class="line">]);</span><br><span class="line">&#123; &quot;count&quot; : 1, &quot;cbs&quot; : &quot;机械工业出版社&quot; &#125;</span><br><span class="line">&#123; &quot;count&quot; : 7, &quot;cbs&quot; : &quot;中国日报出版社&quot; &#125;</span><br></pre></td></tr></table></figure>
+<h5 id="sort-排序"><a href="#sort-排序" class="headerlink" title="$sort 排序"></a>$sort 排序</h5><blockquote>
+<p>根据出版社升序(1) 金额排序降序(-1)</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">aiwiown:PRIMARY&gt; db.tb_book.aggregate([</span><br><span class="line">  &#123;$sort:&#123;cbs:1, price:-1&#125;&#125;,            //根据出版社升序 金额降序</span><br><span class="line">  &#123;$project:&#123;_id:0, name:1, price:1&#125;&#125;   //输出 书籍名称, 金额字段</span><br><span class="line">])</span><br><span class="line">&#123; &quot;name&quot; : &quot;php从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;599.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;python从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;499.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;c++从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;299.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;java从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;199.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;mongodb从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;179.9900000000000&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;mongodb从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;169.9900000000000&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;c++入门图解&quot;, &quot;price&quot; : null &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;C从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;399.99&quot;) &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h5 id="limit-限制返回条数"><a href="#limit-限制返回条数" class="headerlink" title="$limit 限制返回条数"></a>$limit 限制返回条数</h5><blockquote>
+<p>查询出版社为<code>中国日报出版社</code> 根据金额升序,并获取2条记录</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">aiwiown:PRIMARY&gt; db.tb_book.aggregate([</span><br><span class="line">    &#123;$match:&#123;cbs:&#x27;中国日报出版社&#x27;&#125;&#125;,   //查询出版社为 中国日报出版社 的数据</span><br><span class="line">    &#123;$sort:&#123;price:1&#125;&#125;,              //根据金额升序</span><br><span class="line">    &#123;$limit:2&#125;                      //获取2条记录</span><br><span class="line">]).pretty()                         //格式化输出</span><br><span class="line">&#123;</span><br><span class="line">        &quot;_id&quot; : ObjectId(&quot;61ee464b1b2b081b2f801fb4&quot;),</span><br><span class="line">        &quot;name&quot; : &quot;c++入门图解&quot;,</span><br><span class="line">        &quot;cbs&quot; : &quot;中国日报出版社&quot;,</span><br><span class="line">        &quot;price&quot; : null,</span><br><span class="line">        &quot;deleted&quot; : 1,</span><br><span class="line">        &quot;create_time&quot; : ISODate(&quot;2022-01-19T06:34:29.247Z&quot;)</span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">        &quot;_id&quot; : ObjectId(&quot;61e7aeffd83f5a29ae960b28&quot;),</span><br><span class="line">        &quot;name&quot; : &quot;mongodb从入门到放弃&quot;,</span><br><span class="line">        &quot;cbs&quot; : &quot;中国日报出版社&quot;,</span><br><span class="line">        &quot;price&quot; : NumberDecimal(&quot;169.9900000000000&quot;),</span><br><span class="line">        &quot;deleted&quot; : 1,</span><br><span class="line">        &quot;create_time&quot; : ISODate(&quot;2022-01-19T06:26:07.178Z&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h5 id="skip-跳过指定数量的文档"><a href="#skip-跳过指定数量的文档" class="headerlink" title="$skip 跳过指定数量的文档"></a>$skip 跳过指定数量的文档</h5><blockquote>
+<p>查询出版社为<code>中国日报出版社</code> 根据金额升序,并获取3,4条记录</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">aiwiown:PRIMARY&gt; db.tb_book.aggregate([</span><br><span class="line">  &#123;$match:&#123;cbs:&#x27;中国日报出版社&#x27;&#125;&#125;,     //查询出版社为 中国日报出版社 的数据</span><br><span class="line">  &#123;$sort:&#123;price:1&#125;&#125;,                //根据金额升序</span><br><span class="line">  &#123;$skip:2&#125;,                        //跳过前2条</span><br><span class="line">  &#123;$limit:2&#125;                        //获取2条记录</span><br><span class="line">]).pretty()                         //格式化输出</span><br><span class="line">&#123;</span><br><span class="line">        &quot;_id&quot; : ObjectId(&quot;61e7aebfd83f5a29ae960b27&quot;),</span><br><span class="line">        &quot;name&quot; : &quot;mongodb从入门到放弃&quot;,</span><br><span class="line">        &quot;cbs&quot; : &quot;中国日报出版社&quot;,</span><br><span class="line">        &quot;price&quot; : NumberDecimal(&quot;179.9900000000000&quot;),</span><br><span class="line">        &quot;deleted&quot; : 1,</span><br><span class="line">        &quot;create_time&quot; : ISODate(&quot;2022-01-19T06:25:03.373Z&quot;)</span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">        &quot;_id&quot; : ObjectId(&quot;61e7b0f5256f8f3d2b9370c5&quot;),</span><br><span class="line">        &quot;name&quot; : &quot;java从入门到放弃&quot;,</span><br><span class="line">        &quot;cbs&quot; : &quot;中国日报出版社&quot;,</span><br><span class="line">        &quot;price&quot; : NumberDecimal(&quot;199.99&quot;),</span><br><span class="line">        &quot;deleted&quot; : 1,</span><br><span class="line">        &quot;create_time&quot; : ISODate(&quot;2022-01-19T06:34:29.247Z&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h5 id="unwind-拆分文档数组"><a href="#unwind-拆分文档数组" class="headerlink" title="$unwind 拆分文档数组"></a>$unwind 拆分文档数组</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查询文档</span></span><br><span class="line">aiwiown:PRIMARY&gt; db.test.find(&#123;_id:ObjectId(&quot;5f35dee1f1ccd78138525e72&quot;)&#125;).pretty()</span><br><span class="line">&#123;</span><br><span class="line">        &quot;_id&quot; : ObjectId(&quot;5f35dee1f1ccd78138525e72&quot;),</span><br><span class="line">        &quot;title&quot; : &quot;pgsql 教程&quot;,</span><br><span class="line">        &quot;description&quot; : &quot;pgsql 是一个数据库&quot;,</span><br><span class="line">        &quot;by&quot; : &quot;菜鸟教程&quot;,</span><br><span class="line">        &quot;url&quot; : &quot;http://www.runoob.com&quot;,</span><br><span class="line">        &quot;tags&quot; : [</span><br><span class="line">                &quot;pgsql&quot;,</span><br><span class="line">                &quot;database&quot;,</span><br><span class="line">                &quot;SQL&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;likes&quot; : 100,</span><br><span class="line">        &quot;count&quot; : 100</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//拆分tags</span><br><span class="line">aiwiown:PRIMARY&gt; db.test.aggregate([</span><br><span class="line">  &#123;$match:&#123;_id:ObjectId(&quot;5f35dee1f1ccd78138525e72&quot;)&#125;&#125;,    //查询文档ID为 5f35dee1f1ccd78138525e72的文档</span><br><span class="line">  &#123;$unwind: &#x27;$tags&#x27;&#125;                                      //拆分tags字段</span><br><span class="line">]).pretty()</span><br><span class="line">&#123;</span><br><span class="line">        &quot;_id&quot; : ObjectId(&quot;5f35dee1f1ccd78138525e72&quot;),</span><br><span class="line">        &quot;title&quot; : &quot;pgsql 教程&quot;,</span><br><span class="line">        &quot;description&quot; : &quot;pgsql 是一个数据库&quot;,</span><br><span class="line">        &quot;by&quot; : &quot;菜鸟教程&quot;,</span><br><span class="line">        &quot;url&quot; : &quot;http://www.runoob.com&quot;,</span><br><span class="line">        &quot;tags&quot; : &quot;pgsql&quot;,</span><br><span class="line">        &quot;likes&quot; : 100,</span><br><span class="line">        &quot;count&quot; : 100</span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">        &quot;_id&quot; : ObjectId(&quot;5f35dee1f1ccd78138525e72&quot;),</span><br><span class="line">        &quot;title&quot; : &quot;pgsql 教程&quot;,</span><br><span class="line">        &quot;description&quot; : &quot;pgsql 是一个数据库&quot;,</span><br><span class="line">        &quot;by&quot; : &quot;菜鸟教程&quot;,</span><br><span class="line">        &quot;url&quot; : &quot;http://www.runoob.com&quot;,</span><br><span class="line">        &quot;tags&quot; : &quot;database&quot;,</span><br><span class="line">        &quot;likes&quot; : 100,</span><br><span class="line">        &quot;count&quot; : 100</span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">        &quot;_id&quot; : ObjectId(&quot;5f35dee1f1ccd78138525e72&quot;),</span><br><span class="line">        &quot;title&quot; : &quot;pgsql 教程&quot;,</span><br><span class="line">        &quot;description&quot; : &quot;pgsql 是一个数据库&quot;,</span><br><span class="line">        &quot;by&quot; : &quot;菜鸟教程&quot;,</span><br><span class="line">        &quot;url&quot; : &quot;http://www.runoob.com&quot;,</span><br><span class="line">        &quot;tags&quot; : &quot;SQL&quot;,</span><br><span class="line">        &quot;likes&quot; : 100,</span><br><span class="line">        &quot;count&quot; : 100</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li>$unwind 参数数组字段为空或不存在时,待处理的文档将会被忽略,该文档将不会有任何输出;</li>
+<li>$unwind 参数不是一个数组类型时,将会抛出异常;</li>
+<li>$unwind 所作的修改,只用于输出,不能改变原文档;</li>
+</ul>
+<h4 id="表达式操作符"><a href="#表达式操作符" class="headerlink" title="表达式操作符"></a>表达式操作符</h4><h5 id="布尔管道聚合操作（Boolean-Aggregation-Operators）-or-and-not"><a href="#布尔管道聚合操作（Boolean-Aggregation-Operators）-or-and-not" class="headerlink" title="布尔管道聚合操作（Boolean Aggregation Operators） $or $and $not"></a>布尔管道聚合操作（Boolean Aggregation Operators） $or $and $not</h5><blockquote>
+<p>示例1 查询金额大于200 小于500的书籍</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">aiwiown:PRIMARY&gt; db.tb_book.aggregate([</span><br><span class="line">  &#123;$match:&#123;</span><br><span class="line">    price:&#123;</span><br><span class="line">      $gt:NumberDecimal(200), </span><br><span class="line">      $lt:NumberDecimal(500)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;&#125;,</span><br><span class="line">  &#123;$project:&#123;_id:0, name:1, price:1&#125;&#125;</span><br><span class="line">]);</span><br><span class="line">&#123; &quot;name&quot; : &quot;c++从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;299.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;C从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;399.99&quot;) &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;python从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;499.99&quot;) &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>示例2 判断金额小于200或大于500的书籍</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">aiwiown:PRIMARY&gt; db.tb_book.aggregate([</span><br><span class="line">  &#123;$project: &#123;</span><br><span class="line">    _id: 0,name: 1, price:1, </span><br><span class="line">    amount: &#123;</span><br><span class="line">      $or: [</span><br><span class="line">        &#123;$gt: [&#x27;$price&#x27;,NumberDecimal(&#x27;500&#x27;)]&#125;, </span><br><span class="line">        &#123;$lt: [&#x27;$price&#x27;,NumberDecimal(&#x27;200&#x27;)]&#125;</span><br><span class="line">      ]</span><br><span class="line">     &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;])</span><br><span class="line">&#123; &quot;name&quot; : &quot;mongodb从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;179.9900000000000&quot;), &quot;amount&quot; : true &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;mongodb从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;169.9900000000000&quot;), &quot;amount&quot; : true &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;java从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;199.99&quot;), &quot;amount&quot; : true &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;c++从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;299.99&quot;), &quot;amount&quot; : false &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;C从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;399.99&quot;), &quot;amount&quot; : false &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;python从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;499.99&quot;), &quot;amount&quot; : false &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;php从入门到放弃&quot;, &quot;price&quot; : NumberDecimal(&quot;599.99&quot;), &quot;amount&quot; : true &#125;</span><br><span class="line">&#123; &quot;name&quot; : &quot;c++入门图解&quot;, &quot;price&quot; : null, &quot;amount&quot; : true &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h5 id="集合操作（Set-Operators）"><a href="#集合操作（Set-Operators）" class="headerlink" title="集合操作（Set Operators）"></a>集合操作（Set Operators）</h5><p>样本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;_id&quot;: 1,</span><br><span class="line">  &quot;A&quot;: [</span><br><span class="line">    &quot;red&quot;,</span><br><span class="line">    &quot;blue&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;B&quot;: [</span><br><span class="line">    &quot;red&quot;,</span><br><span class="line">    &quot;blue&quot;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;_id&quot;: 2,</span><br><span class="line">  &quot;A&quot;: [</span><br><span class="line">    &quot;red&quot;,</span><br><span class="line">    &quot;blue&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;B&quot;: [</span><br><span class="line">    &quot;blue&quot;,</span><br><span class="line">    &quot;red&quot;,</span><br><span class="line">    &quot;blue&quot;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;_id&quot;: 3,</span><br><span class="line">  &quot;A&quot;: [</span><br><span class="line">    &quot;red&quot;,</span><br><span class="line">    &quot;blue&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;B&quot;: [</span><br><span class="line">    &quot;red&quot;,</span><br><span class="line">    &quot;blue&quot;,</span><br><span class="line">    &quot;green&quot;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;_id&quot;: 4,</span><br><span class="line">  &quot;A&quot;: [</span><br><span class="line">    &quot;red&quot;,</span><br><span class="line">    &quot;blue&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;B&quot;: [</span><br><span class="line">    &quot;green&quot;,</span><br><span class="line">    &quot;red&quot;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;_id&quot;: 5,</span><br><span class="line">  &quot;A&quot;: [</span><br><span class="line">    &quot;red&quot;,</span><br><span class="line">    &quot;blue&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;B&quot;: []</span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;_id&quot;: 6,</span><br><span class="line">  &quot;A&quot;: [</span><br><span class="line">    &quot;red&quot;,</span><br><span class="line">    &quot;blue&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;B&quot;: [</span><br><span class="line">    [</span><br><span class="line">      &quot;red&quot;</span><br><span class="line">    ],</span><br><span class="line">    [</span><br><span class="line">      &quot;blue&quot;</span><br><span class="line">    ]</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;_id&quot;: 7,</span><br><span class="line">  &quot;A&quot;: [</span><br><span class="line">    &quot;red&quot;,</span><br><span class="line">    &quot;blue&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;B&quot;: [</span><br><span class="line">    [</span><br><span class="line">      &quot;red&quot;,</span><br><span class="line">      &quot;blue&quot;</span><br><span class="line">    ]</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;_id&quot;: 8,</span><br><span class="line">  &quot;A&quot;: [],</span><br><span class="line">  &quot;B&quot;: []</span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;_id&quot;: 9,</span><br><span class="line">  &quot;A&quot;: [],</span><br><span class="line">  &quot;B&quot;: [</span><br><span class="line">    &quot;red&quot;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>操作符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$setEquals</td>
+<td>匹配 <code>{$setEquals:[&#39;$B&#39;,&#39;$A&#39;]}</code>匹配两个集合是否一致</td>
+</tr>
+<tr>
+<td>$setIntersection</td>
+<td>交集 <code>{$setIntersection:[&#39;$B&#39;,&#39;$A&#39;]</code> 获取A,B集合都存在的数据</td>
+</tr>
+<tr>
+<td>$setUnion</td>
+<td>并集 <code>{$setUnion:[&#39;$B&#39;,&#39;$A&#39;]</code> 获取A,B集合所有数据</td>
+</tr>
+<tr>
+<td>$setDifference</td>
+<td>差集 <code>{$setDifference:[&#39;$B&#39;,&#39;$A&#39;]</code> 获取B集合数据中在A集合中不存在的数据</td>
+</tr>
+<tr>
+<td>$setIsSubset</td>
+<td>子集 <code>{$setIsSubset:[&#39;$B&#39;,&#39;$A&#39;]}</code> 判断B是否是A的子集</td>
+</tr>
+<tr>
+<td>$anyElementTrue</td>
+<td>判断集合是否存在值</td>
+</tr>
+<tr>
+<td>$allElementsTrue</td>
+<td>如果集合中没有元素计算结果为 false，则返回 true，否则返回 false。接受单个参数表达式。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p>示例 获取A,B列的交集</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">aiwiown:PRIMARY&gt; db.tb_set.aggregate([&#123;$project:&#123;_id:0, A:1, B:1, union:&#123;$setIntersection:[&#x27;$A&#x27;,&#x27;$B&#x27;]&#125;&#125;&#125;])</span><br><span class="line">&#123; &quot;A&quot; : [ &quot;red&quot;, &quot;blue&quot; ], &quot;B&quot; : [ &quot;red&quot;, &quot;blue&quot; ], &quot;union&quot; : [ &quot;blue&quot;, &quot;red&quot; ] &#125;</span><br><span class="line">&#123; &quot;A&quot; : [ &quot;red&quot;, &quot;blue&quot; ], &quot;B&quot; : [ &quot;blue&quot;, &quot;red&quot;, &quot;blue&quot; ], &quot;union&quot; : [ &quot;blue&quot;, &quot;red&quot; ] &#125;</span><br><span class="line">&#123; &quot;A&quot; : [ &quot;red&quot;, &quot;blue&quot; ], &quot;B&quot; : [ &quot;red&quot;, &quot;blue&quot;, &quot;green&quot; ], &quot;union&quot; : [ &quot;blue&quot;, &quot;red&quot; ] &#125;</span><br><span class="line">&#123; &quot;A&quot; : [ &quot;red&quot;, &quot;blue&quot; ], &quot;B&quot; : [ &quot;green&quot;, &quot;red&quot; ], &quot;union&quot; : [ &quot;red&quot; ] &#125;</span><br><span class="line">&#123; &quot;A&quot; : [ &quot;red&quot;, &quot;blue&quot; ], &quot;B&quot; : [ ], &quot;union&quot; : [ ] &#125;</span><br><span class="line">&#123; &quot;A&quot; : [ &quot;red&quot;, &quot;blue&quot; ], &quot;B&quot; : [ [ &quot;red&quot; ], [ &quot;blue&quot; ] ], &quot;union&quot; : [ ] &#125;</span><br><span class="line">&#123; &quot;A&quot; : [ &quot;red&quot;, &quot;blue&quot; ], &quot;B&quot; : [ [ &quot;red&quot;, &quot;blue&quot; ] ], &quot;union&quot; : [ ] &#125;</span><br><span class="line">&#123; &quot;A&quot; : [ ], &quot;B&quot; : [ ], &quot;union&quot; : [ ] &#125;</span><br><span class="line">&#123; &quot;A&quot; : [ ], &quot;B&quot; : [ &quot;red&quot; ], &quot;union&quot; : [ ] &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h5 id="比较聚合操作"><a href="#比较聚合操作" class="headerlink" title="比较聚合操作"></a>比较聚合操作</h5><p>样本</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  _id<span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">  start<span class="punctuation">:</span> <span class="number">5</span><span class="punctuation">,</span></span><br><span class="line">  end<span class="punctuation">:</span> <span class="number">8</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  _id<span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span></span><br><span class="line">  start<span class="punctuation">:</span> <span class="number">4</span><span class="punctuation">,</span></span><br><span class="line">  end<span class="punctuation">:</span> <span class="number">4</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  _id<span class="punctuation">:</span> <span class="number">3</span><span class="punctuation">,</span></span><br><span class="line">  start<span class="punctuation">:</span> <span class="number">9</span><span class="punctuation">,</span></span><br><span class="line">  end<span class="punctuation">:</span> <span class="number">7</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  _id<span class="punctuation">:</span> <span class="number">4</span><span class="punctuation">,</span></span><br><span class="line">  start<span class="punctuation">:</span> <span class="number">6</span><span class="punctuation">,</span></span><br><span class="line">  end<span class="punctuation">:</span> <span class="number">7</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>操作符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$cmp</td>
+<td>返回：如果两个值相等，则返回 0，如果第一个值大于第二个，则返回 1，如果第一个值小于第二个，则返回 -1。 eg:<code>{eqse:{$cmp:[&#39;$start&#39;,&#39;$end&#39;]}}</code></td>
+</tr>
+<tr>
+<td>$eq</td>
+<td>如果值相等，则返回 true。</td>
+</tr>
+<tr>
+<td>$gt</td>
+<td>R如果第一个值大于第二个值，则返回 true。</td>
+</tr>
+<tr>
+<td>$gte</td>
+<td>如果第一个值大于或等于第二个值，则返回 true。</td>
+</tr>
+<tr>
+<td>$lt</td>
+<td>如果第一个值小于第二个值，则返回 true。</td>
+</tr>
+<tr>
+<td>$lte</td>
+<td>如果第一个值小于或等于第二个值，则返回 true。</td>
+</tr>
+<tr>
+<td>$ne</td>
+<td>如果值不相等，则返回 true。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p>示例1 比较start, end值</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">aiwiown:PRIMARY&gt; db.tb_compare.aggregate([&#123;$project:&#123;eqse:&#123;$cmp:[&#x27;$start&#x27;,&#x27;$end&#x27;]&#125;&#125;&#125;])</span><br><span class="line">&#123; &quot;_id&quot; : 1, &quot;eqse&quot; : -1 &#125;</span><br><span class="line">&#123; &quot;_id&quot; : 2, &quot;eqse&quot; : 0 &#125;</span><br><span class="line">&#123; &quot;_id&quot; : 3, &quot;eqse&quot; : 1 &#125;</span><br><span class="line">&#123; &quot;_id&quot; : 4, &quot;eqse&quot; : -1 &#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>示例2 获取start=end的数据ID</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">aiwiown:PRIMARY&gt; db.tb_compare.aggregate([&#123;$project:&#123;_id:1, gt:&#123;$eq: [&#x27;$start&#x27;,&#x27;$end&#x27;]&#125;&#125;&#125;,&#123;$match:&#123;gt:true&#125;&#125;])</span><br><span class="line">&#123; &quot;_id&quot; : 2, &quot;gt&quot; : true &#125;</span><br></pre></td></tr></table></figure>
+<h5 id="算术聚合操作-doc"><a href="#算术聚合操作-doc" class="headerlink" title="算术聚合操作 doc"></a>算术聚合操作 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.mongodb.com/v4.0/meta/aggregation-quick-reference/">doc</a></h5><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>操作符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$abs</td>
+<td>获取绝对值 <code>{abs:{ $abs:&#39;$price&#39;}}</code></td>
+</tr>
+<tr>
+<td>$add</td>
+<td>求和 <code>{add:{$add:[&#39;$price&#39;:10]}}</code></td>
+</tr>
+<tr>
+<td>$ceil</td>
+<td>向上取整 正数存在小数则舍去小数加1,负数则直接舍去小数。<code>{ceil:{ $ceil:&#39;$price&#39;}}</code></td>
+</tr>
+<tr>
+<td>$divide</td>
+<td>除运算 <code>{devide:{ $divide:[&#39;$price&#39;, 10]}}</code></td>
+</tr>
+<tr>
+<td>$exp</td>
+<td>计算e的n次幂 <code>{exp:{ $exp:1}}</code> e≈2.718281828459045</td>
+</tr>
+<tr>
+<td>$floor</td>
+<td>向下取整 返回小于或等于指定数字的最大整数。<code>{floor:{ $floor:&#39;$price&#39;}}</code></td>
+</tr>
+<tr>
+<td>$ln</td>
+<td>e为底数的对数-&gt;log n <code>{ln:{ $ln:0}}</code></td>
+</tr>
+<tr>
+<td>$log</td>
+<td><code>{log:{$log:[100,10]}}</code> 计算以10为底100的对数, 2</td>
+</tr>
+<tr>
+<td>$log10</td>
+<td>计算以10为底N的对数  <code>{log10:{$log10:100}}</code> == <code>{log:{$log:[100,10]}}</code></td>
+</tr>
+<tr>
+<td>$mod</td>
+<td>取模(余)运算 <code>{mod:{$mod:[11,2]}}</code> = 1</td>
+</tr>
+<tr>
+<td>$multiply</td>
+<td>乘法运算 <code>{multiply:{$multiply:[10,10]}}</code> = 100</td>
+</tr>
+<tr>
+<td>$pow</td>
+<td>继续参数0的参数1次方 <code>{pow:{$pow:[5,2]}}</code> = 25</td>
+</tr>
+<tr>
+<td>$sqrt</td>
+<td>计算平方根 <code>{sqrt:{$sqrt:25}}</code> = 5</td>
+</tr>
+<tr>
+<td>$subtract</td>
+<td>减法运算  <code>{sub:{$subtract:[10,10]}}</code> = 0</td>
+</tr>
+<tr>
+<td>$trunc</td>
+<td>截取 <code>{trunc:{$trunc:100.1}}</code> = 100</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h5 id="字符串聚合操作"><a href="#字符串聚合操作" class="headerlink" title="字符串聚合操作"></a>字符串聚合操作</h5><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>操作符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$concat</td>
+<td>拼接字符串 <code>{concat: {$concat:[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;]}}</code> = abc</td>
+</tr>
+<tr>
+<td>$indexOfBytes</td>
+<td>查找字符串,存在返回索引值, 不存在返回-1, 索引从0开始 <code>{indexOfBytes:{$indexOfBytes:[&#39;abc&#39;,&#39;a&#39;]}}</code></td>
+</tr>
+<tr>
+<td>$indexOfCP</td>
+<td>查找字符串,存在返回索引值, 不存在返回-1, 索引从0开始 <code>{indexOfBytes:{$indexOfBytes:[&#39;abc&#39;,&#39;a&#39;]}}</code></td>
+</tr>
+<tr>
+<td>$split</td>
+<td>切分字符串 <code>{split:{$split:[&#39;hi mongodb!&#39;, &#39; &#39;]}}</code> =  <code>[ &quot;hi&quot;, &quot;mongodb!&quot; ]</code></td>
+</tr>
+<tr>
+<td>$strLenBytes</td>
+<td>返回字符串中 UTF-8 编码的字节数。</td>
+</tr>
+<tr>
+<td>$strLenCP</td>
+<td>返回字符串中 UTF-8 代码点的数量。</td>
+</tr>
+<tr>
+<td>$strcasecmp</td>
+<td>执行不区分大小写的字符串比较并返回：如果两个字符串相等，则返回 0，如果第一个字符串大于第二个字符串，则返回 1，如果第一个字符串小于第二个字符串，则返回 -1。</td>
+</tr>
+<tr>
+<td>$substr</td>
+<td>已弃用。使用 $substrBytes 或 $substrCP。</td>
+</tr>
+<tr>
+<td>$substrBytes</td>
+<td>返回字符串的子字符串。从字符串中指定 UTF-8 字节索引（从零开始）处的字符开始，并持续指定的字节数。</td>
+</tr>
+<tr>
+<td>$substrCP</td>
+<td>返回字符串的子字符串。从字符串中指定的 UTF-8 代码点 (CP) 索引（从零开始）处的字符开始，并持续到指定的代码点数。</td>
+</tr>
+<tr>
+<td>$toLower</td>
+<td>转小写</td>
+</tr>
+<tr>
+<td>$toUpper</td>
+<td>转大写</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h5 id="数组聚合操作-doc"><a href="#数组聚合操作-doc" class="headerlink" title="数组聚合操作 doc"></a>数组聚合操作 <a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.mongodb.com/v4.0/meta/aggregation-quick-reference/">doc</a></h5><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>操作符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$arrayElemAt</td>
+<td>返回指定索引处的元素 <code>{arrayElemAt:{$arrayElemAt:[[&#39;abc&#39;,&#39;bcd&#39;, &#39;efg&#39;],-1]}}</code> = efg</td>
+</tr>
+<tr>
+<td>$concatArrays</td>
+<td>连接数组 <code>{concatArrays:{$concatArrays:[[&#39;abc&#39;,&#39;bcd&#39;, &#39;efg&#39;],[123,234,345]]}}</code> = [“abc”, “bcd”, “efg”, 123, 234, 345]</td>
+</tr>
+<tr>
+<td>$filter</td>
+<td>{ <code>$filter: { input: &lt;array&gt;, as: &lt;string&gt;, cond: &lt;expression&gt; } }</code>  数组元素匹配</td>
+</tr>
+<tr>
+<td>$indexOfArray</td>
+<td>查找元素 返回索引下标, 未查询到返回-1 <code>{indexOfArray:{$indexOfArray:[[&#39;abc&#39;,&#39;bcd&#39;,&#39;efg&#39;],&#39;efgg&#39;]}}</code> -1</td>
+</tr>
+<tr>
+<td>$isArray</td>
+<td>判断元素是否为数组 <code>{ $isArray:[&lt;expression&gt;]}</code> eg: <code>{$isArray:[&#39;abc&#39;]}</code> false, <code>{$isArray:[&#39;abc&#39;,&#39;cde&#39;]}</code> true,</td>
+</tr>
+<tr>
+<td>$range</td>
+<td>输出一个数组 <code>{ $range: [ &lt;start&gt;, &lt;end&gt;, &lt;non-zero step&gt; ] }</code> <start> 开始位置 <end> 结束位置, <non-zero step> 步长(默认1)</non-zero></end></start></td>
+</tr>
+<tr>
+<td>$reverseArray</td>
+<td>反转数组 <code>{reverseArray:{$reverseArray:[[0,10,5]]}}</code> -&gt; [5,10,0]</td>
+</tr>
+<tr>
+<td>$reduce</td>
+<td>将表达式应用于数组中的每个元素并将它们组合成一个值。</td>
+</tr>
+<tr>
+<td>$size</td>
+<td>返回数组长度  <code>{size:{$size:[[0,10,5]]}}</code> 3</td>
+</tr>
+<tr>
+<td>$slice</td>
+<td>Returns a subset of an array.</td>
+</tr>
+<tr>
+<td>$zip</td>
+<td>将两个列表合并在一起</td>
+</tr>
+<tr>
+<td>$in</td>
+<td>返回一个布尔值，指示指定的值是否在数组中。<code>{in:{$in:[123,[123,234,345]]}}</code>,</td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p>数组元素匹配<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">db.tb_book.aggregate([</span><br><span class="line">  &#123;$project:&#123;filter:&#123;$filter: &#123;</span><br><span class="line">      input: [ 1, &quot;a&quot;, 2, null, 3.1, NumberLong(4), &quot;5&quot; ],      //输入数组</span><br><span class="line">      as: &quot;num&quot;,                                                //别名</span><br><span class="line">      cond:&#123;                                                    //条件</span><br><span class="line">        $and:[</span><br><span class="line">           &#123; $gte: [ &quot;$$num&quot;, NumberLong(&quot;-9223372036854775807&quot;)]&#125;,</span><br><span class="line">           &#123; $lte: [ &quot;$$num&quot;, NumberLong(&quot;9223372036854775807&quot;)]&#125;</span><br><span class="line">        ]&#125;</span><br><span class="line">      &#125;&#125;</span><br><span class="line">  &#125;&#125;</span><br><span class="line">])</span><br></pre></td></tr></table></figure><br>$reduce示例</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">aiwiown:PRIMARY&gt; db.tb_book.aggregate([</span><br><span class="line">  &#123;$project:&#123;reduce:&#123;$reduce:&#123;</span><br><span class="line">    input:[[123,234],[567,678]],              //输入参数 $this</span><br><span class="line">    initialValue:[345,456],                   //测试参数 $value</span><br><span class="line">    in:&#123;$concatArrays:[&#x27;$$this&#x27;, &#x27;$$value&#x27;]&#125;&#125;</span><br><span class="line">&#125;&#125;&#125;])</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;61e7aebfd83f5a29ae960b27&quot;), &quot;reduce&quot; : [ 567, 678, 123, 234, 345, 456 ] &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://blog.aiwiown.com">dbin0123</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://blog.aiwiown.com/posts/7b094517/">http://blog.aiwiown.com/posts/7b094517/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="external nofollow noopener noreferrer">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://blog.aiwiown.com" target="_blank">被讨厌的勇气</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/mongodb-%E8%81%9A%E5%90%88%E7%AE%A1%E9%81%93/">mongodb 聚合管道</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/4fadcd11/" title="2022年01月26日 MongoDB文件(GridFS)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">2022年01月26日 MongoDB文件(GridFS)</div></div><div class="info-2"><div class="info-item-1">MongoDB文件mongo shell shell mongofile使用   命令: mongofiles     command  list      列出所有文件,’filename’ 是一个可选前缀,列出的文件名必须以; search    查找所有文件,’filename’ 是列出的文件名必须包含的子字符串; put       添加一个文件名为 ‘filename’ 的文件 put_id    添加一个文件名为 ‘filename’和给定’_id’的文件 get       获取文件名为’filename’的文件 get_id    获取具有给定 ‘_id’ 的文件 delete    删除所有文件名为’filename’的文件 delete_id 删除具有给定 ‘_id’ 的文件   options  h host p port(端口) u 用户名 p 密码    12345678# 上传文件.\bin\mongofiles.exe -h 127.0.0.1 -p 27017 -d aiwiown_gridfs put C:/Users/admin/Desktop...</div></div></div></a><a class="pagination-related" href="/posts/387b0565/" title="2022年01月22日 mongdb基本使用"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">2022年01月22日 mongdb基本使用</div></div><div class="info-2"><div class="info-item-1">mongdb shell 线上当前连接的数据库  1db  切换数据库  12# 切换至admin库use admin  显示用户列表里所有数据库  12show dbsshow databases  列出数据库中的集合  12show tablesshow collections  获取集合  123db.&lt;collection name&gt;.find();# 可以用好集合名称中存在空格等或者无法使用`db.&lt;collection name&gt;`的方式获取集合等情况db.getCollection(&#x27;collection name&#x27;).find()  格式化打印结果 .pretty()  1db.&lt;collection name&gt;.find().pretty();  退出mongo shell  1quit() mongodb 增删改查mongodb 新增文档 db.&lt;collection name&gt;.insert(document, options) 新增文档  obj: 需要写入的文档 options 写入参数...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="author-info-name">dbin0123</div><div class="author-info-description">人生不是别人赋予的,而是自己选择的,自由就是被别人讨厌~</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">69</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">66</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/dbin0123"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/dbin0123" target="_blank" title="Github" rel="external nofollow noopener noreferrer"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#mongodb%E8%81%9A%E5%90%88%E7%AE%A1%E9%81%93"><span class="toc-number">1.</span> <span class="toc-text">mongodb聚合管道</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%98%B6%E6%AE%B5%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-number">1.1.</span> <span class="toc-text">阶段操作符</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#project-%E4%BF%AE%E6%94%B9%E6%96%87%E6%A1%A3%E7%9A%84%E7%BB%93%E6%9E%84%EF%BC%8C%E5%8F%AF%E4%BB%A5%E7%94%A8%E6%9D%A5%E9%87%8D%E5%91%BD%E5%90%8D%E3%80%81%E5%A2%9E%E5%8A%A0%E6%88%96%E5%88%A0%E9%99%A4%E6%96%87%E6%A1%A3%E4%B8%AD%E7%9A%84%E5%AD%97%E6%AE%B5%E3%80%82"><span class="toc-number">1.1.1.</span> <span class="toc-text">$project 修改文档的结构，可以用来重命名、增加或删除文档中的字段。</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#match-%E5%8C%B9%E9%85%8D-%E7%9B%B8%E5%BD%93%E4%BA%8Efind%E6%9F%A5%E8%AF%A2"><span class="toc-number">1.1.2.</span> <span class="toc-text">$match 匹配(相当于find查询)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#group-%E5%88%86%E7%BB%84%E6%93%8D%E4%BD%9C"><span class="toc-number">1.1.3.</span> <span class="toc-text">$group 分组操作</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#sort-%E6%8E%92%E5%BA%8F"><span class="toc-number">1.1.4.</span> <span class="toc-text">$sort 排序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#limit-%E9%99%90%E5%88%B6%E8%BF%94%E5%9B%9E%E6%9D%A1%E6%95%B0"><span class="toc-number">1.1.5.</span> <span class="toc-text">$limit 限制返回条数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#skip-%E8%B7%B3%E8%BF%87%E6%8C%87%E5%AE%9A%E6%95%B0%E9%87%8F%E7%9A%84%E6%96%87%E6%A1%A3"><span class="toc-number">1.1.6.</span> <span class="toc-text">$skip 跳过指定数量的文档</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#unwind-%E6%8B%86%E5%88%86%E6%96%87%E6%A1%A3%E6%95%B0%E7%BB%84"><span class="toc-number">1.1.7.</span> <span class="toc-text">$unwind 拆分文档数组</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-number">1.2.</span> <span class="toc-text">表达式操作符</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B8%83%E5%B0%94%E7%AE%A1%E9%81%93%E8%81%9A%E5%90%88%E6%93%8D%E4%BD%9C%EF%BC%88Boolean-Aggregation-Operators%EF%BC%89-or-and-not"><span class="toc-number">1.2.1.</span> <span class="toc-text">布尔管道聚合操作（Boolean Aggregation Operators） $or $and $not</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%9B%86%E5%90%88%E6%93%8D%E4%BD%9C%EF%BC%88Set-Operators%EF%BC%89"><span class="toc-number">1.2.2.</span> <span class="toc-text">集合操作（Set Operators）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AF%94%E8%BE%83%E8%81%9A%E5%90%88%E6%93%8D%E4%BD%9C"><span class="toc-number">1.2.3.</span> <span class="toc-text">比较聚合操作</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AE%97%E6%9C%AF%E8%81%9A%E5%90%88%E6%93%8D%E4%BD%9C-doc"><span class="toc-number">1.2.4.</span> <span class="toc-text">算术聚合操作 doc</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%81%9A%E5%90%88%E6%93%8D%E4%BD%9C"><span class="toc-number">1.2.5.</span> <span class="toc-text">字符串聚合操作</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E8%81%9A%E5%90%88%E6%93%8D%E4%BD%9C-doc"><span class="toc-number">1.2.6.</span> <span class="toc-text">数组聚合操作 doc</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/57c67e8a/" title="2023年08月20日 包(Package)和Create和模块(Module)&quot;">2023年08月20日 包(Package)和Create和模块(Module)&quot;</a><time datetime="2023-08-19T16:00:00.000Z" title="发表于 2023-08-20 00:00:00">2023-08-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/50541e2f/" title="2023年08月20日 路径(Path)&quot;">2023年08月20日 路径(Path)&quot;</a><time datetime="2023-08-19T16:00:00.000Z" title="发表于 2023-08-20 00:00:00">2023-08-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/c467feca/" title="2023年08月19日 枚举与match表达式">2023年08月19日 枚举与match表达式</a><time datetime="2023-08-18T16:00:00.000Z" title="发表于 2023-08-19 00:00:00">2023-08-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/56134be9/" title="2023年08月19日 struct">2023年08月19日 struct</a><time datetime="2023-08-18T16:00:00.000Z" title="发表于 2023-08-19 00:00:00">2023-08-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/b82e4745/" title="2023年07月26日 Java获取系统名称">2023年07月26日 Java获取系统名称</a><time datetime="2023-07-25T16:00:00.000Z" title="发表于 2023-07-26 00:00:00">2023-07-26</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By dbin0123</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.2"></script><script src="/js/main.js?v=5.5.2"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const applyThemeDefaultsConfig = theme => {
+    if (theme === 'dark-mode') {
+      Chart.defaults.color = "rgba(255, 255, 255, 0.8)"
+      Chart.defaults.borderColor = "rgba(255, 255, 255, 0.2)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    } else {
+      Chart.defaults.color = "rgba(0, 0, 0, 0.8)"
+      Chart.defaults.borderColor = "rgba(0, 0, 0, 0.1)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    }
+  }
+
+  // Recursively traverse the config object and automatically apply theme-specific color schemes
+  const applyThemeConfig = (obj, theme) => {
+    if (typeof obj !== 'object' || obj === null) return
+
+    Object.keys(obj).forEach(key => {
+      const value = obj[key]
+      // If the property is an object and has theme-specific options, apply them
+      if (typeof value === 'object' && value !== null) {
+        if (value[theme]) {
+          obj[key] = value[theme] // Apply the value for the current theme
+        } else {
+          // Recursively process child objects
+          applyThemeConfig(value, theme)
+        }
+      }
+    })
+  }
+
+  const runChartJS = ele => {
+    window.loadChartJS = true
+
+    Array.from(ele).forEach((item, index) => {
+      const chartSrc = item.firstElementChild
+      const chartID = item.getAttribute('data-chartjs-id') || ('chartjs-' + index) // Use custom ID or default ID
+      const width = item.getAttribute('data-width')
+      const existingCanvas = document.getElementById(chartID)
+
+      // If a canvas already exists, remove it to avoid rendering duplicates
+      if (existingCanvas) {
+          existingCanvas.parentNode.remove()
+      }
+
+      const chartDefinition = chartSrc.textContent
+      const canvas = document.createElement('canvas')
+      canvas.id = chartID
+
+      const div = document.createElement('div')
+      div.className = 'chartjs-wrap'
+
+      if (width) {
+        div.style.width = width
+      }
+
+      div.appendChild(canvas)
+      chartSrc.insertAdjacentElement('afterend', div)
+
+      const ctx = document.getElementById(chartID).getContext('2d')
+
+      const config = JSON.parse(chartDefinition)
+
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark-mode' : 'light-mode'
+
+      // Set default styles (initial setup)
+      applyThemeDefaultsConfig(theme)
+
+      // Automatically traverse the config and apply dual-mode color schemes
+      applyThemeConfig(config, theme)
+
+      new Chart(ctx, config)
+    })
+  }
+
+  const loadChartJS = () => {
+    const chartJSEle = document.querySelectorAll('#article-container .chartjs-container')
+    if (chartJSEle.length === 0) return
+
+    window.loadChartJS ? runChartJS(chartJSEle) : btf.getScript('https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js').then(() => runChartJS(chartJSEle))
+  }
+
+  // Listen for theme change events
+  btf.addGlobalFn('themeChange', loadChartJS, 'chartjs')
+  btf.addGlobalFn('encrypt', loadChartJS, 'chartjs')
+
+  window.pjax ? loadChartJS() : document.addEventListener('DOMContentLoaded', loadChartJS)
+})()</script></div><div class="aplayer no-destroy" data-id="28290165" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true" data-lrctype="-1"> </div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script>(() => {
+  const destroyAplayer = () => {
+    if (window.aplayers) {
+      for (let i = 0; i < window.aplayers.length; i++) {
+        if (!window.aplayers[i].options.fixed) {
+          window.aplayers[i].destroy()
+        }
+      }
+    }
+  }
+
+  const runMetingJS = () => {
+    typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+  }
+
+  btf.addGlobalFn('pjaxSend', destroyAplayer, 'destroyAplayer')
+  btf.addGlobalFn('pjaxComplete', loadMeting, 'runMetingJS')
+})()</script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script>(() => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      const usePjax = true
+      true
+        ? (usePjax ? pjax.loadUrl('/404.html') : window.location.href = '/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})()</script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文档" type="text"></div><hr><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.2"></script></div></div></body></html>

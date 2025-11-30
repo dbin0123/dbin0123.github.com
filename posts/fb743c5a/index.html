@@ -1,0 +1,736 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>2021年10月24日 堆内存设置(网络) | 被讨厌的勇气</title><meta name="author" content="dbin0123"><meta name="copyright" content="dbin0123"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="堆内存设置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2021年10月24日 堆内存设置(网络)">
+<meta property="og:url" content="http://blog.aiwiown.com/posts/fb743c5a/index.html">
+<meta property="og:site_name" content="被讨厌的勇气">
+<meta property="og:description" content="堆内存设置">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.aiwiown.com/img/avatar.jpg">
+<meta property="article:published_time" content="2021-10-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-30T00:45:01.477Z">
+<meta property="article:author" content="dbin0123">
+<meta property="article:tag" content="堆内存设置">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.aiwiown.com/img/avatar.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "2021年10月24日 堆内存设置(网络)",
+  "url": "http://blog.aiwiown.com/posts/fb743c5a/",
+  "image": "http://blog.aiwiown.com/img/avatar.jpg",
+  "datePublished": "2021-10-23T16:00:00.000Z",
+  "dateModified": "2025-11-30T00:45:01.477Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "dbin0123",
+      "url": "http://blog.aiwiown.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="http://blog.aiwiown.com/posts/fb743c5a/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="stylesheet" href="/css/index.css?v=5.5.2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '2021年10月24日 堆内存设置(网络)',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.1.1"></head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/blue/pace-theme-minimal.min.css"><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">69</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">66</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-archive"></i><span> 文档</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://s2.loli.net/2022/02/09/dytTqjBgbhkCmD6.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">被讨厌的勇气</span></a><a class="nav-page-title" href="/"><span class="site-name">2021年10月24日 堆内存设置(网络)</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-archive"></i><span> 文档</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">2021年10月24日 堆内存设置(网络)</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-10-23T16:00:00.000Z" title="发表于 2021-10-24 00:00:00">2021-10-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-30T00:45:01.477Z" title="更新于 2025-11-30 08:45:01">2025-11-30</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>14分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h3 id="堆内存设置"><a href="#堆内存设置" class="headerlink" title="堆内存设置"></a>堆内存设置</h3><h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>JVM堆内存分为2块：Permanent Space 和 Heap Space。</p>
+<ul>
+<li>Permanent 即 持久代（Permanent Generation），主要存放的是Java类定义信息，与垃圾收集器要收集的Java对象关系不大。</li>
+<li>Heap = { Old + NEW = {Eden, from, to} }，Old 即 年老代（Old Generation），New 即 年轻代（Young Generation）。年老代和年轻代的划分对垃圾收集影响比较大。</li>
+</ul>
+<h4 id="年轻代"><a href="#年轻代" class="headerlink" title="年轻代"></a>年轻代</h4><p>所有新生成的对象首先都是放在年轻代。年轻代的目标就是尽可能快速的收集掉那些生命周期短的对象。年轻代一般分3个区，1个Eden区，2个Survivor区（from 和 to）。</p>
+<p>大部分对象在Eden区中生成。当Eden区满时，还存活的对象将被复制到Survivor区（两个中的一个），当一个Survivor区满时，此区的存活对象将被复制到另外一个Survivor区，当另一个Survivor区也满了的时候，从前一个Survivor区复制过来的并且此时还存活的对象，将可能被复制到年老代。</p>
+<p>2个Survivor区是对称的，没有先后关系，所以同一个Survivor区中可能同时存在从Eden区复制过来对象，和从另一个Survivor区复制过来的对象；而复制到年老区的只有从另一个Survivor区过来的对象。而且，<code>因为需要交换的原因，Survivor区至少有一个是空的。</code>特殊的情况下，根据程序需要，Survivor区是可以配置为多个的（多于2个），这样可以增加对象在年轻代中的存在时间，减少被放到年老代的可能。</p>
+<p>针对年轻代的垃圾回收即 Young GC。</p>
+<h4 id="年老代"><a href="#年老代" class="headerlink" title="年老代"></a>年老代</h4><p>在年轻代中经历了N次（可配置）垃圾回收后仍然存活的对象，就会被复制到年老代中。因此，可以认为年老代中存放的都是一些生命周期较长的对象。</p>
+<p>针对年老代的垃圾回收即 Full GC。</p>
+<h4 id="持久代"><a href="#持久代" class="headerlink" title="持久代"></a>持久代</h4><p>用于存放静态类型数据，如 Java Class, Method 等。持久代对垃圾回收没有显著影响。但是有些应用可能动态生成或调用一些Class，例如 Hibernate CGLib 等，在这种时候往往需要设置一个比较大的持久代空间来存放这些运行过程中动态增加的类型。</p>
+<p>所以，当一组对象生成时，<code>内存申请</code>过程如下：</p>
+<p>JVM会试图为相关Java对象在年轻代的Eden区中初始化一块内存区域。<br>当Eden区空间足够时，内存申请结束。否则执行下一步。<br>JVM试图释放在Eden区中所有不活跃的对象（Young GC）。释放后若Eden空间仍然不足以放入新对象，JVM则试图将部分Eden区中活跃对象放入Survivor区。<br>Survivor区被用来作为Eden区及年老代的中间交换区域。当年老代空间足够时，Survivor区中存活了一定次数的对象会被移到年老代。<br>当年老代空间不够时，JVM会在年老代进行完全的垃圾回收（Full GC）。<br>Full GC后，若Survivor区及年老代仍然无法存放从Eden区复制过来的对象，则会导致JVM无法在Eden区为新生成的对象申请内存，即出现“Out of Memory”。</p>
+<h4 id="OOM（“Out-of-Memory”）异常一般主要有如下2种原因："><a href="#OOM（“Out-of-Memory”）异常一般主要有如下2种原因：" class="headerlink" title="OOM（“Out of Memory”）异常一般主要有如下2种原因："></a>OOM（“Out of Memory”）异常一般主要有如下2种原因：</h4><ol>
+<li><p>年老代溢出，表现为：<strong>java.lang.OutOfMemoryError:Javaheapspace</strong><br>这是最常见的情况，产生的原因可能是：设置的内存参数Xmx过小或程序的内存泄露及使用不当问题。<br>例如循环上万次的字符串处理、创建上千万个对象、在一段代码内申请上百M甚至上G的内存。还有的时候虽然不会报内存溢出，却会使系统不间断的垃圾回收，也无法处理其它请求。这种情况下除了检查程序、打印堆内存等方法排查，还可以借助一些内存分析工具，比如MAT就很不错。</p>
+</li>
+<li><p>持久代溢出，表现为：<strong>java.lang.OutOfMemoryError:PermGenspace</strong><br>通常由于持久代设置过小，动态加载了大量Java类而导致溢出，解决办法唯有将参数 -XX:MaxPermSize 调大（一般256m能满足绝大多数应用程序需求）。将部分Java类放到容器共享区（例如Tomcat share lib）去加载的办法也是一个思路，但前提是容器里部署了多个应用，且这些应用有大量的共享类库。</p>
+<h4 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h4></li>
+</ol>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>配置参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>-Xmx3550m</strong></td>
+<td>设置JVM最大堆内存为3550M。</td>
+</tr>
+<tr>
+<td><strong>-Xms3550m</strong></td>
+<td>设置JVM初始堆内存为3550M。此值可以设置与-Xmx相同，以避免每次垃圾回收完成后JVM重新分配内存。</td>
+</tr>
+<tr>
+<td><strong>-Xss128k</strong></td>
+<td>设置每个线程的栈大小。JDK5.0以后每个线程栈大小为1M，之前每个线程栈大小为256K。应当根据应用的线程所需内存大小进行调整。在相同物理内存下，减小这个值能生成更多的线程。但是操作系统对一个进程内的线程数还是有限制的，不能无限生成，经验值在3000~5000左右。需要注意的是：当这个值被设置的较大（例如&gt;2MB）时将会在很大程度上降低系统的性能。</td>
+</tr>
+<tr>
+<td><strong>-Xmn2g</strong></td>
+<td>设置年轻代大小为2G。在整个堆内存大小确定的情况下，增大年轻代将会减小年老代，反之亦然。此值关系到JVM垃圾回收，对系统性能影响较大，官方推荐配置为整个堆大小的3/8</td>
+</tr>
+<tr>
+<td><strong>-XX:NewSize=1024m</strong></td>
+<td>设置年轻代初始值为1024M。</td>
+</tr>
+<tr>
+<td><strong>-XX:NewSize=1024m</strong></td>
+<td>设置年轻代初始值为1024M。</td>
+</tr>
+<tr>
+<td><strong>-XX:MaxNewSize=1024m</strong></td>
+<td>设置年轻代最大值为1024M。。</td>
+</tr>
+<tr>
+<td><strong>-XX:PermSize=256m</strong></td>
+<td>设置持久代初始值为256M。。</td>
+</tr>
+<tr>
+<td><strong>-XX:MaxPermSize=256m</strong></td>
+<td>设置持久代最大值为256M。。</td>
+</tr>
+<tr>
+<td><strong>-XX:NewRatio=4</strong></td>
+<td>设置年轻代（包括1个Eden和2个Survivor区）与年老代的比值。表示年轻代比年老代为1:4。。</td>
+</tr>
+<tr>
+<td><strong>-XX:SurvivorRatio=4</strong></td>
+<td>设置年轻代中Eden区与Survivor区的比值。表示2个Survivor区（JVM堆内存年轻代中默认有2个大小相等的Survivor区）与1个Eden区的比值为2:4，即1个Survivor区占整个年轻代大小的1/6。。</td>
+</tr>
+<tr>
+<td><strong>-XX:MaxTenuringThreshold=7</strong></td>
+<td>表示一个对象如果在Survivor区（救助空间）移动了7次还没有被垃圾回收就进入年老代。如果设置为0的话，则年轻代对象不经过Survivor区，直接进入年老代，对于需要大量常驻内存的应用，这样做可以提高效率。如果将此值设置为一个较大值，则年轻代对象会在Survivor区进行多次复制，这样可以增加对象在年轻代存活时间，增加对象在年轻代被垃圾回收的概率，减少Full GC的频率，这样做可以在某种程度上提高服务稳定性。。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="疑问解答"><a href="#疑问解答" class="headerlink" title="疑问解答"></a>疑问解答</h4><blockquote>
+<p>-Xmn，-XX:NewSize/-XX:MaxNewSize，-XX:NewRatio 3组参数都可以影响年轻代的大小，混合使用的情况下，优先级是什么？</p>
+</blockquote>
+<p>如下：</p>
+<ol>
+<li>高优先级：-XX:NewSize/-XX:MaxNewSize </li>
+<li>中优先级：-Xmn（默认等效  -Xmn=-XX:NewSize=-XX:MaxNewSize=?） </li>
+<li>低优先级：-XX:NewRatio </li>
+</ol>
+<p>推荐使用-Xmn参数，原因是这个参数简洁，相当于一次设定 NewSize/MaxNewSIze，而且两者相等，适用于生产环境。-Xmn 配合 -Xms/-Xmx，即可将堆内存布局完成。<br>-Xmn参数是在JDK 1.4 开始支持。</p>
+<h3 id="垃圾回收器选择"><a href="#垃圾回收器选择" class="headerlink" title="垃圾回收器选择"></a>垃圾回收器选择</h3><p>JVM给出了3种选择：串行收集器、并行收集器、并发收集器。串行收集器只适用于小数据量的情况，所以生产环境的选择主要是并行收集器和并发收集器。</p>
+<p>默认情况下JDK5.0以前都是使用串行收集器，如果想使用其他收集器需要在启动时加入相应参数。JDK5.0以后，JVM会根据当前系统配置进行智能判断。</p>
+<h4 id="串行收集器"><a href="#串行收集器" class="headerlink" title="串行收集器"></a>串行收集器</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>配置参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>-XX:+UseSerialGC</strong></td>
+<td>设置串行收集器。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="并行收集器（吞吐量优先）"><a href="#并行收集器（吞吐量优先）" class="headerlink" title="并行收集器（吞吐量优先）"></a>并行收集器（吞吐量优先）</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>配置参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>-XX:+UseParallelGC</strong></td>
+<td>设置为并行收集器。此配置仅对年轻代有效。即年轻代使用并行收集，而年老代仍使用串行收集。</td>
+</tr>
+<tr>
+<td><strong>-XX:ParallelGCThreads=20</strong></td>
+<td>配置并行收集器的线程数，即：同时有多少个线程一起进行垃圾回收。此值建议配置与CPU数目相等。</td>
+</tr>
+<tr>
+<td><strong>-XX:+UseParallelOldGC</strong></td>
+<td>配置年老代垃圾收集方式为并行收集。JDK6.0开始支持对年老代并行收集。</td>
+</tr>
+<tr>
+<td><strong>-XX:MaxGCPauseMillis=100</strong></td>
+<td>设置每次年轻代垃圾回收的最长时间（单位毫秒）。如果无法满足此时间，JVM会自动调整年轻代大小，以满足此时间。</td>
+</tr>
+<tr>
+<td><strong>-XX:+UseAdaptiveSizePolicy</strong></td>
+<td>设置此选项后，并行收集器会自动调整年轻代Eden区大小和Survivor区大小的比例，以达成目标系统规定的最低响应时间或者收集频率等指标。此参数建议在使用并行收集器时，一直打开。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="并发收集器（响应时间优先）"><a href="#并发收集器（响应时间优先）" class="headerlink" title="并发收集器（响应时间优先）"></a>并发收集器（响应时间优先）</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>配置参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>-XX:+UseConcMarkSweepGC</strong></td>
+<td>即CMS收集，设置年老代为并发收集。CMS收集是JDK1.4后期版本开始引入的新GC算法。它的主要适合场景是对响应时间的重要性需求大于对吞吐量的需求，能够承受垃圾回收线程和应用线程共享CPU资源，并且应用中存在比较多的长生命周期对象。CMS收集的目标是尽量减少应用的暂停时间，减少Full GC发生的几率，利用和应用程序线程并发的垃圾回收线程来标记清除年老代内存。</td>
+</tr>
+<tr>
+<td><strong>-XX:+UseParNewGC</strong></td>
+<td>设置年轻代为并发收集。可与CMS收集同时使用。JDK5.0以上，JVM会根据系统配置自行设置，所以无需再设置此参数。</td>
+</tr>
+<tr>
+<td><strong>-XX:CMSFullGCsBeforeCompaction=0</strong></td>
+<td>由于并发收集器不对内存空间进行压缩和整理，所以运行一段时间并行收集以后会产生内存碎片，内存使用效率降低。此参数设置运行0次Full GC后对内存空间进行压缩和整理，即每次Full GC后立刻开始压缩和整理内存。</td>
+</tr>
+<tr>
+<td><strong>-XX:+UseCMSCompactAtFullCollection</strong></td>
+<td>打开内存空间的压缩和整理，在Full GC后执行。可能会影响性能，但可以消除内存碎片。</td>
+</tr>
+<tr>
+<td><strong>-XX:+CMSIncrementalMode</strong></td>
+<td>设置为增量收集模式。一般适用于单CPU情况。</td>
+</tr>
+<tr>
+<td><strong>-XX:CMSInitiatingOccupancyFraction=70</strong></td>
+<td>表示年老代内存空间使用到70%时就开始执行CMS收集，以确保年老代有足够的空间接纳来自年轻代的对象，避免Full GC的发生。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="其它垃圾回收参数"><a href="#其它垃圾回收参数" class="headerlink" title="其它垃圾回收参数"></a>其它垃圾回收参数</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>配置参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>-XX:+ScavengeBeforeFullGC</strong></td>
+<td>年轻代GC优于Full GC执行。</td>
+</tr>
+<tr>
+<td><strong>-XX:-DisableExplicitGC</strong></td>
+<td>不响应 System.gc() 代码。</td>
+</tr>
+<tr>
+<td><strong>-XX:+UseThreadPriorities</strong></td>
+<td>启用本地线程优先级API。即使 java.lang.Thread.setPriority() 生效，不启用则无效。</td>
+</tr>
+<tr>
+<td><strong>-XX:SoftRefLRUPolicyMSPerMB=0</strong></td>
+<td>软引用对象在最后一次被访问后能存活0毫秒（JVM默认为1000毫秒）。</td>
+</tr>
+<tr>
+<td><strong>-XX:TargetSurvivorRatio=90</strong></td>
+<td>允许90%的Survivor区被占用（JVM默认为50%）。提高对于Survivor区的使用率。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>辅助信息参数设置</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>配置参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>-XX:-CITime</strong></td>
+<td>打印消耗在JIT编译的时间。</td>
+</tr>
+<tr>
+<td><strong>-XX:ErrorFile=./hs_err_pid.log</strong></td>
+<td>保存错误日志或数据到指定文件中。</td>
+</tr>
+<tr>
+<td><strong>-XX:HeapDumpPath=./java_pid.hprof</strong></td>
+<td>指定Dump堆内存时的路径。</td>
+</tr>
+<tr>
+<td><strong>-XX:-HeapDumpOnOutOfMemoryError</strong></td>
+<td>当首次遭遇内存溢出时Dump出此时的堆内存。</td>
+</tr>
+<tr>
+<td><strong>-XX:OnError=”;”</strong></td>
+<td>出现致命ERROR后运行自定义命令。</td>
+</tr>
+<tr>
+<td><strong>-XX:OnOutOfMemoryError=”;”</strong></td>
+<td>当首次遭遇内存溢出时执行自定义命令。</td>
+</tr>
+<tr>
+<td><strong>-XX:-PrintClassHistogram</strong></td>
+<td>按下 Ctrl+Break 后打印堆内存中类实例的柱状信息，同JDK的 jmap -histo 命令。</td>
+</tr>
+<tr>
+<td><strong>-XX:-PrintConcurrentLocks</strong></td>
+<td>按下 Ctrl+Break 后打印线程栈中并发锁的相关信息，同JDK的 jstack -l 命令。</td>
+</tr>
+<tr>
+<td><strong>-XX:-PrintCompilation</strong></td>
+<td>当一个方法被编译时打印相关信息。</td>
+</tr>
+<tr>
+<td><strong>-XX:-PrintGC</strong></td>
+<td>每次GC时打印相关信息。</td>
+</tr>
+<tr>
+<td><strong>-XX:-PrintGCDetails</strong></td>
+<td>每次GC时打印详细信息。</td>
+</tr>
+<tr>
+<td><strong>-XX:-PrintGCTimeStamps</strong></td>
+<td>打印每次GC的时间戳。</td>
+</tr>
+<tr>
+<td><strong>-XX:-TraceClassLoading</strong></td>
+<td>跟踪类的加载信息。</td>
+</tr>
+<tr>
+<td><strong>-XX:-TraceClassLoadingPreorder</strong></td>
+<td>跟踪被引用到的所有类的加载信息。</td>
+</tr>
+<tr>
+<td><strong>-XX:-TraceClassResolution</strong></td>
+<td>跟踪常量池。</td>
+</tr>
+<tr>
+<td><strong>-XX:-TraceClassUnloading</strong></td>
+<td>跟踪类的卸载信息。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>关于参数名称等</p>
+<ul>
+<li>标准参数(-),所有JVM都必须支持这些参数的功能,而且向后兼容；例如<ol>
+<li><code>-client</code>:设置JVM使用Client模式,特点是启动速度比较快,但运行时性能和内存管理效率不高，通常用于客户端应用程序或开发调试；在32位环境下直接运行Java程序默认启用该模式.</li>
+<li><code>-server</code>:设置JVM使Server模式,特点是启动速度比较慢,但运行时性能和内存管理效率很高,适用于生产环境.在具有64位能力的JDK环境下默认启用该模式.</li>
+</ol>
+</li>
+<li>非标准参数(-X),默认JVM实现这些参数的功能,但是并不保证所有JVM实现都满足,且不保证向后兼容;</li>
+<li>非稳定参数(-XX),此类参数各个JVM实现会有所不同,将来可能会不被支持,需要慎重使用;</li>
+</ul>
+<h4 id="JVM服务参数调优实战"><a href="#JVM服务参数调优实战" class="headerlink" title="JVM服务参数调优实战"></a>JVM服务参数调优实战</h4><p>大型网站服务器案例<br>承受海量访问的动态Web应用</p>
+<blockquote>
+<p>服务器配置：8 CPU, 8G MEM, JDK 1.6.X</p>
+</blockquote>
+<p>参数方案：</p>
+<blockquote>
+<p>-server -Xmx3550m -Xms3550m -Xmn1256m -Xss128k -XX:SurvivorRatio=6 -XX:MaxPermSize=256m -XX:ParallelGCThreads=8 -XX:MaxTenuringThreshold=0 -XX:+UseConcMarkSweepGC</p>
+</blockquote>
+<p>调优说明：</p>
+<ul>
+<li>-Xmx 与 -Xms 相同以避免JVM反复重新申请内存。-Xmx 的大小约等于系统内存大小的一半，即充分利用系统资源，又给予系统安全运行的空间。</li>
+<li>-Xmn1256m 设置年轻代大小为1256MB。此值对系统性能影响较大，Sun官方推荐配置年轻代大小为整个堆的3/8。</li>
+<li>-Xss128k 设置较小的线程栈以支持创建更多的线程，支持海量访问，并提升系统性能。</li>
+<li>-XX:SurvivorRatio=6 设置年轻代中Eden区与Survivor区的比值。系统默认是8，根据经验设置为6，则2个Survivor区与1个Eden区的比值为2:6，一个Survivor区占整个年轻代的1/8。</li>
+<li>-XX:ParallelGCThreads=8 配置并行收集器的线程数，即同时8个线程一起进行垃圾回收。此值一般配置为与CPU数目相等。</li>
+<li>-XX:MaxTenuringThreshold=0 设置垃圾最大年龄（在年轻代的存活次数）。如果设置为0的话，则年轻代对象不经过Survivor区直接进入年老代。对于年老代比较多的应用，可以提高效率；如果将此值设置为一个较大值，则年轻代对象会在Survivor区进行多次复制，这样可以增加对象再年轻代的存活时间，增加在年轻代即被回收的概率。根据被海量访问的动态Web应用之特点，其内存要么被缓存起来以减少直接访问DB，要么被快速回收以支持高并发海量请求，因此其内存对象在年轻代存活多次意义不大，可以直接进入年老代，根据实际应用效果，在这里设置此值为0。</li>
+<li>-XX:+UseConcMarkSweepGC 设置年老代为并发收集。CMS（ConcMarkSweepGC）收集的目标是尽量减少应用的暂停时间，减少Full GC发生的几率，利用和应用程序线程并发的垃圾回收线程来标记清除年老代内存，适用于应用中存在比较多的长生命周期对象的情况。</li>
+</ul>
+<h4 id="内部集成构建服务器案例"><a href="#内部集成构建服务器案例" class="headerlink" title="内部集成构建服务器案例"></a>内部集成构建服务器案例</h4><p>高性能数据处理的工具应用</p>
+<blockquote>
+<p>服务器配置：1 CPU, 4G MEM, JDK 1.6.X</p>
+</blockquote>
+<p>参数方案：</p>
+<blockquote>
+<p>-server -XX:PermSize=196m -XX:MaxPermSize=196m -Xmn320m -Xms768m -Xmx1024m</p>
+</blockquote>
+<p>调优说明：</p>
+<ul>
+<li>-XX:PermSize=196m -XX:MaxPermSize=196m 根据集成构建的特点，大规模的系统编译可能需要加载大量的Java类到内存中，所以预先分配好大量的持久代内存是高效和必要的。</li>
+<li>-Xmn320m 遵循年轻代大小为整个堆的3/8原则。</li>
+<li>-Xms768m -Xmx1024m 根据系统大致能够承受的堆内存大小设置即可。<br>在64位服务器上运行应用程序，构建执行时，用 jmap -heap 11540 命令观察JVM堆内存状况如下：<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="attr">Attaching</span> <span class="string">to process ID 11540, please wait...</span></span><br><span class="line"><span class="attr">Debugger</span> <span class="string">attached successfully.</span></span><br><span class="line"><span class="attr">Server</span> <span class="string">compiler detected.</span></span><br><span class="line"><span class="attr">JVM</span> <span class="string">version is 20.12-b01</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="attr">using</span> <span class="string">thread-local object allocation.</span></span><br><span class="line"><span class="attr">Parallel</span> <span class="string">GC with 4 thread(s)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="attr">Heap</span> <span class="string">Configuration:</span></span><br><span class="line"><span class="attr">MinHeapFreeRatio</span> = <span class="string">40</span></span><br><span class="line"><span class="attr">MaxHeapFreeRatio</span> = <span class="string">70</span></span><br><span class="line"><span class="attr">MaxHeapSize</span>      = <span class="string">1073741824 (1024.0MB)</span></span><br><span class="line"><span class="attr">NewSize</span>          = <span class="string">335544320 (320.0MB)</span></span><br><span class="line"><span class="attr">MaxNewSize</span>       = <span class="string">335544320 (320.0MB)</span></span><br><span class="line"><span class="attr">OldSize</span>          = <span class="string">5439488 (5.1875MB)</span></span><br><span class="line"><span class="attr">NewRatio</span>         = <span class="string">2</span></span><br><span class="line"><span class="attr">SurvivorRatio</span>    = <span class="string">8</span></span><br><span class="line"><span class="attr">PermSize</span>         = <span class="string">205520896 (196.0MB)</span></span><br><span class="line"><span class="attr">MaxPermSize</span>      = <span class="string">205520896 (196.0MB)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="attr">Heap</span> <span class="string">Usage:</span></span><br><span class="line"><span class="attr">PS</span> <span class="string">Young Generation</span></span><br><span class="line"><span class="attr">Eden</span> <span class="string">Space:</span></span><br><span class="line"><span class="attr">capacity</span> = <span class="string">255852544 (244.0MB)</span></span><br><span class="line"><span class="attr">used</span>     = <span class="string">101395504 (96.69828796386719MB)</span></span><br><span class="line"><span class="attr">free</span>     = <span class="string">154457040 (147.3017120361328MB)</span></span><br><span class="line"><span class="attr">39.63044588683081%</span> <span class="string">used</span></span><br><span class="line"><span class="attr">From</span> <span class="string">Space:</span></span><br><span class="line"><span class="attr">capacity</span> = <span class="string">34144256 (32.5625MB)</span></span><br><span class="line"><span class="attr">used</span>     = <span class="string">33993968 (32.41917419433594MB)</span></span><br><span class="line"><span class="attr">free</span>     = <span class="string">150288 (0.1433258056640625MB)</span></span><br><span class="line"><span class="attr">99.55984397492803%</span> <span class="string">used</span></span><br><span class="line"><span class="attr">To</span> <span class="string">Space:</span></span><br><span class="line"><span class="attr">capacity</span> = <span class="string">39845888 (38.0MB)</span></span><br><span class="line"><span class="attr">used</span>     = <span class="string">0 (0.0MB)</span></span><br><span class="line"><span class="attr">free</span>     = <span class="string">39845888 (38.0MB)</span></span><br><span class="line"><span class="attr">0.0%</span> <span class="string">used</span></span><br><span class="line"><span class="attr">PS</span> <span class="string">Old Generation</span></span><br><span class="line"><span class="attr">capacity</span> = <span class="string">469762048 (448.0MB)</span></span><br><span class="line"><span class="attr">used</span>     = <span class="string">44347696 (42.29325866699219MB)</span></span><br><span class="line"><span class="attr">free</span>     = <span class="string">425414352 (405.7067413330078MB)</span></span><br><span class="line"><span class="attr">9.440459523882184%</span> <span class="string">used</span></span><br><span class="line"><span class="attr">PS</span> <span class="string">Perm Generation</span></span><br><span class="line"><span class="attr">capacity</span> = <span class="string">205520896 (196.0MB)</span></span><br><span class="line"><span class="attr">used</span>     = <span class="string">85169496 (81.22396087646484MB)</span></span><br><span class="line"><span class="attr">free</span>     = <span class="string">120351400 (114.77603912353516MB)</span></span><br><span class="line"><span class="attr">41.440796365543285%</span> <span class="string">used</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>结果是比较健康的。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://blog.aiwiown.com">dbin0123</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://blog.aiwiown.com/posts/fb743c5a/">http://blog.aiwiown.com/posts/fb743c5a/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="external nofollow noopener noreferrer">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://blog.aiwiown.com" target="_blank">被讨厌的勇气</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%A0%86%E5%86%85%E5%AD%98%E8%AE%BE%E7%BD%AE/">堆内存设置</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/57250c90/" title="2021年10月24日 JVM内存模型"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">2021年10月24日 JVM内存模型</div></div><div class="info-2"><div class="info-item-1">JVM内存模型JRE/JDK JRE(Java Runtime Environment)：JRE顾名思义是java运行时环境，包含了java虚拟机，java基础类库 JDK(Java Development Kit)：JDK顾名思义是java开发工具包，是程序员使用java语言编写java程序所需的开发工具包，是提供给程序员使用的。JDK包含了JRE，同时还包含了编译java源码的编译器javac，还包含了很多java程序调试和分析的工具：jconsole，jvisualvm等工具软件，还包含了java程序编写所需的文档和demo例子程序。   JVM内存模型主要包含:运行时数据区Run-Time Data Areas, 类装载子系统, 字节码执行引擎 运行时数据区组成 主要包含: 堆,虚拟机栈(Java Virtual Machine Stacks)[线程私有],本地方法区[线程私有],方法区,程序计数器[线程私有]  JVM内存参数设置 堆    参数 描述     -Xms 设置JVM启动时堆内存的初始化大小,默认物理内存的1/64   -Xmx 设置堆内存最大值,默认物理...</div></div></div></a><a class="pagination-related" href="/posts/6ef44812/" title="2021年10月13日 垃圾收集器"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">2021年10月13日 垃圾收集器</div></div><div class="info-2"><div class="info-item-1">垃圾收集器 G1垃圾收集器参数    参数 描述     -XX:+UseG1GC 使用G1收集器   -XX:ParallelGCThreads 指定GC工作的线程数量   -XX:G1HeapRegionSize 指定分区大小（1MB〜32MB,且必须是2的N次鬲），默认将整堆划分为2048个region   -XX:MaxGCPauseMillis 目标暂停时间（默认200ms）   -XX:G1NewSizePercent 新生代内存初始空间（默认整堆5%,值配置整数，默认就是百分比）   -XX:G1MaxNewSizePercent 新生代内存最大空间   -XX:TargetSurvivorRatio Survivor区的填充容量（默认50%）, Survivor区域里的一批对象（年龄1+年龄2+年龄n的多个年 龄对象）总和超过了Survivor区域的50%,此时就会把年龄n（含）以上的对象都放入老年代   -XX:MaxTenuringThreshold 最大年龄阈值（默认 15）   -XX:InitiatingHeapOccupancyPercent 老年代占...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="author-info-name">dbin0123</div><div class="author-info-description">人生不是别人赋予的,而是自己选择的,自由就是被别人讨厌~</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">69</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">66</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/dbin0123"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/dbin0123" target="_blank" title="Github" rel="external nofollow noopener noreferrer"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A0%86%E5%86%85%E5%AD%98%E8%AE%BE%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">堆内存设置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">1.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%B4%E8%BD%BB%E4%BB%A3"><span class="toc-number">1.2.</span> <span class="toc-text">年轻代</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%B4%E8%80%81%E4%BB%A3"><span class="toc-number">1.3.</span> <span class="toc-text">年老代</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E4%BB%A3"><span class="toc-number">1.4.</span> <span class="toc-text">持久代</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OOM%EF%BC%88%E2%80%9COut-of-Memory%E2%80%9D%EF%BC%89%E5%BC%82%E5%B8%B8%E4%B8%80%E8%88%AC%E4%B8%BB%E8%A6%81%E6%9C%89%E5%A6%82%E4%B8%8B2%E7%A7%8D%E5%8E%9F%E5%9B%A0%EF%BC%9A"><span class="toc-number">1.5.</span> <span class="toc-text">OOM（“Out of Memory”）异常一般主要有如下2种原因：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="toc-number">1.6.</span> <span class="toc-text">参数说明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%96%91%E9%97%AE%E8%A7%A3%E7%AD%94"><span class="toc-number">1.7.</span> <span class="toc-text">疑问解答</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E9%80%89%E6%8B%A9"><span class="toc-number">2.</span> <span class="toc-text">垃圾回收器选择</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%B2%E8%A1%8C%E6%94%B6%E9%9B%86%E5%99%A8"><span class="toc-number">2.1.</span> <span class="toc-text">串行收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%B6%E8%A1%8C%E6%94%B6%E9%9B%86%E5%99%A8%EF%BC%88%E5%90%9E%E5%90%90%E9%87%8F%E4%BC%98%E5%85%88%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">并行收集器（吞吐量优先）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E6%94%B6%E9%9B%86%E5%99%A8%EF%BC%88%E5%93%8D%E5%BA%94%E6%97%B6%E9%97%B4%E4%BC%98%E5%85%88%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">并发收集器（响应时间优先）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E5%AE%83%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%8F%82%E6%95%B0"><span class="toc-number">2.4.</span> <span class="toc-text">其它垃圾回收参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JVM%E6%9C%8D%E5%8A%A1%E5%8F%82%E6%95%B0%E8%B0%83%E4%BC%98%E5%AE%9E%E6%88%98"><span class="toc-number">2.5.</span> <span class="toc-text">JVM服务参数调优实战</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E9%83%A8%E9%9B%86%E6%88%90%E6%9E%84%E5%BB%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%A1%88%E4%BE%8B"><span class="toc-number">2.6.</span> <span class="toc-text">内部集成构建服务器案例</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/57c67e8a/" title="2023年08月20日 包(Package)和Create和模块(Module)&quot;">2023年08月20日 包(Package)和Create和模块(Module)&quot;</a><time datetime="2023-08-19T16:00:00.000Z" title="发表于 2023-08-20 00:00:00">2023-08-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/50541e2f/" title="2023年08月20日 路径(Path)&quot;">2023年08月20日 路径(Path)&quot;</a><time datetime="2023-08-19T16:00:00.000Z" title="发表于 2023-08-20 00:00:00">2023-08-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/c467feca/" title="2023年08月19日 枚举与match表达式">2023年08月19日 枚举与match表达式</a><time datetime="2023-08-18T16:00:00.000Z" title="发表于 2023-08-19 00:00:00">2023-08-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/56134be9/" title="2023年08月19日 struct">2023年08月19日 struct</a><time datetime="2023-08-18T16:00:00.000Z" title="发表于 2023-08-19 00:00:00">2023-08-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/b82e4745/" title="2023年07月26日 Java获取系统名称">2023年07月26日 Java获取系统名称</a><time datetime="2023-07-25T16:00:00.000Z" title="发表于 2023-07-26 00:00:00">2023-07-26</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By dbin0123</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.2"></script><script src="/js/main.js?v=5.5.2"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const applyThemeDefaultsConfig = theme => {
+    if (theme === 'dark-mode') {
+      Chart.defaults.color = "rgba(255, 255, 255, 0.8)"
+      Chart.defaults.borderColor = "rgba(255, 255, 255, 0.2)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    } else {
+      Chart.defaults.color = "rgba(0, 0, 0, 0.8)"
+      Chart.defaults.borderColor = "rgba(0, 0, 0, 0.1)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    }
+  }
+
+  // Recursively traverse the config object and automatically apply theme-specific color schemes
+  const applyThemeConfig = (obj, theme) => {
+    if (typeof obj !== 'object' || obj === null) return
+
+    Object.keys(obj).forEach(key => {
+      const value = obj[key]
+      // If the property is an object and has theme-specific options, apply them
+      if (typeof value === 'object' && value !== null) {
+        if (value[theme]) {
+          obj[key] = value[theme] // Apply the value for the current theme
+        } else {
+          // Recursively process child objects
+          applyThemeConfig(value, theme)
+        }
+      }
+    })
+  }
+
+  const runChartJS = ele => {
+    window.loadChartJS = true
+
+    Array.from(ele).forEach((item, index) => {
+      const chartSrc = item.firstElementChild
+      const chartID = item.getAttribute('data-chartjs-id') || ('chartjs-' + index) // Use custom ID or default ID
+      const width = item.getAttribute('data-width')
+      const existingCanvas = document.getElementById(chartID)
+
+      // If a canvas already exists, remove it to avoid rendering duplicates
+      if (existingCanvas) {
+          existingCanvas.parentNode.remove()
+      }
+
+      const chartDefinition = chartSrc.textContent
+      const canvas = document.createElement('canvas')
+      canvas.id = chartID
+
+      const div = document.createElement('div')
+      div.className = 'chartjs-wrap'
+
+      if (width) {
+        div.style.width = width
+      }
+
+      div.appendChild(canvas)
+      chartSrc.insertAdjacentElement('afterend', div)
+
+      const ctx = document.getElementById(chartID).getContext('2d')
+
+      const config = JSON.parse(chartDefinition)
+
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark-mode' : 'light-mode'
+
+      // Set default styles (initial setup)
+      applyThemeDefaultsConfig(theme)
+
+      // Automatically traverse the config and apply dual-mode color schemes
+      applyThemeConfig(config, theme)
+
+      new Chart(ctx, config)
+    })
+  }
+
+  const loadChartJS = () => {
+    const chartJSEle = document.querySelectorAll('#article-container .chartjs-container')
+    if (chartJSEle.length === 0) return
+
+    window.loadChartJS ? runChartJS(chartJSEle) : btf.getScript('https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js').then(() => runChartJS(chartJSEle))
+  }
+
+  // Listen for theme change events
+  btf.addGlobalFn('themeChange', loadChartJS, 'chartjs')
+  btf.addGlobalFn('encrypt', loadChartJS, 'chartjs')
+
+  window.pjax ? loadChartJS() : document.addEventListener('DOMContentLoaded', loadChartJS)
+})()</script></div><div class="aplayer no-destroy" data-id="28290165" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true" data-lrctype="-1"> </div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script>(() => {
+  const destroyAplayer = () => {
+    if (window.aplayers) {
+      for (let i = 0; i < window.aplayers.length; i++) {
+        if (!window.aplayers[i].options.fixed) {
+          window.aplayers[i].destroy()
+        }
+      }
+    }
+  }
+
+  const runMetingJS = () => {
+    typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+  }
+
+  btf.addGlobalFn('pjaxSend', destroyAplayer, 'destroyAplayer')
+  btf.addGlobalFn('pjaxComplete', loadMeting, 'runMetingJS')
+})()</script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script>(() => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      const usePjax = true
+      true
+        ? (usePjax ? pjax.loadUrl('/404.html') : window.location.href = '/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})()</script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文档" type="text"></div><hr><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.2"></script></div></div></body></html>

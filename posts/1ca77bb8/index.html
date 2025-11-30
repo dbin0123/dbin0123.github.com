@@ -1,0 +1,543 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>2021年05月17日 hibernate-validate使用 | 被讨厌的勇气</title><meta name="author" content="dbin0123"><meta name="copyright" content="dbin0123"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="hibernate-validate使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2021年05月17日 hibernate-validate使用">
+<meta property="og:url" content="http://blog.aiwiown.com/posts/1ca77bb8/index.html">
+<meta property="og:site_name" content="被讨厌的勇气">
+<meta property="og:description" content="hibernate-validate使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.aiwiown.com/img/avatar.jpg">
+<meta property="article:published_time" content="2021-05-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-30T00:45:01.268Z">
+<meta property="article:author" content="dbin0123">
+<meta property="article:tag" content="hibernate-validate 校验">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.aiwiown.com/img/avatar.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "2021年05月17日 hibernate-validate使用",
+  "url": "http://blog.aiwiown.com/posts/1ca77bb8/",
+  "image": "http://blog.aiwiown.com/img/avatar.jpg",
+  "datePublished": "2021-05-16T16:00:00.000Z",
+  "dateModified": "2025-11-30T00:45:01.268Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "dbin0123",
+      "url": "http://blog.aiwiown.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="http://blog.aiwiown.com/posts/1ca77bb8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="stylesheet" href="/css/index.css?v=5.5.2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '2021年05月17日 hibernate-validate使用',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.1.1"></head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/blue/pace-theme-minimal.min.css"><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">69</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">66</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-archive"></i><span> 文档</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://s2.loli.net/2022/02/09/dytTqjBgbhkCmD6.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">被讨厌的勇气</span></a><a class="nav-page-title" href="/"><span class="site-name">2021年05月17日 hibernate-validate使用</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-archive"></i><span> 文档</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">2021年05月17日 hibernate-validate使用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-05-16T16:00:00.000Z" title="发表于 2021-05-17 00:00:00">2021-05-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-30T00:45:01.268Z" title="更新于 2025-11-30 08:45:01">2025-11-30</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h4 id="hibernate-validate"><a href="#hibernate-validate" class="headerlink" title="hibernate-validate"></a>hibernate-validate</h4><h5 id="什么是hibernate-validate"><a href="#什么是hibernate-validate" class="headerlink" title="什么是hibernate-validate"></a>什么是hibernate-validate</h5><p>Hibernate Validator是Hibernate提供的一个开源框架，使用注解方式非常方便的实现服务端的数据校验。</p>
+<p><a target="_blank" rel="external nofollow noopener noreferrer" href="http://hibernate.org/validator/">hibernate-validate官网</a></p>
+<h5 id="spring-boot使用"><a href="#spring-boot使用" class="headerlink" title="spring boot使用"></a>spring boot使用</h5><blockquote>
+<p>spring boot 默认集成了hibernate-validator</p>
+</blockquote>
+<h6 id="引入jar-maven"><a href="#引入jar-maven" class="headerlink" title="引入jar(maven)"></a>引入jar(maven)</h6><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.hibernate.validator<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hibernate-validator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>last-version<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h6 id="新增配置类"><a href="#新增配置类" class="headerlink" title="新增配置类"></a>新增配置类</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.hibernate.validator.HibernateValidator;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.validation.beanvalidation.MethodValidationPostProcessor;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.validation.Validation;</span><br><span class="line"><span class="keyword">import</span> javax.validation.Validator;</span><br><span class="line"><span class="keyword">import</span> javax.validation.ValidatorFactory;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ValidatorConfig</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Bean</span></span><br><span class="line">	<span class="keyword">public</span> MethodValidationPostProcessor <span class="title function_">methodValidationPostProcessor</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="type">MethodValidationPostProcessor</span> <span class="variable">postProcessor</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MethodValidationPostProcessor</span>();</span><br><span class="line">		<span class="comment">/**设置validator模式为快速失败返回*/</span></span><br><span class="line">		postProcessor.setValidator(validator());</span><br><span class="line">		<span class="keyword">return</span> postProcessor;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Bean</span></span><br><span class="line">	<span class="keyword">public</span> Validator <span class="title function_">validator</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="type">ValidatorFactory</span> <span class="variable">validatorFactory</span> <span class="operator">=</span> Validation.byProvider(HibernateValidator.class)</span><br><span class="line">				.configure()</span><br><span class="line">				.failFast(<span class="literal">true</span>)</span><br><span class="line">				.buildValidatorFactory();</span><br><span class="line">		<span class="type">Validator</span> <span class="variable">validator</span> <span class="operator">=</span> validatorFactory.getValidator();</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> validator;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.fasterxml.jackson.annotation.JsonIgnoreProperties;</span><br><span class="line"><span class="keyword">import</span> com.aiwiown.constraints.Dict;</span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"><span class="keyword">import</span> java.math.BigDecimal;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> javax.validation.constraints.DecimalMax;</span><br><span class="line"><span class="keyword">import</span> javax.validation.constraints.DecimalMin;</span><br><span class="line"><span class="keyword">import</span> javax.validation.constraints.Max;</span><br><span class="line"><span class="keyword">import</span> javax.validation.constraints.Min;</span><br><span class="line"><span class="keyword">import</span> javax.validation.constraints.NotBlank;</span><br><span class="line"><span class="keyword">import</span> javax.validation.constraints.NotEmpty;</span><br><span class="line"><span class="keyword">import</span> javax.validation.constraints.NotNull;</span><br><span class="line"><span class="keyword">import</span> javax.validation.constraints.Pattern;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> org.hibernate.validator.group.GroupSequenceProvider;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@JsonIgnoreProperties(ignoreUnknown = true)</span></span><br><span class="line"><span class="meta">@GroupSequenceProvider(TestValidate.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestFrom</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">serialVersionUID</span> <span class="operator">=</span> -<span class="number">8635187916891118177L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**数据类型[S(收款)|Q(收入及成本的确认)|F(开票)|R(退货)]*/</span></span><br><span class="line">    <span class="meta">@Dict(value = &#123;&quot;S&quot;, &quot;Q&quot;, &quot;F&quot;, &quot;R&quot;&#125;, message = &quot;数据类型无效[S(收款)|Q(收入及成本的确认)|F(开票)|R(退货)]&quot;, hasRequer = true)</span></span><br><span class="line">    <span class="keyword">private</span> String dataType;</span><br><span class="line">    <span class="comment">/**商户号*/</span></span><br><span class="line">    <span class="meta">@NotBlank(message = &quot;商户号不能为空&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String bizId;</span><br><span class="line">    <span class="comment">/**子商户号*/</span></span><br><span class="line">    <span class="meta">@NotBlank(message = &quot;子商户号不能为空&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String bizSid;</span><br><span class="line">    <span class="comment">/**订单编号(T0000000001)*/</span></span><br><span class="line">    <span class="meta">@NotBlank(message = &quot;订单编号不能为空&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String tradeNo;</span><br><span class="line">    <span class="meta">@NotBlank(message = &quot;支付单号不能为空&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String paymentNo;</span><br><span class="line">    <span class="meta">@Dict(value = &#123;&quot;微信&quot;, &quot;支付宝&quot;, &quot;网银&quot;, &quot;其他&quot;&#125;, message = &quot;收款方式无效[微信/支付宝/网银/其他]&quot;, groups = &#123;TestValidate.Group1Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">    <span class="keyword">private</span> String paymentMethod;</span><br><span class="line">    <span class="meta">@NotEmpty(message = &quot;销售渠道不能为空&quot;, groups = &#123;TestValidate.Group1Check.class&#125;)</span></span><br><span class="line">    <span class="keyword">private</span> String salesPlatform;</span><br><span class="line">    <span class="keyword">private</span> String shopName;</span><br><span class="line">    <span class="meta">@NotNull(message = &quot;手续费不能为空&quot;, groups = &#123;TestValidate.Group1Check.class&#125;)</span></span><br><span class="line">    <span class="meta">@DecimalMin(value = &quot;0.00&quot;, message = &quot;手续费必须大于等于0&quot;, groups = &#123;TestValidate.Group1Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">    <span class="keyword">private</span> BigDecimal serviceFee;</span><br><span class="line">    <span class="meta">@NotNull(message = &quot;运费不能为空&quot;, groups = &#123;TestValidate.Group1Check.class&#125;)</span></span><br><span class="line">    <span class="meta">@DecimalMin(value = &quot;0.00&quot;, message = &quot;运费必须大于等于0&quot;, groups = &#123;TestValidate.Group1Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">    <span class="keyword">private</span> BigDecimal freightFee;</span><br><span class="line">    <span class="keyword">private</span> BigDecimal discountFee;</span><br><span class="line">    <span class="keyword">private</span> String discountType;</span><br><span class="line">    <span class="meta">@NotNull(message = &quot;支付时间不能为空&quot;, groups = &#123;TestValidate.Group1Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">    <span class="meta">@Pattern(regexp = &quot;^[1-9]\\d&#123;3&#125;-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\\s+(20|21|22|23|[0-1]\\d):[0-5]\\d:[0-5]$&quot;, message = &quot;支付时间格式不正确[yyyy-MM-dd HH:mm:ss]&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String paymentTime;</span><br><span class="line">    <span class="meta">@NotNull(message = &quot;收货时间不能为空&quot;, groups = &#123;TestValidate.Group2Check.class&#125;)</span></span><br><span class="line">    <span class="meta">@Pattern(regexp = &quot;^[1-9]\\d&#123;3&#125;-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\\s+(20|21|22|23|[0-1]\\d):[0-5]\\d:[0-5]$&quot;, message = &quot;收货时间格式不正确[yyyy-MM-dd HH:mm:ss]&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String receiptTime;</span><br><span class="line">    <span class="meta">@NotEmpty(message = &quot;订单商品详情不能为空&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;TradeOrder&gt; listOrder;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Data</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">TradeOrder</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">serialVersionUID</span> <span class="operator">=</span> -<span class="number">9141355495258606857L</span>;</span><br><span class="line">        <span class="comment">/**订单交易明细单号(OT00000000011)*/</span></span><br><span class="line">        <span class="meta">@NotEmpty(message = &quot;订单交易明细单号不能为空&quot;)</span></span><br><span class="line">        <span class="keyword">private</span> String orderNo;</span><br><span class="line">        <span class="meta">@Dict(value = &#123;&quot;自营&quot;, &quot;第三方入驻&quot;&#125;, message = &quot;商品类型无效(自营/第三方入驻)&quot;, hasRequer = true, groups = &#123;TestValidate.Group1Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> String orderItemChannel;</span><br><span class="line">        <span class="meta">@Dict(value = &#123;&quot;主要责任人&quot;, &quot;代理人&quot;&#125;, message = &quot;履约义务类型无效(主要责任人/代理人)&quot;, hasRequer = true, groups = &#123;TestValidate.Group1Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> String obligationType;</span><br><span class="line">        <span class="meta">@NotEmpty(message = &quot;商品ID不能为空&quot;, groups = &#123;TestValidate.Group1Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> String orderItemId;</span><br><span class="line">        <span class="meta">@NotEmpty(message = &quot;商品名称不能为空&quot;, groups = &#123;TestValidate.Group1Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> String orderItemName;</span><br><span class="line">        <span class="meta">@NotEmpty(message = &quot;商品类别不能为空&quot;, groups = &#123;TestValidate.Group1Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> String orderItemType;</span><br><span class="line">        <span class="meta">@NotEmpty(message = &quot;详细信息不能为空&quot;, groups = &#123;TestValidate.Group1Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> String orderItemDesc;</span><br><span class="line">        <span class="meta">@NotNull(message = &quot;销售数量不能为空&quot;, groups = &#123;TestValidate.Group1Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@Min(value = 0, message = &quot;付款销售数量必须大于等于0&quot;, groups = &#123;TestValidate.Group1Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@Max(value = 0, message = &quot;退款销售数量必须小于等于0&quot;, groups = &#123;TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> Integer salesVolume;</span><br><span class="line">        <span class="meta">@NotNull(message = &quot;销售单价不能为空&quot;, groups = &#123;TestValidate.Group1Check.class, TestValidate.Group2Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@DecimalMin(value = &quot;0.00&quot;, message = &quot;销售单价必须大于等于0&quot;, groups = &#123;TestValidate.Group1Check.class, TestValidate.Group2Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> BigDecimal salesUnitPrice;</span><br><span class="line">        <span class="meta">@NotNull(message = &quot;销售金额不能为空&quot;, groups = &#123;TestValidate.Group1Check.class, TestValidate.Group2Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@DecimalMin(value = &quot;0.00&quot;, message = &quot;付款销售金额必须大于等于0&quot;, groups = &#123;TestValidate.Group1Check.class, TestValidate.Group2Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@DecimalMax(value = &quot;0.00&quot;, message = &quot;退款销售金额必须小于等于0&quot;, groups = &#123;TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> BigDecimal salesAmount;</span><br><span class="line">        <span class="meta">@NotNull(message = &quot;销售税率不能为空&quot;, groups = &#123;TestValidate.Group1Check.class, TestValidate.Group2Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@DecimalMin(value = &quot;0.00&quot;, message = &quot;销售税率必须大于等于0&quot;, groups = &#123;TestValidate.Group1Check.class, TestValidate.Group2Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> BigDecimal salesTaxRate;</span><br><span class="line">        <span class="meta">@NotNull(message = &quot;实收金额不能为空&quot;, groups = &#123;TestValidate.Group1Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@DecimalMin(value = &quot;0.00&quot;, message = &quot;付款实收金额必须大于等于0&quot;, groups = &#123;TestValidate.Group1Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@DecimalMax(value = &quot;0.00&quot;, message = &quot;退款实收金额必须小于等于0&quot;, groups = &#123;TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> BigDecimal actualAmount;</span><br><span class="line">        <span class="meta">@NotNull(message = &quot;收入金额不能为空&quot;, groups = &#123;TestValidate.Group2Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@DecimalMin(value = &quot;0.00&quot;, message = &quot;收入金额必须大于等于0&quot;, groups = &#123;TestValidate.Group2Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> BigDecimal incomeAmount;</span><br><span class="line">        <span class="meta">@NotNull(message = &quot;结算单价不能为空&quot;, groups = &#123;TestValidate.Group2Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@DecimalMin(value = &quot;0.00&quot;, message = &quot;结算单价必须大于等于0&quot;, groups = &#123;TestValidate.Group2Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> BigDecimal settlementUnitPrice;</span><br><span class="line">        <span class="meta">@NotNull(message = &quot;结算数量不能为空&quot;, groups = &#123;TestValidate.Group2Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@Min(value = 0, message = &quot;结算数量必须大于等于0&quot;, groups = &#123;TestValidate.Group2Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> Integer settlementVolume;</span><br><span class="line">        <span class="meta">@NotNull(message = &quot;结算金额不能为空&quot;, groups = &#123;TestValidate.Group2Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@DecimalMin(value = &quot;0.00&quot;, message = &quot;结算金额必须大于等于0&quot;, groups = &#123;TestValidate.Group2Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> BigDecimal settlementAmount;</span><br><span class="line">        <span class="meta">@NotNull(message = &quot;采购税率不能为空&quot;, groups = &#123;TestValidate.Group2Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@DecimalMin(value = &quot;0.00&quot;, message = &quot;采购税率必须大于等于0&quot;, groups = &#123;TestValidate.Group2Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> BigDecimal purchaseTaxRate;</span><br><span class="line">        <span class="meta">@NotNull(message = &quot;成本金额不能为空&quot;, groups = &#123;TestValidate.Group2Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@DecimalMin(value = &quot;0.00&quot;, message = &quot;成本金额必须大于等于0&quot;, groups = &#123;TestValidate.Group2Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> BigDecimal costAmount;</span><br><span class="line">        <span class="meta">@NotNull(message = &quot;结存数量不能为空&quot;)</span></span><br><span class="line">        <span class="meta">@Min(value = 1, message = &quot;结存数量必须大于1&quot;)</span></span><br><span class="line">        <span class="keyword">private</span> Integer balanceQuantity;</span><br><span class="line">        <span class="meta">@NotNull(message = &quot;开票单价不能为空&quot;, groups = &#123;TestValidate.Group3Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@DecimalMin(value = &quot;0.00&quot;, message = &quot;开票单价必须大于等于0&quot;, groups = &#123;TestValidate.Group3Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@DecimalMax(value = &quot;0.00&quot;, message = &quot;开票单价必须小于等于0&quot;, groups = &#123;TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> BigDecimal invoiceUnitPrice;</span><br><span class="line">        <span class="meta">@NotNull(message = &quot;开票数量不能为空&quot;, groups = &#123;TestValidate.Group3Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@Min(value = 0, message = &quot;开票数量必须大于等于0&quot;, groups = &#123;TestValidate.Group3Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> Integer invoicedQuantity;</span><br><span class="line">        <span class="meta">@NotNull(message = &quot;开票金额不能为空&quot;, groups = &#123;TestValidate.Group3Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@DecimalMin(value = &quot;0.00&quot;, message = &quot;开票金额必须大于等于0&quot;, groups = &#123;TestValidate.Group3Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@DecimalMax(value = &quot;0.00&quot;, message = &quot;开票金额必须小于等于0&quot;, groups = &#123;TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> BigDecimal invoiceAmount;</span><br><span class="line">        <span class="meta">@NotNull(message = &quot;开票税率不能为空&quot;, groups = &#123;TestValidate.Group3Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@DecimalMin(value = &quot;0.00&quot;, message = &quot;开票税率必须大于等于0&quot;, groups = &#123;TestValidate.Group3Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> BigDecimal invoiceBillRate;</span><br><span class="line">        <span class="meta">@NotNull(message = &quot;开票日期不能为空&quot;, groups = &#123;TestValidate.Group3Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@Pattern(regexp = &quot;^[1-9]\\d&#123;3&#125;-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$&quot;, message = &quot;开票日期格式不正确[yyyy-MM-dd]&quot;, groups = &#123;TestValidate.Group3Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> String invoiceOpenDate;</span><br><span class="line">        <span class="meta">@NotNull(message = &quot;退货日期不能为空&quot;, groups = &#123;TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">        <span class="meta">@Pattern(regexp = &quot;^[1-9]\\d&#123;3&#125;-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$&quot;, message = &quot;退货日期格式不正确[yyyy-MM-dd]&quot;, groups = &#123;TestValidate.Group3Check.class&#125;)</span></span><br><span class="line">        <span class="keyword">private</span> String refundTime;</span><br><span class="line">        <span class="keyword">private</span> List&lt;OrderDiscount&gt; listDiscount;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Data</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">OrderDiscount</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line">            <span class="meta">@NotNull(message = &quot;商品折扣金额不能为空&quot;, groups = &#123;TestValidate.Group1Check.class, TestValidate.Group2Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">            <span class="meta">@DecimalMin(value = &quot;0.00&quot;, message = &quot;商品折扣金额必须大于等于0&quot;, groups = &#123;TestValidate.Group1Check.class, TestValidate.Group2Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">            <span class="keyword">private</span> BigDecimal discountFee;</span><br><span class="line">            <span class="meta">@NotBlank(message = &quot;商品折扣类型不能为空&quot;, groups = &#123;TestValidate.Group1Check.class, TestValidate.Group2Check.class, TestValidate.Group4Check.class&#125;)</span></span><br><span class="line">            <span class="keyword">private</span> String discountType;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h6 id="分组校验使用"><a href="#分组校验使用" class="headerlink" title="分组校验使用"></a>分组校验使用</h6><ul>
+<li>新增分组校验类A实现DefaultGroupSequenceProvider接口<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestValidate</span> <span class="keyword">implements</span> <span class="title class_">DefaultGroupSequenceProvider</span>&lt;TestFrom&gt; &#123;&#125;</span><br></pre></td></tr></table></figure></li>
+<li>实现getValidationGroups方法<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> List&lt;Class&lt;?&gt;&gt; getValidationGroups(TestFrom testFrom) &#123;<span class="keyword">return</span> <span class="literal">null</span>;&#125;</span><br></pre></td></tr></table></figure></li>
+<li>按需求新增分组校验逻辑</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> List&lt;Class&lt;?&gt;&gt; getValidationGroups(TestFrom testFrom) &#123;</span><br><span class="line">    List&lt;Class&lt;?&gt;&gt; listGroudSequence = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    listGroudSequence.add(TestFrom.class);</span><br><span class="line">    <span class="keyword">if</span> (Objects.nonNull(financialStatementFrom)) &#123;</span><br><span class="line">        <span class="comment">//[S(group1)|Q(group2)|F(group3)|R(group4)]</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">dataType</span> <span class="operator">=</span> testFrom.getDataType();</span><br><span class="line">        <span class="keyword">switch</span> (dataType) &#123;</span><br><span class="line">            <span class="keyword">case</span> DATA_TYPE_GROUP1:</span><br><span class="line">                listGroudSequence.add(TestValidate.Group1Check.class);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> DATA_TYPE_GROUP2:</span><br><span class="line">                listGroudSequence.add(TestValidate.Group2Check.class);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> DATA_TYPE_GROUP3:</span><br><span class="line">                listGroudSequence.add(TestValidate.Group3Check.class);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> DATA_TYPE_GROUP4:</span><br><span class="line">                listGroudSequence.add(TestValidate.Group4Check.class);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> listGroudSequence;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Group1Check</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Group2Check</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Group3Check</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Group4Check</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h6 id="spring-boot使用-1"><a href="#spring-boot使用-1" class="headerlink" title="spring boot使用"></a>spring boot使用</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/test&quot;)</span></span><br><span class="line"><span class="keyword">public</span> JSONResult <span class="title function_">test</span><span class="params">(<span class="meta">@RequestBody</span> TestFrom testFrom, BindingResult bindingResult)</span> &#123;</span><br><span class="line">    log.info(<span class="string">&quot;入参:&#123;&#125;&quot;</span>, testFrom);</span><br><span class="line">    <span class="comment">//参数校验 Default.class用于全局参数校验</span></span><br><span class="line">    ValidatorUtils.validateFastException(testFrom, &#123;TestValidate.Group1Check.class,Default.class&#125;);</span><br><span class="line">    <span class="comment">//TODO ... 业务逻辑</span></span><br><span class="line">    <span class="keyword">return</span> JSONResult.ok();</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>控制层类</p>
+<h4 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h4><h5 id="相关注解"><a href="#相关注解" class="headerlink" title="相关注解"></a>相关注解</h5><table>
+    <tr>
+        <th>分类</th>
+        <th>注解</th>
+        <th>描述</th>  
+    </tr>
+    <tr>
+        <td rowspan="4">空和非空检查</td>
+        <td>@Null</td>
+        <td>被注释的元素必须为null</td>
+    </tr>
+    <tr>
+        <td>@NotNull</td>
+        <td>被注释的元素必须不为null</td>
+    </tr>
+    <tr>
+        <td>@NotEmpty</td>
+        <td>被注释的元素的必须非空(字符串长度不为0,集合长度不为0)</td>
+    </tr>
+    <tr>
+        <td>@NotBlank</td>
+        <td>注释元素的值不为空(不为null, 去首尾空格后长度为0</td>
+    </tr>
+    <tr>
+        <td rowspan="2">Boolean检查</td>
+        <td>@AssertFalse</td>
+        <td>元素值必须为false</td>
+    </tr>
+    <tr>
+        <td>@AssertTrue</td>
+        <td>元素值必须为true</td>
+    </tr>
+    <tr>
+        <td rowspan="1">长度检查</td>
+        <td>@Size(max, min)</td>
+        <td>元素值(字符串)的长度需在min,max之间(between and)</td>
+    </tr>
+    <tr>
+        <td rowspan="5">日期时间检查</td>
+        <td>@Past</td>
+        <td>元素必须为过去时间</td>
+    </tr>
+    <tr>
+        <td>@Future</td>
+        <td>元素的值必须为当前时间之后</td>
+    </tr>
+    <tr>
+        <td>@FutureOrPresent</td>
+        <td>元素的值必须为当前时间或当前时间之后</td>
+    </tr>
+    <tr>
+        <td>@Past</td>
+        <td>元素的值必须为当前时间之前</td>
+    </tr>
+    <tr>
+        <td>@PastOrPresent</td>
+        <td>元素的值必须为当前时间或当前时间之前</td>
+    </tr>
+    <tr>
+        <td rowspan="9">数值校验</td>
+        <td>@Max(value)</td>
+        <td>元素的值必须大于等于指定值</td>
+    </tr>
+    <tr>
+        <td>@Min(value)</td>
+        <td>元素的值必须小于等于指定值</td>
+    </tr>
+        <tr>
+        <td>@DecimalMax(value)</td>
+        <td>元素的值必须大于等于指定值</td>
+    </tr>
+        <tr>
+        <td>@DecimalMin(value)</td>
+        <td>元素的值必须小于等于指定值</td>
+    </tr>
+    <tr>
+        <td>@Digits(integer, function)</td>
+        <td>元素值必须是一个数字，其值必须在可接受的范围内</td>
+    </tr>
+    <tr>
+        <td>@Negative</td>
+        <td>元素值必须为负数</td>
+    </tr>
+    <tr>
+        <td>@NegativeOrZero</td>
+        <td>元素值必须为负数或0</td>
+    </tr>
+    <tr>
+        <td>@Positive</td>
+        <td>元素值必须为这正整数</td>
+    </tr>
+    <tr>
+        <td>@PositiveOrZero</td>
+        <td>元素值必须为这正整数或0</td>
+    </tr>
+    <tr>
+        <td rowspan="1">正则校验</td>
+        <td>@Pattern(value)</td>
+        <td>元素值必须符合正则表达式</td>
+    </tr>
+    <tr>
+        <td rowspan="1">邮箱校验</td>
+        <td>@Email</td>
+        <td>元素值必须为邮箱</td>
+    </tr>
+    <tr>
+        <td rowspan="1">URL校验</td>
+        <td>@URL(protocol=,host=, port=,regexp=, flags=)</td>
+        <td>元素值为URL</td>
+    </tr>
+    <tr>
+        <td rowspan="1">信用卡校验</td>
+        <td>@CreditCardNumber</td>
+        <td>元素值为必须必须通过Luhn校验算法</td>
+    </tr>
+</table>
+
+
+<h5 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@ControllerAdvice</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HibernateValidatedExceptionHandler</span> &#123;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 处理<span class="doctag">@Validated</span>参数校验失败异常</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> exception 异常类</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 响应</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="meta">@ResponseStatus(HttpStatus.BAD_REQUEST)</span></span><br><span class="line">    <span class="meta">@ExceptionHandler(MethodArgumentNotValidException.class)</span></span><br><span class="line">    <span class="keyword">public</span> ModelAndView <span class="title function_">exceptionHandler</span><span class="params">(MethodArgumentNotValidException exception)</span>&#123;</span><br><span class="line">        <span class="type">BindingResult</span> <span class="variable">bindingResult</span> <span class="operator">=</span> exception.getBindingResult();</span><br><span class="line">        <span class="type">StringBuilder</span> <span class="variable">stringBuilder</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line">        <span class="type">FieldError</span> <span class="variable">fieldError</span> <span class="operator">=</span> bindingResult.getFieldError();</span><br><span class="line">		<span class="type">MappingJackson2JsonView</span> <span class="variable">view</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MappingJackson2JsonView</span>();</span><br><span class="line">		view.setExtractValueFromSingleKeyModel(<span class="literal">true</span>);</span><br><span class="line">		<span class="type">ModelAndView</span> <span class="variable">modelAndView</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ModelAndView</span>(view);</span><br><span class="line">		modelAndView.addObject(fieldError);</span><br><span class="line">        <span class="keyword">return</span> modelAndView;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="级联校验工具类型"><a href="#级联校验工具类型" class="headerlink" title="级联校验工具类型"></a>级联校验工具类型</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.aiwiown.exceptions.CommonException;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"><span class="keyword">import</span> javax.validation.ConstraintViolation;</span><br><span class="line"><span class="keyword">import</span> javax.validation.Validation;</span><br><span class="line"><span class="keyword">import</span> javax.validation.Validator;</span><br><span class="line"><span class="keyword">import</span> org.hibernate.validator.HibernateValidator;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ValidatorUtils</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="type">Validator</span> <span class="variable">validatorFast</span> <span class="operator">=</span> Validation.byProvider(HibernateValidator.class).configure().failFast(<span class="literal">true</span>).buildValidatorFactory().getValidator();</span><br><span class="line">    <span class="keyword">static</span> <span class="type">Validator</span> <span class="variable">validatorAll</span> <span class="operator">=</span> Validation.byProvider(HibernateValidator.class).configure().failFast(<span class="literal">false</span>).buildValidatorFactory().getValidator();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 校验遇到第一个不合法的字段直接返回不合法字段，后续字段不再校验</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> domain 校验对象</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> &lt;T&gt;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; Set&lt;ConstraintViolation&lt;T&gt;&gt; <span class="title function_">validateFast</span><span class="params">(T domain, Class&lt;?&gt;... groups)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> validatorFast.validate(domain, groups);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 校验遇到第一个不合法的字段直接返回不合法字段，后续字段不再校验(存在不合法参数 异常提示)</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> domain 校验对象</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> &lt;T&gt;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="keyword">void</span> <span class="title function_">validateFastException</span><span class="params">(T domain, Class&lt;?&gt;... groups)</span> &#123;</span><br><span class="line">        Set&lt;ConstraintViolation&lt;T&gt;&gt; constraintViolations = validateFast(domain, groups);</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> != constraintViolations &amp;&amp; constraintViolations.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            ConstraintViolation&lt;T&gt; violation = constraintViolations.iterator().next();</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">CommonException</span>(violation.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 校验所有字段并返回不合法字段</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> domain</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> &lt;T&gt;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; Set&lt;ConstraintViolation&lt;T&gt;&gt; <span class="title function_">validateAll</span><span class="params">(T domain, Class&lt;?&gt;... groups)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> validatorAll.validate(domain, groups);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 校验所有字段 存在不合法的异常</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> domain 校验对象</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> &lt;T&gt;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="keyword">void</span> <span class="title function_">validateAllException</span><span class="params">(T domain, Class&lt;?&gt;... groups)</span> &#123;</span><br><span class="line">        Set&lt;ConstraintViolation&lt;T&gt;&gt; constraintViolations = validateAll(domain, groups);</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> != constraintViolations &amp;&amp; constraintViolations.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            ConstraintViolation&lt;T&gt; violation = constraintViolations.iterator().next();</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">CommonException</span>(violation.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://blog.aiwiown.com">dbin0123</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://blog.aiwiown.com/posts/1ca77bb8/">http://blog.aiwiown.com/posts/1ca77bb8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="external nofollow noopener noreferrer">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://blog.aiwiown.com" target="_blank">被讨厌的勇气</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/hibernate-validate-%E6%A0%A1%E9%AA%8C/">hibernate-validate 校验</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/baedac5b/" title="2021年05月23日 Flex 布局"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">2021年05月23日 Flex 布局</div></div><div class="info-2"><div class="info-item-1">Flex什么是Flex Flex 是 Flexible Box 的缩写，意为”弹性布局”  基本概念 容器: 需要添加弹性布局的父元素. 主轴: 在弹性布局中，通过属性规定水平/垂直方向为主轴. 交叉轴: 与主轴垂直的另一方向,称为交叉轴.  基本使用123456789&lt;div class=&quot;flex-box&quot;&gt;&lt;/div&gt;.flex-box&#123;    /*     * flex: 容器添加弹性布局后，显示为块级元素;     * inline-flex; 容器添加弹性布局后，显示为行级元素;     */    display: flex;&#125;  设为Flex布局后,子元素的float,clear和vertical-align属性将失效。position属性依然生效.  容器属性 flex-direction (决定主轴的方向[子元素的排列方向])  row（默认值）：主轴为水平方向，起点在左。 row-reverse：主轴为水平方向，起点在右。 column：主轴为垂直方向，起点在上。 column-reverse：...</div></div></div></a><a class="pagination-related" href="/posts/da0f53b6/" title="2021年05月13日 NavicatPassword查看"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">2021年05月13日 NavicatPassword查看</div></div><div class="info-2"><div class="info-item-1">NavicatPassword查看步骤 Navicat导出链接 文件文件打开导出文件搜索关键字(password) 打开tool.lu在线PHP运行 附录脚本(主要修改脚本中的密码) 点击运行获取用户密码;  附录123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140141&lt;?phpclass NavicatPassword&#123;    protected $version = 0;    protected...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="author-info-name">dbin0123</div><div class="author-info-description">人生不是别人赋予的,而是自己选择的,自由就是被别人讨厌~</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">69</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">66</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/dbin0123"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/dbin0123" target="_blank" title="Github" rel="external nofollow noopener noreferrer"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#hibernate-validate"><span class="toc-number">1.</span> <span class="toc-text">hibernate-validate</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFhibernate-validate"><span class="toc-number">1.1.</span> <span class="toc-text">什么是hibernate-validate</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#spring-boot%E4%BD%BF%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">spring boot使用</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%BC%95%E5%85%A5jar-maven"><span class="toc-number">1.2.1.</span> <span class="toc-text">引入jar(maven)</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%96%B0%E5%A2%9E%E9%85%8D%E7%BD%AE%E7%B1%BB"><span class="toc-number">1.2.2.</span> <span class="toc-text">新增配置类</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.2.3.</span> <span class="toc-text">使用示例</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%88%86%E7%BB%84%E6%A0%A1%E9%AA%8C%E4%BD%BF%E7%94%A8"><span class="toc-number">1.2.4.</span> <span class="toc-text">分组校验使用</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#spring-boot%E4%BD%BF%E7%94%A8-1"><span class="toc-number">1.2.5.</span> <span class="toc-text">spring boot使用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%99%84%E5%BD%95"><span class="toc-number">2.</span> <span class="toc-text">附录</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3"><span class="toc-number">2.1.</span> <span class="toc-text">相关注解</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="toc-number">2.2.</span> <span class="toc-text">异常处理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BA%A7%E8%81%94%E6%A0%A1%E9%AA%8C%E5%B7%A5%E5%85%B7%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.3.</span> <span class="toc-text">级联校验工具类型</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/57c67e8a/" title="2023年08月20日 包(Package)和Create和模块(Module)&quot;">2023年08月20日 包(Package)和Create和模块(Module)&quot;</a><time datetime="2023-08-19T16:00:00.000Z" title="发表于 2023-08-20 00:00:00">2023-08-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/50541e2f/" title="2023年08月20日 路径(Path)&quot;">2023年08月20日 路径(Path)&quot;</a><time datetime="2023-08-19T16:00:00.000Z" title="发表于 2023-08-20 00:00:00">2023-08-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/c467feca/" title="2023年08月19日 枚举与match表达式">2023年08月19日 枚举与match表达式</a><time datetime="2023-08-18T16:00:00.000Z" title="发表于 2023-08-19 00:00:00">2023-08-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/56134be9/" title="2023年08月19日 struct">2023年08月19日 struct</a><time datetime="2023-08-18T16:00:00.000Z" title="发表于 2023-08-19 00:00:00">2023-08-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/b82e4745/" title="2023年07月26日 Java获取系统名称">2023年07月26日 Java获取系统名称</a><time datetime="2023-07-25T16:00:00.000Z" title="发表于 2023-07-26 00:00:00">2023-07-26</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By dbin0123</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.2"></script><script src="/js/main.js?v=5.5.2"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const applyThemeDefaultsConfig = theme => {
+    if (theme === 'dark-mode') {
+      Chart.defaults.color = "rgba(255, 255, 255, 0.8)"
+      Chart.defaults.borderColor = "rgba(255, 255, 255, 0.2)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    } else {
+      Chart.defaults.color = "rgba(0, 0, 0, 0.8)"
+      Chart.defaults.borderColor = "rgba(0, 0, 0, 0.1)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    }
+  }
+
+  // Recursively traverse the config object and automatically apply theme-specific color schemes
+  const applyThemeConfig = (obj, theme) => {
+    if (typeof obj !== 'object' || obj === null) return
+
+    Object.keys(obj).forEach(key => {
+      const value = obj[key]
+      // If the property is an object and has theme-specific options, apply them
+      if (typeof value === 'object' && value !== null) {
+        if (value[theme]) {
+          obj[key] = value[theme] // Apply the value for the current theme
+        } else {
+          // Recursively process child objects
+          applyThemeConfig(value, theme)
+        }
+      }
+    })
+  }
+
+  const runChartJS = ele => {
+    window.loadChartJS = true
+
+    Array.from(ele).forEach((item, index) => {
+      const chartSrc = item.firstElementChild
+      const chartID = item.getAttribute('data-chartjs-id') || ('chartjs-' + index) // Use custom ID or default ID
+      const width = item.getAttribute('data-width')
+      const existingCanvas = document.getElementById(chartID)
+
+      // If a canvas already exists, remove it to avoid rendering duplicates
+      if (existingCanvas) {
+          existingCanvas.parentNode.remove()
+      }
+
+      const chartDefinition = chartSrc.textContent
+      const canvas = document.createElement('canvas')
+      canvas.id = chartID
+
+      const div = document.createElement('div')
+      div.className = 'chartjs-wrap'
+
+      if (width) {
+        div.style.width = width
+      }
+
+      div.appendChild(canvas)
+      chartSrc.insertAdjacentElement('afterend', div)
+
+      const ctx = document.getElementById(chartID).getContext('2d')
+
+      const config = JSON.parse(chartDefinition)
+
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark-mode' : 'light-mode'
+
+      // Set default styles (initial setup)
+      applyThemeDefaultsConfig(theme)
+
+      // Automatically traverse the config and apply dual-mode color schemes
+      applyThemeConfig(config, theme)
+
+      new Chart(ctx, config)
+    })
+  }
+
+  const loadChartJS = () => {
+    const chartJSEle = document.querySelectorAll('#article-container .chartjs-container')
+    if (chartJSEle.length === 0) return
+
+    window.loadChartJS ? runChartJS(chartJSEle) : btf.getScript('https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js').then(() => runChartJS(chartJSEle))
+  }
+
+  // Listen for theme change events
+  btf.addGlobalFn('themeChange', loadChartJS, 'chartjs')
+  btf.addGlobalFn('encrypt', loadChartJS, 'chartjs')
+
+  window.pjax ? loadChartJS() : document.addEventListener('DOMContentLoaded', loadChartJS)
+})()</script></div><div class="aplayer no-destroy" data-id="28290165" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true" data-lrctype="-1"> </div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script>(() => {
+  const destroyAplayer = () => {
+    if (window.aplayers) {
+      for (let i = 0; i < window.aplayers.length; i++) {
+        if (!window.aplayers[i].options.fixed) {
+          window.aplayers[i].destroy()
+        }
+      }
+    }
+  }
+
+  const runMetingJS = () => {
+    typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+  }
+
+  btf.addGlobalFn('pjaxSend', destroyAplayer, 'destroyAplayer')
+  btf.addGlobalFn('pjaxComplete', loadMeting, 'runMetingJS')
+})()</script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script>(() => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      const usePjax = true
+      true
+        ? (usePjax ? pjax.loadUrl('/404.html') : window.location.href = '/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})()</script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文档" type="text"></div><hr><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.2"></script></div></div></body></html>

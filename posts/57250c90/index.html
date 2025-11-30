@@ -1,0 +1,527 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>2021年10月24日 JVM内存模型 | 被讨厌的勇气</title><meta name="author" content="dbin0123"><meta name="copyright" content="dbin0123"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="JVM内存模型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2021年10月24日 JVM内存模型">
+<meta property="og:url" content="http://blog.aiwiown.com/posts/57250c90/index.html">
+<meta property="og:site_name" content="被讨厌的勇气">
+<meta property="og:description" content="JVM内存模型">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.aiwiown.com/img/avatar.jpg">
+<meta property="article:published_time" content="2021-10-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-30T00:45:01.511Z">
+<meta property="article:author" content="dbin0123">
+<meta property="article:tag" content="JVM内存模型">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.aiwiown.com/img/avatar.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "2021年10月24日 JVM内存模型",
+  "url": "http://blog.aiwiown.com/posts/57250c90/",
+  "image": "http://blog.aiwiown.com/img/avatar.jpg",
+  "datePublished": "2021-10-23T16:00:00.000Z",
+  "dateModified": "2025-11-30T00:45:01.511Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "dbin0123",
+      "url": "http://blog.aiwiown.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="http://blog.aiwiown.com/posts/57250c90/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="stylesheet" href="/css/index.css?v=5.5.2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '2021年10月24日 JVM内存模型',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.1.1"></head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/blue/pace-theme-minimal.min.css"><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">69</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">66</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-archive"></i><span> 文档</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://s2.loli.net/2022/02/09/dytTqjBgbhkCmD6.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">被讨厌的勇气</span></a><a class="nav-page-title" href="/"><span class="site-name">2021年10月24日 JVM内存模型</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-archive"></i><span> 文档</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">2021年10月24日 JVM内存模型</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-10-23T16:00:00.000Z" title="发表于 2021-10-24 00:00:00">2021-10-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-30T00:45:01.511Z" title="更新于 2025-11-30 08:45:01">2025-11-30</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">761</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>2分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="JVM内存模型"><a href="#JVM内存模型" class="headerlink" title="JVM内存模型"></a>JVM内存模型</h2><h3 id="JRE-JDK"><a href="#JRE-JDK" class="headerlink" title="JRE/JDK"></a>JRE/JDK</h3><ul>
+<li>JRE(Java Runtime Environment)：JRE顾名思义是java运行时环境，包含了java虚拟机，java基础类库</li>
+<li>JDK(Java Development Kit)：JDK顾名思义是java开发工具包，是程序员使用java语言编写java程序所需的开发工具包，是提供给程序员使用的。JDK包含了JRE，同时还包含了编译java源码的编译器javac，还包含了很多java程序调试和分析的工具：jconsole，jvisualvm等工具软件，还包含了java程序编写所需的文档和demo例子程序。</li>
+</ul>
+<p><img src="https://i.loli.net/2021/10/24/MmichDpAOPxRrQF.png" alt></p>
+<h3 id="JVM内存模型-1"><a href="#JVM内存模型-1" class="headerlink" title="JVM内存模型"></a>JVM内存模型</h3><p>主要包含:<a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5">运行时数据区Run-Time Data Areas</a>, <a href="https://blog.aiwiown.com/2021/10/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类装载子系统</a>, 字节码执行引擎</p>
+<h3 id="运行时数据区组成"><a href="#运行时数据区组成" class="headerlink" title="运行时数据区组成"></a><a href="https://blog.aiwiown.com/2021/09/jvm%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BB%84%E6%88%90/">运行时数据区组成</a></h3><blockquote>
+<p>主要包含: 堆,虚拟机栈(Java Virtual Machine Stacks)[<em>线程私有</em>],本地方法区[<em>线程私有</em>],方法区,程序计数器[<em>线程私有</em>]</p>
+</blockquote>
+<h4 id="JVM内存参数设置"><a href="#JVM内存参数设置" class="headerlink" title="JVM内存参数设置"></a><a href="https://blog.aiwiown.com/2021/09/JVM%E5%8F%82%E6%95%B0/">JVM内存参数设置</a></h4><p><img src="https://i.loli.net/2021/10/24/bcS7pl8k5QxhFwP.png" alt></p>
+<h5 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h5><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-Xms</code></td>
+<td>设置JVM启动时堆内存的初始化大小,默认物理内存的1/64</td>
+</tr>
+<tr>
+<td><code>-Xmx</code></td>
+<td>设置堆内存最大值,默认物理内存的1/4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h5 id="新生代"><a href="#新生代" class="headerlink" title="新生代"></a>新生代</h5><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-Xmn</code></td>
+<td>设置年轻代的空间大小，剩下的为老年代的空间大小</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h5 id="新生代-老年代"><a href="#新生代-老年代" class="headerlink" title="新生代/老年代"></a>新生代/老年代</h5><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-XX:NewRatio</code></td>
+<td>默认2表示新生代占年老代的1/2，占整个堆内存的1/3。</td>
+</tr>
+<tr>
+<td><code>-XX:SurvivorRatio</code></td>
+<td>默认8表示一个survivor区占用1/8的Eden内存，即1/10的新生代内存。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h6 id="XX-SurvivorRatio"><a href="#XX-SurvivorRatio" class="headerlink" title="-XX:SurvivorRatio"></a>-XX:SurvivorRatio</h6><blockquote>
+<p>设置新生代中eden和S0/S1空间的比例</p>
+</blockquote>
+<ul>
+<li>默认 -XX:SurvivorRatio=8,Eden:S0:S1=8:1:1</li>
+<li>假如 -XX:SurvivorRatio=4,Eden:S0:S1=4:1:1</li>
+</ul>
+<h6 id="XX-SurvivorRatio值就是设置Eden区的比例占多少-S0-S1相同"><a href="#XX-SurvivorRatio值就是设置Eden区的比例占多少-S0-S1相同" class="headerlink" title="-XX:SurvivorRatio值就是设置Eden区的比例占多少,S0/S1相同"></a><code>-XX:SurvivorRatio</code>值就是设置Eden区的比例占多少,S0/S1相同</h6><h5 id="方法区-元空间"><a href="#方法区-元空间" class="headerlink" title="方法区(元空间)"></a>方法区(元空间)</h5><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-XX:MaxMetaspaceSize</code></td>
+<td>设置元空间最大值， 默认是-1， 即不限制， 或者说只受限于本地内存大小。</td>
+</tr>
+<tr>
+<td><code>-XX：MetaspaceSize</code></td>
+<td>指定元空间触发Fullgc的初始阈值(元空间无固定初始大小)， 以字节为单位，<strong>默认是21M</strong>，达到该值就会触发full gc进行类型卸载， 同时收集器会对该值进行调整： 如果释放了大量的空间， 就适当降低该值； 如果释放了很少的空间， 那么在不超过<code>-XX:MaxMetaspaceSize</code>（如果设置了的话） 的情况下， 适当提高该值。这个跟早期jdk版本的-XX:PermSize参数意思不一样，<code>-XX:PermSize</code>代表永久代的初始容量。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p>一般建议在JVM参数中将MetaspaceSize和MaxMetaspaceSize设置成一样的值,调整元空间的大小需要Full GC,会照成Stop The World; eg: <code>‐XX:MetaspaceSize=128M ‐XX:MaxMetaspaceSize=128M</code></p>
+</blockquote>
+<h5 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h5><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-Xss</code></td>
+<td>设置线程栈(栈针)空间大小, 默认1M, eg:-Xss512k, -Xss1M, <strong>-Xss设置越小说明一个线程分配的栈内存就越少,但可以开启更多的线程数</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>————————————————-我是可爱的页面分割线——————————————————-</p>
+<h5 id="生成JVM汇编代码"><a href="#生成JVM汇编代码" class="headerlink" title="生成JVM汇编代码"></a>生成JVM汇编代码</h5><ul>
+<li>javap -v xxx.class 输出附加信息(含常量词信息)</li>
+<li>javap -c xxx.class 对代码进行反汇编<h5 id="Idea配置External-Tool"><a href="#Idea配置External-Tool" class="headerlink" title="Idea配置External Tool"></a>Idea配置External Tool</h5><img src="https://i.loli.net/2021/10/24/OKZAy3tLW4H9TPa.png" alt><h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4></li>
+</ul>
+<ol>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.zhihu.com/question/20317448">JRE 和 JDK 的区别</a></li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://blog.aiwiown.com">dbin0123</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://blog.aiwiown.com/posts/57250c90/">http://blog.aiwiown.com/posts/57250c90/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="external nofollow noopener noreferrer">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://blog.aiwiown.com" target="_blank">被讨厌的勇气</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">JVM内存模型</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/b7e063b3/" title="2021年10月24日 类加载器(ClassLoader)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">2021年10月24日 类加载器(ClassLoader)</div></div><div class="info-2"><div class="info-item-1">类加载器(ClassLoader)什么是类加载器类加载过程 Launcher.loadClass的类加载过程有如下几步： 加载 &gt;&gt; 验证 &gt;&gt; 准备 &gt;&gt; 解析 &gt;&gt; 初始化 &gt;&gt; 使用 &gt;&gt; 卸载 加载：在硬盘/网络/JAR等存储上查找并读入字节码文件到内存(类需要使用时才会加载),在加载阶段会在内存中生成一个代表这个类的java.lang.Class对象,作为方法区这个类的各种数据的访问入口; 链接：当类被加载之后，系统为之生成一个对应的Class对象，接着将会进入链接阶段，链接阶段负责把类的二进制数据合并到JRE中。类连接又可分为如下3个阶段:1: 验证：校验字节码文件的正确性,主要包括四种验证，文件格式验证，元数据验证，字节码验证，符号引用验证;2: 准备：给类的静态变量分配内存，并赋予默认值(对象的默认值是null, int:0, boolean:false)3: 解析：将类的二进制数据中的符号引用替换成直接引用,该阶段会把一些静态方法(符号引用，比如main()方法)替换为指向数据所存内存的指针...</div></div></div></a><a class="pagination-related" href="/posts/fb743c5a/" title="2021年10月24日 堆内存设置(网络)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">2021年10月24日 堆内存设置(网络)</div></div><div class="info-2"><div class="info-item-1">堆内存设置原理JVM堆内存分为2块：Permanent Space 和 Heap Space。  Permanent 即 持久代（Permanent Generation），主要存放的是Java类定义信息，与垃圾收集器要收集的Java对象关系不大。 Heap = { Old + NEW = {Eden, from, to} }，Old 即 年老代（Old Generation），New 即 年轻代（Young Generation）。年老代和年轻代的划分对垃圾收集影响比较大。  年轻代所有新生成的对象首先都是放在年轻代。年轻代的目标就是尽可能快速的收集掉那些生命周期短的对象。年轻代一般分3个区，1个Eden区，2个Survivor区（from 和 to）。 大部分对象在Eden区中生成。当Eden区满时，还存活的对象将被复制到Survivor区（两个中的一个），当一个Survivor区满时，此区的存活对象将被复制到另外一个Survivor区，当另一个Survivor区也满了的时候，从前一个Survivor区复制过来的并且此时还存活的对象，将可能被复制到年老代。 2个Survivo...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="author-info-name">dbin0123</div><div class="author-info-description">人生不是别人赋予的,而是自己选择的,自由就是被别人讨厌~</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">69</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">66</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/dbin0123"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/dbin0123" target="_blank" title="Github" rel="external nofollow noopener noreferrer"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">JVM内存模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JRE-JDK"><span class="toc-number">1.1.</span> <span class="toc-text">JRE&#x2F;JDK</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B-1"><span class="toc-number">1.2.</span> <span class="toc-text">JVM内存模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E7%BB%84%E6%88%90"><span class="toc-number">1.3.</span> <span class="toc-text">运行时数据区组成</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#JVM%E5%86%85%E5%AD%98%E5%8F%82%E6%95%B0%E8%AE%BE%E7%BD%AE"><span class="toc-number">1.3.1.</span> <span class="toc-text">JVM内存参数设置</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A0%86"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">堆</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B0%E7%94%9F%E4%BB%A3"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">新生代</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B0%E7%94%9F%E4%BB%A3-%E8%80%81%E5%B9%B4%E4%BB%A3"><span class="toc-number">1.3.1.3.</span> <span class="toc-text">新生代&#x2F;老年代</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#XX-SurvivorRatio"><span class="toc-number">1.3.1.3.1.</span> <span class="toc-text">-XX:SurvivorRatio</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#XX-SurvivorRatio%E5%80%BC%E5%B0%B1%E6%98%AF%E8%AE%BE%E7%BD%AEEden%E5%8C%BA%E7%9A%84%E6%AF%94%E4%BE%8B%E5%8D%A0%E5%A4%9A%E5%B0%91-S0-S1%E7%9B%B8%E5%90%8C"><span class="toc-number">1.3.1.3.2.</span> <span class="toc-text">-XX:SurvivorRatio值就是设置Eden区的比例占多少,S0&#x2F;S1相同</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E5%8C%BA-%E5%85%83%E7%A9%BA%E9%97%B4"><span class="toc-number">1.3.1.4.</span> <span class="toc-text">方法区(元空间)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A0%88"><span class="toc-number">1.3.1.5.</span> <span class="toc-text">栈</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%94%9F%E6%88%90JVM%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81"><span class="toc-number">1.3.1.6.</span> <span class="toc-text">生成JVM汇编代码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Idea%E9%85%8D%E7%BD%AEExternal-Tool"><span class="toc-number">1.3.1.7.</span> <span class="toc-text">Idea配置External Tool</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.3.2.</span> <span class="toc-text">参考</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/57c67e8a/" title="2023年08月20日 包(Package)和Create和模块(Module)&quot;">2023年08月20日 包(Package)和Create和模块(Module)&quot;</a><time datetime="2023-08-19T16:00:00.000Z" title="发表于 2023-08-20 00:00:00">2023-08-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/50541e2f/" title="2023年08月20日 路径(Path)&quot;">2023年08月20日 路径(Path)&quot;</a><time datetime="2023-08-19T16:00:00.000Z" title="发表于 2023-08-20 00:00:00">2023-08-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/c467feca/" title="2023年08月19日 枚举与match表达式">2023年08月19日 枚举与match表达式</a><time datetime="2023-08-18T16:00:00.000Z" title="发表于 2023-08-19 00:00:00">2023-08-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/56134be9/" title="2023年08月19日 struct">2023年08月19日 struct</a><time datetime="2023-08-18T16:00:00.000Z" title="发表于 2023-08-19 00:00:00">2023-08-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/b82e4745/" title="2023年07月26日 Java获取系统名称">2023年07月26日 Java获取系统名称</a><time datetime="2023-07-25T16:00:00.000Z" title="发表于 2023-07-26 00:00:00">2023-07-26</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By dbin0123</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.2"></script><script src="/js/main.js?v=5.5.2"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const applyThemeDefaultsConfig = theme => {
+    if (theme === 'dark-mode') {
+      Chart.defaults.color = "rgba(255, 255, 255, 0.8)"
+      Chart.defaults.borderColor = "rgba(255, 255, 255, 0.2)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    } else {
+      Chart.defaults.color = "rgba(0, 0, 0, 0.8)"
+      Chart.defaults.borderColor = "rgba(0, 0, 0, 0.1)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    }
+  }
+
+  // Recursively traverse the config object and automatically apply theme-specific color schemes
+  const applyThemeConfig = (obj, theme) => {
+    if (typeof obj !== 'object' || obj === null) return
+
+    Object.keys(obj).forEach(key => {
+      const value = obj[key]
+      // If the property is an object and has theme-specific options, apply them
+      if (typeof value === 'object' && value !== null) {
+        if (value[theme]) {
+          obj[key] = value[theme] // Apply the value for the current theme
+        } else {
+          // Recursively process child objects
+          applyThemeConfig(value, theme)
+        }
+      }
+    })
+  }
+
+  const runChartJS = ele => {
+    window.loadChartJS = true
+
+    Array.from(ele).forEach((item, index) => {
+      const chartSrc = item.firstElementChild
+      const chartID = item.getAttribute('data-chartjs-id') || ('chartjs-' + index) // Use custom ID or default ID
+      const width = item.getAttribute('data-width')
+      const existingCanvas = document.getElementById(chartID)
+
+      // If a canvas already exists, remove it to avoid rendering duplicates
+      if (existingCanvas) {
+          existingCanvas.parentNode.remove()
+      }
+
+      const chartDefinition = chartSrc.textContent
+      const canvas = document.createElement('canvas')
+      canvas.id = chartID
+
+      const div = document.createElement('div')
+      div.className = 'chartjs-wrap'
+
+      if (width) {
+        div.style.width = width
+      }
+
+      div.appendChild(canvas)
+      chartSrc.insertAdjacentElement('afterend', div)
+
+      const ctx = document.getElementById(chartID).getContext('2d')
+
+      const config = JSON.parse(chartDefinition)
+
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark-mode' : 'light-mode'
+
+      // Set default styles (initial setup)
+      applyThemeDefaultsConfig(theme)
+
+      // Automatically traverse the config and apply dual-mode color schemes
+      applyThemeConfig(config, theme)
+
+      new Chart(ctx, config)
+    })
+  }
+
+  const loadChartJS = () => {
+    const chartJSEle = document.querySelectorAll('#article-container .chartjs-container')
+    if (chartJSEle.length === 0) return
+
+    window.loadChartJS ? runChartJS(chartJSEle) : btf.getScript('https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js').then(() => runChartJS(chartJSEle))
+  }
+
+  // Listen for theme change events
+  btf.addGlobalFn('themeChange', loadChartJS, 'chartjs')
+  btf.addGlobalFn('encrypt', loadChartJS, 'chartjs')
+
+  window.pjax ? loadChartJS() : document.addEventListener('DOMContentLoaded', loadChartJS)
+})()</script></div><div class="aplayer no-destroy" data-id="28290165" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true" data-lrctype="-1"> </div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script>(() => {
+  const destroyAplayer = () => {
+    if (window.aplayers) {
+      for (let i = 0; i < window.aplayers.length; i++) {
+        if (!window.aplayers[i].options.fixed) {
+          window.aplayers[i].destroy()
+        }
+      }
+    }
+  }
+
+  const runMetingJS = () => {
+    typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+  }
+
+  btf.addGlobalFn('pjaxSend', destroyAplayer, 'destroyAplayer')
+  btf.addGlobalFn('pjaxComplete', loadMeting, 'runMetingJS')
+})()</script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script>(() => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      const usePjax = true
+      true
+        ? (usePjax ? pjax.loadUrl('/404.html') : window.location.href = '/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})()</script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文档" type="text"></div><hr><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.2"></script></div></div></body></html>

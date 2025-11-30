@@ -1,0 +1,450 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>2022年02月09日 Redis 集群安装 | 被讨厌的勇气</title><meta name="author" content="dbin0123"><meta name="copyright" content="dbin0123"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Redis 集群安装">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2022年02月09日 Redis 集群安装">
+<meta property="og:url" content="http://blog.aiwiown.com/posts/5a197a16/index.html">
+<meta property="og:site_name" content="被讨厌的勇气">
+<meta property="og:description" content="Redis 集群安装">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.aiwiown.com/img/avatar.jpg">
+<meta property="article:published_time" content="2022-02-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-30T00:45:01.808Z">
+<meta property="article:author" content="dbin0123">
+<meta property="article:tag" content="Redis集群">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.aiwiown.com/img/avatar.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "2022年02月09日 Redis 集群安装",
+  "url": "http://blog.aiwiown.com/posts/5a197a16/",
+  "image": "http://blog.aiwiown.com/img/avatar.jpg",
+  "datePublished": "2022-02-08T16:00:00.000Z",
+  "dateModified": "2025-11-30T00:45:01.808Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "dbin0123",
+      "url": "http://blog.aiwiown.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="http://blog.aiwiown.com/posts/5a197a16/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="stylesheet" href="/css/index.css?v=5.5.2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '2022年02月09日 Redis 集群安装',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.1.1"></head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/blue/pace-theme-minimal.min.css"><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">69</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">66</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-archive"></i><span> 文档</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://s2.loli.net/2022/02/09/dytTqjBgbhkCmD6.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">被讨厌的勇气</span></a><a class="nav-page-title" href="/"><span class="site-name">2022年02月09日 Redis 集群安装</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-archive"></i><span> 文档</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">2022年02月09日 Redis 集群安装</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-02-08T16:00:00.000Z" title="发表于 2022-02-09 00:00:00">2022-02-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-30T00:45:01.808Z" title="更新于 2025-11-30 08:45:01">2025-11-30</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><ol>
+<li>服务器(centos 7): 192.168.5.55(6380,6381),192.168.5.56(6380,6381),192.168.5.57(6380,6381)</li>
+<li>Redis版本<code>redis-5.0.14</code></li>
+<li>安装目录<code>/data/redis</code> 目录</li>
+<li>关闭防火墙(或者打开6380,6381,16380,16381端口) 16380,16381端口内部通信端口(集群节点gossip通信端口(默认是在redis端口号上加1W))</li>
+<li>安装gcc</li>
+</ol>
+<h5 id="关闭防火墙"><a href="#关闭防火墙" class="headerlink" title="关闭防火墙"></a>关闭防火墙</h5><blockquote>
+<p>本次安装采用关闭防火墙方式(关闭55,56,57的防火墙)</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">临时关闭防火墙</span></span><br><span class="line">systemctl stop firewalld</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">禁止开机启动</span></span><br><span class="line">systemctl disable firewalld</span><br></pre></td></tr></table></figure>
+<h5 id="安装gcc"><a href="#安装gcc" class="headerlink" title="安装gcc"></a>安装gcc</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">安装gcc</span><br><span class="line">yum install gcc</span><br></pre></td></tr></table></figure>
+<h4 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h4><ul>
+<li>创建安装目录,上传安装包,创建配置文件</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建安装目录</span></span><br><span class="line">mkdir -p /data</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">上传安装包 或在线下载(wget http://download.redis.io/releases/redis-5.0.14.tar.gz)</span></span><br><span class="line">rz -y 选择安装文件redis-5.0.14.tar.gz (如果不存在rz 命令 运行yum install lrzsz)</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">编译安装 进入到解压好的redis‐5.0.14目录下,进行编译与安装</span></span><br><span class="line">make</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">解压缩</span></span><br><span class="line">tar -zxvf redis-5.0.14.tar.gz</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建配置文件目录</span></span><br><span class="line">cd redis-5.0.14</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"></span></span><br><span class="line"><span class="language-bash"><span class="built_in">mkdir</span> config</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入配置文件目录创建配置文件</span></span><br><span class="line">cd config</span><br><span class="line">touch 6380.conf 6381.conf</span><br></pre></td></tr></table></figure>
+<ul>
+<li>编写配置文件 <a href="https://blog.aiwiown.com/2022/01/Redis5.X%E9%85%8D%E7%BD%AE/">redis.conf</a></li>
+</ul>
+<p>编写配置文件并创建配置文件中相关目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建数据存储目录</span></span><br><span class="line">mkdir -p /data/redis-5.0.14/datas/6380/ /data/redis-5.0.14/datas/6381/</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>6380.conf</code> 配置文件</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># 后台启动</span><br><span class="line">daemonize yes</span><br><span class="line"># 端口</span><br><span class="line">port 6380</span><br><span class="line"># pid文件(启动进程号) 不需要手动创建</span><br><span class="line">pidfile /data/redis-5.0.14/config/6380.pid</span><br><span class="line"># 数据文件存放路径</span><br><span class="line">dir /data/redis-5.0.14/datas/6380/</span><br><span class="line"></span><br><span class="line"># 一定要注释绑定ip配置, 或者不注释,配置多个,本次演示注释</span><br><span class="line"># bind 127.0.0.1</span><br><span class="line"># 关闭保护模式</span><br><span class="line">protected-mode no</span><br><span class="line"># 开启aof持久化</span><br><span class="line">appendonly yes</span><br><span class="line"></span><br><span class="line"># 配置redis访问密码</span><br><span class="line">requirepass redis123</span><br><span class="line"># 配置集群间密码访问</span><br><span class="line">masterauth redis123</span><br><span class="line"></span><br><span class="line"># 开启集群模式</span><br><span class="line">cluster-enabled yes</span><br><span class="line"># 集群节点信息集群组建成功redis会自动写入(不需要手动创建)</span><br><span class="line">cluster-config-file nodes-6380.conf</span><br><span class="line"># redis节点通信超时时间毫秒</span><br><span class="line">cluster-node-timeout 10000</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>6381.conf</code> 配置文件</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># 后台启动</span><br><span class="line">daemonize yes</span><br><span class="line"># 端口</span><br><span class="line">port 6381</span><br><span class="line"># pid文件(启动进程号)</span><br><span class="line">pidfile /data/redis-5.0.14/config/6381.pid</span><br><span class="line"># 数据文件存放路径</span><br><span class="line">dir /data/redis-5.0.14/datas/6381/</span><br><span class="line"></span><br><span class="line"># 一定要注释绑定ip配置, 或者不注释,配置多个,本次演示注释</span><br><span class="line"># bind 127.0.0.1</span><br><span class="line"># 关闭保护模式</span><br><span class="line">protected-mode no</span><br><span class="line"># 开启aof持久化</span><br><span class="line">appendonly yes</span><br><span class="line"></span><br><span class="line"># 配置redis访问密码</span><br><span class="line">requirepass redis123</span><br><span class="line"># 配置集群间密码访问</span><br><span class="line">masterauth redis123</span><br><span class="line"></span><br><span class="line"># 开启集群模式</span><br><span class="line">cluster-enabled yes</span><br><span class="line"># 集群节点信息集群组建成功redis会自动写入</span><br><span class="line">cluster-config-file nodes-6381.conf</span><br><span class="line"># redis节点通信超时时间毫秒</span><br><span class="line">cluster-node-timeout 10000</span><br></pre></td></tr></table></figure>
+<ul>
+<li>复制安装文件至56,57服务器(使用<a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.runoob.com/linux/linux-comm-scp.html">scp命令</a>)</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">复制至56</span></span><br><span class="line">scp -r /data root@192.168.5.56:/</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">复制至57</span> </span><br><span class="line">scp -r /data root@192.168.5.57:/</span><br></pre></td></tr></table></figure>
+<ul>
+<li>分别在55,56,57服务器启动redis服务</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动服务</span></span><br><span class="line">/data/redis-5.0.14/src/redis-server /data/redis-5.0.14/config/6380.conf</span><br><span class="line">/data/redis-5.0.14/src/redis-server /data/redis-5.0.14/config/6381.conf</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看是否启动</span></span><br><span class="line">ps -ef|grep redis</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/02/09/Rpkb8GFVwf3gOxr.png" alt></p>
+<ul>
+<li>组建集群</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">随便选取一台执行(-a 密码 --cluster-replicas 副本个数) </span><br><span class="line">/data/redis-5.0.14/src/redis-cli -a redis123 --cluster create 192.168.5.55:6380 192.168.5.55:6381 192.168.5.56:6380 192.168.5.56:6381 192.168.5.57:6380 192.168.5.57:6381 --cluster-replicas 1</span><br><span class="line">Warning: Using a password with &#x27;-a&#x27; or &#x27;-u&#x27; option on the command line interface may not be safe.</span><br><span class="line"><span class="meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; Performing <span class="built_in">hash</span> slots allocation on 6 nodes...</span></span><br><span class="line">Master[0] -&gt; Slots 0 - 5460</span><br><span class="line">Master[1] -&gt; Slots 5461 - 10922</span><br><span class="line">Master[2] -&gt; Slots 10923 - 16383</span><br><span class="line">Adding replica 192.168.5.56:6381 to 192.168.5.55:6380</span><br><span class="line">Adding replica 192.168.5.57:6381 to 192.168.5.56:6380</span><br><span class="line">Adding replica 192.168.5.55:6381 to 192.168.5.57:6380</span><br><span class="line">M: de97776b4df00cfc37faa0f09915ac7c324b0199 192.168.5.55:6380</span><br><span class="line">   slots:[0-5460] (5461 slots) master</span><br><span class="line">S: 0d765947e1da43ffb18ff1e8ad4bdc651e430bb0 192.168.5.55:6381</span><br><span class="line">   replicates 2d74accc409c09cfed3273328adb713198ee92f7</span><br><span class="line">M: 5058621690a86ad524293672dbd8c39deba1c40d 192.168.5.56:6380</span><br><span class="line">   slots:[5461-10922] (5462 slots) master</span><br><span class="line">S: 55921ef7e6d266e79e6c3e29418920ee21828bbc 192.168.5.56:6381</span><br><span class="line">   replicates de97776b4df00cfc37faa0f09915ac7c324b0199</span><br><span class="line">M: 2d74accc409c09cfed3273328adb713198ee92f7 192.168.5.57:6380</span><br><span class="line">   slots:[10923-16383] (5461 slots) master</span><br><span class="line">S: 315ff303fc0924cc1c10c2f55fd6907b42d11406 192.168.5.57:6381</span><br><span class="line">   replicates 5058621690a86ad524293672dbd8c39deba1c40d</span><br><span class="line">Can I set the above configuration? (type &#x27;yes&#x27; to accept): yes</span><br><span class="line">Can I set the above configuration? (type &#x27;yes&#x27; to accept): yes      </span><br><span class="line"><span class="meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; Nodes configuration updated</span></span><br><span class="line"><span class="meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; Assign a different config epoch to each node</span></span><br><span class="line"><span class="meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; Sending CLUSTER MEET messages to <span class="built_in">join</span> the cluster</span></span><br><span class="line">Waiting for the cluster to join</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; Performing Cluster Check (using node 192.168.5.55:6380)</span></span><br><span class="line">M: de97776b4df00cfc37faa0f09915ac7c324b0199 192.168.5.55:6380</span><br><span class="line">   slots:[0-5460] (5461 slots) master</span><br><span class="line">   1 additional replica(s)</span><br><span class="line">S: 55921ef7e6d266e79e6c3e29418920ee21828bbc 192.168.5.56:6381</span><br><span class="line">   slots: (0 slots) slave</span><br><span class="line">   replicates de97776b4df00cfc37faa0f09915ac7c324b0199</span><br><span class="line">S: 0d765947e1da43ffb18ff1e8ad4bdc651e430bb0 192.168.5.55:6381</span><br><span class="line">   slots: (0 slots) slave</span><br><span class="line">   replicates 2d74accc409c09cfed3273328adb713198ee92f7</span><br><span class="line">M: 2d74accc409c09cfed3273328adb713198ee92f7 192.168.5.57:6380</span><br><span class="line">   slots:[10923-16383] (5461 slots) master</span><br><span class="line">   1 additional replica(s)</span><br><span class="line">M: 5058621690a86ad524293672dbd8c39deba1c40d 192.168.5.56:6380</span><br><span class="line">   slots:[5461-10922] (5462 slots) master</span><br><span class="line">   1 additional replica(s)</span><br><span class="line">S: 315ff303fc0924cc1c10c2f55fd6907b42d11406 192.168.5.57:6381</span><br><span class="line">   slots: (0 slots) slave</span><br><span class="line">   replicates 5058621690a86ad524293672dbd8c39deba1c40d</span><br><span class="line">[OK] All nodes agree about slots configuration.</span><br><span class="line"><span class="meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; Check <span class="keyword">for</span> open slots...</span></span><br><span class="line"><span class="meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; Check slots coverage...</span></span><br><span class="line">[OK] All 16384 slots covered.</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2022/02/09/fg7RXpktoQ46d1S.png" alt="组建集群"><br><img src="https://s2.loli.net/2022/02/09/D1hE9f3i42LxuMF.png" alt="集群组建结果"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://blog.aiwiown.com">dbin0123</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://blog.aiwiown.com/posts/5a197a16/">http://blog.aiwiown.com/posts/5a197a16/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="external nofollow noopener noreferrer">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://blog.aiwiown.com" target="_blank">被讨厌的勇气</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Redis%E9%9B%86%E7%BE%A4/">Redis集群</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/c4124207/" title="2022年02月10日 Redis集群扩容"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">2022年02月10日 Redis集群扩容</div></div><div class="info-2"><div class="info-item-1">引入本文在搭建的redis集群的基础上对集群进行扩容;  环境准备 服务器(centos 7): 192.168.5.57(6382,6383) Redis版本redis-5.0.14 安装目录/data/redis 目录 关闭防火墙(或者打开6382,6383,16382,16383端口) 16382,16383端口内部通信端口(集群节点gossip通信端口(默认是在redis端口号上加1W)) 安装gcc  扩容步骤(本次在57上安装) 创建配置文件  1234# 进入config目录cd /data/redis-5.0.14/config/# 创建配置文件(6382.conf,6383.conf)touch 6382.conf 6383.conf  编写配置文件 redis.conf  编写配置文件并创建配置文件中相关目录 12# 创建数据存储目录mkdir -p /data/redis-5.0.14/datas/6382/ /data/redis-5.0.14/datas/6383/  6382.conf 配置文件  123456789101112131415161718...</div></div></div></a><a class="pagination-related" href="/posts/4fadcd11/" title="2022年01月26日 MongoDB文件(GridFS)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">2022年01月26日 MongoDB文件(GridFS)</div></div><div class="info-2"><div class="info-item-1">MongoDB文件mongo shell shell mongofile使用   命令: mongofiles     command  list      列出所有文件,’filename’ 是一个可选前缀,列出的文件名必须以; search    查找所有文件,’filename’ 是列出的文件名必须包含的子字符串; put       添加一个文件名为 ‘filename’ 的文件 put_id    添加一个文件名为 ‘filename’和给定’_id’的文件 get       获取文件名为’filename’的文件 get_id    获取具有给定 ‘_id’ 的文件 delete    删除所有文件名为’filename’的文件 delete_id 删除具有给定 ‘_id’ 的文件   options  h host p port(端口) u 用户名 p 密码    12345678# 上传文件.\bin\mongofiles.exe -h 127.0.0.1 -p 27017 -d aiwiown_gridfs put C:/Users/admin/Desktop...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="author-info-name">dbin0123</div><div class="author-info-description">人生不是别人赋予的,而是自己选择的,自由就是被别人讨厌~</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">69</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">66</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/dbin0123"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/dbin0123" target="_blank" title="Github" rel="external nofollow noopener noreferrer"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">1.</span> <span class="toc-text">环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%85%B3%E9%97%AD%E9%98%B2%E7%81%AB%E5%A2%99"><span class="toc-number">1.1.</span> <span class="toc-text">关闭防火墙</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AE%89%E8%A3%85gcc"><span class="toc-number">1.2.</span> <span class="toc-text">安装gcc</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4"><span class="toc-number">2.</span> <span class="toc-text">安装步骤</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/57c67e8a/" title="2023年08月20日 包(Package)和Create和模块(Module)&quot;">2023年08月20日 包(Package)和Create和模块(Module)&quot;</a><time datetime="2023-08-19T16:00:00.000Z" title="发表于 2023-08-20 00:00:00">2023-08-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/50541e2f/" title="2023年08月20日 路径(Path)&quot;">2023年08月20日 路径(Path)&quot;</a><time datetime="2023-08-19T16:00:00.000Z" title="发表于 2023-08-20 00:00:00">2023-08-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/c467feca/" title="2023年08月19日 枚举与match表达式">2023年08月19日 枚举与match表达式</a><time datetime="2023-08-18T16:00:00.000Z" title="发表于 2023-08-19 00:00:00">2023-08-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/56134be9/" title="2023年08月19日 struct">2023年08月19日 struct</a><time datetime="2023-08-18T16:00:00.000Z" title="发表于 2023-08-19 00:00:00">2023-08-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/b82e4745/" title="2023年07月26日 Java获取系统名称">2023年07月26日 Java获取系统名称</a><time datetime="2023-07-25T16:00:00.000Z" title="发表于 2023-07-26 00:00:00">2023-07-26</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By dbin0123</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.2"></script><script src="/js/main.js?v=5.5.2"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const applyThemeDefaultsConfig = theme => {
+    if (theme === 'dark-mode') {
+      Chart.defaults.color = "rgba(255, 255, 255, 0.8)"
+      Chart.defaults.borderColor = "rgba(255, 255, 255, 0.2)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    } else {
+      Chart.defaults.color = "rgba(0, 0, 0, 0.8)"
+      Chart.defaults.borderColor = "rgba(0, 0, 0, 0.1)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    }
+  }
+
+  // Recursively traverse the config object and automatically apply theme-specific color schemes
+  const applyThemeConfig = (obj, theme) => {
+    if (typeof obj !== 'object' || obj === null) return
+
+    Object.keys(obj).forEach(key => {
+      const value = obj[key]
+      // If the property is an object and has theme-specific options, apply them
+      if (typeof value === 'object' && value !== null) {
+        if (value[theme]) {
+          obj[key] = value[theme] // Apply the value for the current theme
+        } else {
+          // Recursively process child objects
+          applyThemeConfig(value, theme)
+        }
+      }
+    })
+  }
+
+  const runChartJS = ele => {
+    window.loadChartJS = true
+
+    Array.from(ele).forEach((item, index) => {
+      const chartSrc = item.firstElementChild
+      const chartID = item.getAttribute('data-chartjs-id') || ('chartjs-' + index) // Use custom ID or default ID
+      const width = item.getAttribute('data-width')
+      const existingCanvas = document.getElementById(chartID)
+
+      // If a canvas already exists, remove it to avoid rendering duplicates
+      if (existingCanvas) {
+          existingCanvas.parentNode.remove()
+      }
+
+      const chartDefinition = chartSrc.textContent
+      const canvas = document.createElement('canvas')
+      canvas.id = chartID
+
+      const div = document.createElement('div')
+      div.className = 'chartjs-wrap'
+
+      if (width) {
+        div.style.width = width
+      }
+
+      div.appendChild(canvas)
+      chartSrc.insertAdjacentElement('afterend', div)
+
+      const ctx = document.getElementById(chartID).getContext('2d')
+
+      const config = JSON.parse(chartDefinition)
+
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark-mode' : 'light-mode'
+
+      // Set default styles (initial setup)
+      applyThemeDefaultsConfig(theme)
+
+      // Automatically traverse the config and apply dual-mode color schemes
+      applyThemeConfig(config, theme)
+
+      new Chart(ctx, config)
+    })
+  }
+
+  const loadChartJS = () => {
+    const chartJSEle = document.querySelectorAll('#article-container .chartjs-container')
+    if (chartJSEle.length === 0) return
+
+    window.loadChartJS ? runChartJS(chartJSEle) : btf.getScript('https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js').then(() => runChartJS(chartJSEle))
+  }
+
+  // Listen for theme change events
+  btf.addGlobalFn('themeChange', loadChartJS, 'chartjs')
+  btf.addGlobalFn('encrypt', loadChartJS, 'chartjs')
+
+  window.pjax ? loadChartJS() : document.addEventListener('DOMContentLoaded', loadChartJS)
+})()</script></div><div class="aplayer no-destroy" data-id="28290165" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true" data-lrctype="-1"> </div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script>(() => {
+  const destroyAplayer = () => {
+    if (window.aplayers) {
+      for (let i = 0; i < window.aplayers.length; i++) {
+        if (!window.aplayers[i].options.fixed) {
+          window.aplayers[i].destroy()
+        }
+      }
+    }
+  }
+
+  const runMetingJS = () => {
+    typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+  }
+
+  btf.addGlobalFn('pjaxSend', destroyAplayer, 'destroyAplayer')
+  btf.addGlobalFn('pjaxComplete', loadMeting, 'runMetingJS')
+})()</script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script>(() => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      const usePjax = true
+      true
+        ? (usePjax ? pjax.loadUrl('/404.html') : window.location.href = '/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})()</script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文档" type="text"></div><hr><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.2"></script></div></div></body></html>

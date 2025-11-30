@@ -1,0 +1,611 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>2021年04月05日 ElasticSearch 集群安装 | 被讨厌的勇气</title><meta name="author" content="dbin0123"><meta name="copyright" content="dbin0123"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="ElasticSearch 集群安装">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2021年04月05日 ElasticSearch 集群安装">
+<meta property="og:url" content="http://blog.aiwiown.com/posts/c9f483b8/index.html">
+<meta property="og:site_name" content="被讨厌的勇气">
+<meta property="og:description" content="ElasticSearch 集群安装">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.aiwiown.com/img/avatar.jpg">
+<meta property="article:published_time" content="2021-04-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-30T00:45:01.175Z">
+<meta property="article:author" content="dbin0123">
+<meta property="article:tag" content="ElasticSearch 集群 ES">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.aiwiown.com/img/avatar.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "2021年04月05日 ElasticSearch 集群安装",
+  "url": "http://blog.aiwiown.com/posts/c9f483b8/",
+  "image": "http://blog.aiwiown.com/img/avatar.jpg",
+  "datePublished": "2021-04-04T16:00:00.000Z",
+  "dateModified": "2025-11-30T00:45:01.175Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "dbin0123",
+      "url": "http://blog.aiwiown.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="http://blog.aiwiown.com/posts/c9f483b8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="stylesheet" href="/css/index.css?v=5.5.2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '2021年04月05日 ElasticSearch 集群安装',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.1.1"></head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+btf.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/blue/pace-theme-minimal.min.css"><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">69</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">66</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-archive"></i><span> 文档</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://s2.loli.net/2022/02/09/dytTqjBgbhkCmD6.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">被讨厌的勇气</span></a><a class="nav-page-title" href="/"><span class="site-name">2021年04月05日 ElasticSearch 集群安装</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-archive"></i><span> 文档</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间线</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">2021年04月05日 ElasticSearch 集群安装</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-04-04T16:00:00.000Z" title="发表于 2021-04-05 00:00:00">2021-04-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-30T00:45:01.175Z" title="更新于 2025-11-30 08:45:01">2025-11-30</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="ES-集群搭建"><a href="#ES-集群搭建" class="headerlink" title="ES 集群搭建"></a>ES 集群搭建</h1><h4 id="装备工作"><a href="#装备工作" class="headerlink" title="装备工作"></a>装备工作</h4><ul>
+<li>下载ElasticSearch安装包（6.3.2）</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.3.2.tar.gz</span><br></pre></td></tr></table></figure>
+<ul>
+<li>安装路径说明</li>
+</ul>
+<p><img src="https://gitee.com/dbin0123/picgo/raw/master/image/20210405120023.png" alt="安装目录结构"></p>
+<ol>
+<li>es_master：主节点</li>
+<li>es_slave_01: 子节点1</li>
+<li>es_slave_02: 子节点2</li>
+</ol>
+<ul>
+<li>解压安装文件至 （es_master,es_slave_01,es_slave_02）</li>
+</ul>
+<h4 id="安装工作"><a href="#安装工作" class="headerlink" title="安装工作"></a>安装工作</h4><ul>
+<li>es_master安装</li>
+</ul>
+<p>master配置文件（elasticsearch.yml）</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 集群名称</span></span><br><span class="line"><span class="attr">cluster.name:</span> <span class="string">aiwiown-master</span></span><br><span class="line"><span class="comment"># 节点名称</span></span><br><span class="line"><span class="attr">node.name:</span> <span class="string">master</span></span><br><span class="line"><span class="comment"># 绑定IP</span></span><br><span class="line"><span class="attr">network.host:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line"><span class="comment"># http端口</span></span><br><span class="line"><span class="attr">http.port:</span> <span class="number">9200</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># head插件配置跨域</span></span><br><span class="line"><span class="attr">http.cors.enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">http.cors.allow-origin:</span> <span class="string">&quot;*&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>启动 ./bin/elasticsearch -d (-d 后台启动)</p>
+<p><img src="https://gitee.com/dbin0123/picgo/raw/master/image/20210405124149.png" alt="head插件查看"></p>
+<ul>
+<li>es_slave_01安装</li>
+</ul>
+<p>slave_01配置文件（elasticsearch.yml）</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 集群名称</span></span><br><span class="line"><span class="attr">cluster.name:</span> <span class="string">aiwiown-master</span></span><br><span class="line"><span class="comment"># 节点名称</span></span><br><span class="line"><span class="attr">node.name:</span> <span class="string">slave_01</span></span><br><span class="line"><span class="comment"># 绑定IP</span></span><br><span class="line"><span class="attr">network.host:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line"><span class="comment"># http端口</span></span><br><span class="line"><span class="attr">http.port:</span> <span class="number">9201</span></span><br><span class="line"><span class="comment"># master节点</span></span><br><span class="line"><span class="attr">discovery.zen.ping.unicast.hosts:</span> [<span class="string">&quot;127.0.0.1&quot;</span>]</span><br><span class="line"><span class="comment"># 为了避免脑裂，集群节点数最少为 半数+1</span></span><br><span class="line"><span class="attr">discovery.zen.minimum_master_nodes:</span> <span class="number">2</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>启动 ./bin/elasticsearch -d (-d 后台启动)</p>
+<ul>
+<li>es_slave_02安装</li>
+</ul>
+<p>slave_02配置文件（elasticsearch.yml）</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 集群名称</span></span><br><span class="line"><span class="attr">cluster.name:</span> <span class="string">aiwiown-master</span></span><br><span class="line"><span class="comment"># 节点名称</span></span><br><span class="line"><span class="attr">node.name:</span> <span class="string">slave_02</span></span><br><span class="line"><span class="comment"># 绑定IP</span></span><br><span class="line"><span class="attr">network.host:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line"><span class="comment"># http端口</span></span><br><span class="line"><span class="attr">http.port:</span> <span class="number">9202</span></span><br><span class="line"><span class="comment"># master节点</span></span><br><span class="line"><span class="attr">discovery.zen.ping.unicast.hosts:</span> [<span class="string">&quot;127.0.0.1&quot;</span>]</span><br><span class="line"><span class="comment"># 为了避免脑裂，集群节点数最少为 半数+1</span></span><br><span class="line"><span class="attr">discovery.zen.minimum_master_nodes:</span> <span class="number">2</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>启动 ./bin/elasticsearch -d (-d 后台启动)</p>
+<p><img src="https://gitee.com/dbin0123/picgo/raw/master/image/20210405125429.png" alt="head插件查看"></p>
+<h3 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h3><h4 id="配置描述（转：https-www-cnblogs-com-sunsky303-p-9438737-html）"><a href="#配置描述（转：https-www-cnblogs-com-sunsky303-p-9438737-html）" class="headerlink" title="配置描述（转：https://www.cnblogs.com/sunsky303/p/9438737.html）"></a>配置描述（转：<a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.cnblogs.com/sunsky303/p/9438737.html）">https://www.cnblogs.com/sunsky303/p/9438737.html）</a></h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cluster.name</td>
+<td>配置elasticsearch的集群名称，默认是elasticsearch</td>
+</tr>
+<tr>
+<td>node.name</td>
+<td>节点名称（默认随机指定一个name.txt列表中名字）</td>
+</tr>
+<tr>
+<td>node.master</td>
+<td>指定该节点是否有<span style="color:red;">资格</span>被选举成为master，默认是true，elasticsearch默认集群中的第一台启动的机器为master，master挂了会重新选举master</td>
+</tr>
+<tr>
+<td>node.data</td>
+<td>指定该节点是否存储索引数据，默认为true，（如果节点配置node.master:false并且node.data: false，则该节点将起到负载均衡的作用）</td>
+</tr>
+<tr>
+<td>index.number_of_shards</td>
+<td>设置索引分片个数，默认为5片</td>
+</tr>
+<tr>
+<td>index.number_of_replicas</td>
+<td>设置默认索引副本个数，默认为1个副本（默认5个分片1个拷贝；即总分片数为10）</td>
+</tr>
+<tr>
+<td>path.conf</td>
+<td>设置配置文件的存储路径，默认是es根目录下的config文件夹</td>
+</tr>
+<tr>
+<td>path.data</td>
+<td>设置索引数据的存储路径，默认是es根目录下的data文件夹，可以设置多个存储路径，用逗号隔开。</td>
+</tr>
+<tr>
+<td>path.work</td>
+<td>设置临时文件的存储路径，默认是es根目录下的work文件夹。</td>
+</tr>
+<tr>
+<td>path.logs</td>
+<td>设置日志文件的存储路径，默认是es根目录下的logs文件夹。</td>
+</tr>
+<tr>
+<td>path.plugins</td>
+<td>设置插件的存放路径，默认是es根目录下的plugins文件夹。</td>
+</tr>
+<tr>
+<td>bootstrap.mlockall</td>
+<td><span style="color:red;">设置为true来锁住内存。因为当jvm开始swapping时es的效率会降低，所以要保证它不swap，可以把ES_MIN_MEM和ES_MAX_MEM两个环境变量设置成同一个值，并且保证机器有足够的内存分配给es。同时也要允许elasticsearch的进程可以锁住内存，linux下可以通过ulimit -l unlimited命令。</span></td>
+</tr>
+<tr>
+<td>network.bind_host</td>
+<td>设置绑定的ip地址，可以是ipv4或ipv6的，默认为0.0.0.0。</td>
+</tr>
+<tr>
+<td>network.publish_host</td>
+<td>设置其它节点和该节点交互的ip地址，如果不设置它会自动判断，值必须是个真实的ip地址。</td>
+</tr>
+<tr>
+<td>network.host</td>
+<td>这个参数是用来同时设置<span style="color:red;">bind_host</span>和<span style="color:red;">publish_host</span>上面两个参数。</td>
+</tr>
+<tr>
+<td>transport.tcp.port</td>
+<td>设置节点间交互的tcp端口，默认是9300。</td>
+</tr>
+<tr>
+<td>transport.tcp.compress</td>
+<td>设置是否压缩tcp传输时的数据，默认为false，不压缩。</td>
+</tr>
+<tr>
+<td>http.port</td>
+<td>设置对外服务的http端口，默认为9200。</td>
+</tr>
+<tr>
+<td>http.max_content_length</td>
+<td>设置内容的最大容量，默认<span style="color:red;">100mb</span>。</td>
+</tr>
+<tr>
+<td>http.enabled</td>
+<td>是否使用http协议对外提供服务，默认为true，开启。</td>
+</tr>
+<tr>
+<td>gateway.type</td>
+<td>gateway的类型，默认为local即为本地文件系统，可以设置为本地文件系统，分布式文件系统，hadoop的HDFS，和amazon的s3服务器，其它文件系统的设置。</td>
+</tr>
+<tr>
+<td>gateway.recover_after_nodes</td>
+<td>设置集群中N个节点启动时进行数据恢复，默认为1。</td>
+</tr>
+<tr>
+<td>gateway.recover_after_time</td>
+<td>设置初始化数据恢复进程的超时时间，默认是5分钟。</td>
+</tr>
+<tr>
+<td>gateway.expected_nodes</td>
+<td>设置这个集群中节点的数量，默认为2，一旦这N个节点启动，就会立即进行数据恢复。</td>
+</tr>
+<tr>
+<td>cluster.routing.allocation.node_initial_primaries_recoveries</td>
+<td>初始化数据恢复时，并发恢复线程的个数，默认为4。</td>
+</tr>
+<tr>
+<td>cluster.routing.allocation.node_concurrent_recoveries</td>
+<td>添加删除节点或负载均衡时并发恢复线程的个数，默认为4。</td>
+</tr>
+<tr>
+<td>indices.recovery.max_size_per_sec</td>
+<td>设置数据恢复时限制的带宽，如入100mb，默认为0，即无限制。</td>
+</tr>
+<tr>
+<td>indices.recovery.concurrent_streams</td>
+<td>设置这个参数来限制从其它分片恢复数据时最大同时打开并发流的个数，默认为5。</td>
+</tr>
+<tr>
+<td>discovery.zen.minimum_master_nodes</td>
+<td>设置这个参数来保证集群中的节点可以知道其它N个有master资格的节点。默认为1，对于大的集群来说，可以设置大一点的值（2-4）</td>
+</tr>
+<tr>
+<td>discovery.zen.ping.timeout</td>
+<td>设置集群中自动发现其它节点时ping连接超时时间，默认为3秒，对于比较差的网络环境可以高点的值来防止自动发现时出错。</td>
+</tr>
+<tr>
+<td>discovery.zen.ping.multicast.enabled</td>
+<td>设置是否打开多播发现节点，默认是true。</td>
+</tr>
+<tr>
+<td>discovery.zen.ping.unicast.hosts</td>
+<td>设置集群中master节点的初始列表，可以通过这些节点来自动发现新加入集群的节点。</td>
+</tr>
+<tr>
+<td>threadpool.search.type</td>
+<td>查询线程池配置（fixed 固定）</td>
+</tr>
+<tr>
+<td>threadpool.search.min</td>
+<td>最小线程数</td>
+</tr>
+<tr>
+<td>threadpool.search.max</td>
+<td>最大线程数</td>
+</tr>
+<tr>
+<td>threadpool.search.queue_size</td>
+<td>线程池队列大小</td>
+</tr>
+<tr>
+<td>index.store.type</td>
+<td>ES索引存储 memory（内存）</td>
+</tr>
+<tr>
+<td>index.mapper.dynamic</td>
+<td>禁止自动创建mapping（默认false）</td>
+</tr>
+<tr>
+<td>index.query.parse.allow_unmapped_fields</td>
+<td>不能查找没有在mapping中定义的属性</td>
+</tr>
+</tbody>
+</table>
+</div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://blog.aiwiown.com">dbin0123</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://blog.aiwiown.com/posts/c9f483b8/">http://blog.aiwiown.com/posts/c9f483b8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="external nofollow noopener noreferrer">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://blog.aiwiown.com" target="_blank">被讨厌的勇气</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ElasticSearch-%E9%9B%86%E7%BE%A4-ES/">ElasticSearch 集群 ES</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/8bf1160e/" title="2021年04月05日 ElasticSearch Head插件安装"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">2021年04月05日 ElasticSearch Head插件安装</div></div><div class="info-2"><div class="info-item-1">ES head插件安装下载 head插件123456789101112# 进入安装目录cd /run/media/duanbin/programs/opt/elastic_head# 下载wget https://github.com/mobz/elasticsearch-head/archive/refs/heads/master.zip# 解压unzip master.zip# 进入解压目录cd elasticsearch-head-master# 安装（确保安装node）npm install# 启动npm run start 浏览器打开 http://127.0.0.1:9100 ES配置跨域访问在elasticsearch中启用CORS 12http.cors.enabled: truehttp.cors.allow-origin: &quot;*&quot; 需要身份认证链接 1http:/127.0.0.1:9100?auth_user=elastic&amp;auth_password=pwd  base_uri 强制elasticsearch-head连接到特定...</div></div></div></a><a class="pagination-related" href="/posts/5f4aee9e/" title="2021年03月25日 JfreeChar"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">2021年03月25日 JfreeChar</div></div><div class="info-2"><div class="info-item-1">jfreechat使用 快速入门参考(jfreechart-demo-1.5.2-jar-with-dependencies.jar)使用  使用步骤  java -jar jfreechart-demo-1.5.2-jar-with-dependencies.jar 找到适合的图表类 使用反编译软件打开jfreechart-demo-1.5.2-jar-with-dependencies.jar 反编译图表类即可查看源代码(一般在org.jfree.chart.demo中)  中文乱码问题12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394public class Common &#123;    public static Font ITEXTPDF_FONT_8 = nul...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="author-info-name">dbin0123</div><div class="author-info-description">人生不是别人赋予的,而是自己选择的,自由就是被别人讨厌~</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">69</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">66</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/dbin0123"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/dbin0123" target="_blank" title="Github" rel="external nofollow noopener noreferrer"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ES-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA"><span class="toc-number">1.</span> <span class="toc-text">ES 集群搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A3%85%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">1.1.</span> <span class="toc-text">装备工作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%B7%A5%E4%BD%9C"><span class="toc-number">1.2.</span> <span class="toc-text">安装工作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%99%84%E5%BD%95"><span class="toc-number">1.3.</span> <span class="toc-text">附录</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%8F%8F%E8%BF%B0%EF%BC%88%E8%BD%AC%EF%BC%9Ahttps-www-cnblogs-com-sunsky303-p-9438737-html%EF%BC%89"><span class="toc-number">1.3.1.</span> <span class="toc-text">配置描述（转：https:&#x2F;&#x2F;www.cnblogs.com&#x2F;sunsky303&#x2F;p&#x2F;9438737.html）</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/57c67e8a/" title="2023年08月20日 包(Package)和Create和模块(Module)&quot;">2023年08月20日 包(Package)和Create和模块(Module)&quot;</a><time datetime="2023-08-19T16:00:00.000Z" title="发表于 2023-08-20 00:00:00">2023-08-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/50541e2f/" title="2023年08月20日 路径(Path)&quot;">2023年08月20日 路径(Path)&quot;</a><time datetime="2023-08-19T16:00:00.000Z" title="发表于 2023-08-20 00:00:00">2023-08-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/c467feca/" title="2023年08月19日 枚举与match表达式">2023年08月19日 枚举与match表达式</a><time datetime="2023-08-18T16:00:00.000Z" title="发表于 2023-08-19 00:00:00">2023-08-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/56134be9/" title="2023年08月19日 struct">2023年08月19日 struct</a><time datetime="2023-08-18T16:00:00.000Z" title="发表于 2023-08-19 00:00:00">2023-08-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/b82e4745/" title="2023年07月26日 Java获取系统名称">2023年07月26日 Java获取系统名称</a><time datetime="2023-07-25T16:00:00.000Z" title="发表于 2023-07-26 00:00:00">2023-07-26</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By dbin0123</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.2"></script><script src="/js/main.js?v=5.5.2"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.4/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const applyThemeDefaultsConfig = theme => {
+    if (theme === 'dark-mode') {
+      Chart.defaults.color = "rgba(255, 255, 255, 0.8)"
+      Chart.defaults.borderColor = "rgba(255, 255, 255, 0.2)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    } else {
+      Chart.defaults.color = "rgba(0, 0, 0, 0.8)"
+      Chart.defaults.borderColor = "rgba(0, 0, 0, 0.1)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    }
+  }
+
+  // Recursively traverse the config object and automatically apply theme-specific color schemes
+  const applyThemeConfig = (obj, theme) => {
+    if (typeof obj !== 'object' || obj === null) return
+
+    Object.keys(obj).forEach(key => {
+      const value = obj[key]
+      // If the property is an object and has theme-specific options, apply them
+      if (typeof value === 'object' && value !== null) {
+        if (value[theme]) {
+          obj[key] = value[theme] // Apply the value for the current theme
+        } else {
+          // Recursively process child objects
+          applyThemeConfig(value, theme)
+        }
+      }
+    })
+  }
+
+  const runChartJS = ele => {
+    window.loadChartJS = true
+
+    Array.from(ele).forEach((item, index) => {
+      const chartSrc = item.firstElementChild
+      const chartID = item.getAttribute('data-chartjs-id') || ('chartjs-' + index) // Use custom ID or default ID
+      const width = item.getAttribute('data-width')
+      const existingCanvas = document.getElementById(chartID)
+
+      // If a canvas already exists, remove it to avoid rendering duplicates
+      if (existingCanvas) {
+          existingCanvas.parentNode.remove()
+      }
+
+      const chartDefinition = chartSrc.textContent
+      const canvas = document.createElement('canvas')
+      canvas.id = chartID
+
+      const div = document.createElement('div')
+      div.className = 'chartjs-wrap'
+
+      if (width) {
+        div.style.width = width
+      }
+
+      div.appendChild(canvas)
+      chartSrc.insertAdjacentElement('afterend', div)
+
+      const ctx = document.getElementById(chartID).getContext('2d')
+
+      const config = JSON.parse(chartDefinition)
+
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark-mode' : 'light-mode'
+
+      // Set default styles (initial setup)
+      applyThemeDefaultsConfig(theme)
+
+      // Automatically traverse the config and apply dual-mode color schemes
+      applyThemeConfig(config, theme)
+
+      new Chart(ctx, config)
+    })
+  }
+
+  const loadChartJS = () => {
+    const chartJSEle = document.querySelectorAll('#article-container .chartjs-container')
+    if (chartJSEle.length === 0) return
+
+    window.loadChartJS ? runChartJS(chartJSEle) : btf.getScript('https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js').then(() => runChartJS(chartJSEle))
+  }
+
+  // Listen for theme change events
+  btf.addGlobalFn('themeChange', loadChartJS, 'chartjs')
+  btf.addGlobalFn('encrypt', loadChartJS, 'chartjs')
+
+  window.pjax ? loadChartJS() : document.addEventListener('DOMContentLoaded', loadChartJS)
+})()</script></div><div class="aplayer no-destroy" data-id="28290165" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true" data-lrctype="-1"> </div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-fluttering-ribbon.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script>(() => {
+  const destroyAplayer = () => {
+    if (window.aplayers) {
+      for (let i = 0; i < window.aplayers.length; i++) {
+        if (!window.aplayers[i].options.fixed) {
+          window.aplayers[i].destroy()
+        }
+      }
+    }
+  }
+
+  const runMetingJS = () => {
+    typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+  }
+
+  btf.addGlobalFn('pjaxSend', destroyAplayer, 'destroyAplayer')
+  btf.addGlobalFn('pjaxComplete', loadMeting, 'runMetingJS')
+})()</script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script>(() => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      const usePjax = true
+      true
+        ? (usePjax ? pjax.loadUrl('/404.html') : window.location.href = '/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})()</script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文档" type="text"></div><hr><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.2"></script></div></div></body></html>
